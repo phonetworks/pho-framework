@@ -36,7 +36,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $actor = new Framework\Actor($this->graph);
         $object = new Framework\Object($this->graph);
         $edge = $actor->writes($object);
-        $this->assertInstanceOf(Framework\Actor\Writes::class, $edge);
+        $this->assertInstanceOf(Framework\ActorOut\Writes::class, $edge);
         $this->assertInstanceOf(Graph\Predicate::class, $edge->predicate());
     }
 
@@ -44,17 +44,17 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $actor = new Framework\Actor($this->graph);
         $object = new Framework\Object($this->graph);
         $edge = $actor->subscribes($object);
-        $this->assertInstanceOf(Framework\Actor\SubscribesPredicate::class, $edge->predicate());
+        $this->assertInstanceOf(Framework\ActorOut\SubscribesPredicate::class, $edge->predicate());
     }
 
     public function testObjectGetter() {
         $actor = new Framework\Actor($this->graph);
         $object = new Framework\Object($this->graph);
         $edge = $actor->writes($object);
-        $this->assertInstanceOf(Framework\Actor\Writes::class, $object->getWriters()[0]);
+        $this->assertInstanceOf(Framework\ActorOut\Writes::class, $object->getWriters()[0]);
         $this->assertCount(1, $object->getWriters());
         $this->assertCount(1, $actor->getWrites());
-        $this->assertInstanceOf(Framework\Actor\Writes::class, $actor->getWrites()[0]);
+        $this->assertInstanceOf(Framework\ActorOut\Writes::class, $actor->getWrites()[0]);
     }
 
      public function testFiltering() {

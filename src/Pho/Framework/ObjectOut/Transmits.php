@@ -9,16 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Pho\Framework\Actor;
+namespace Pho\Framework\ObjectOut;
 
 use Pho\Framework;
 
-class Subscribes extends Framework\AbstractEdge {
+class Transmits extends Framework\AbstractEdge {
 
-    const HEAD_LABEL = "subscription";
-    const HEAD_LABELS = "subscriptions";
-    const TAIL_LABEL = "subscriber";
-    const TAIL_LABELS = "subscribers";
+    const HEAD_LABEL = "receiver";
+    const HEAD_LABELS = "receivers";
+    const TAIL_LABEL = "transmitter";
+    const TAIL_LABELS = "transmitters";
+
     const SETTABLES = [Framework\NodeInterface::class];
 
 }

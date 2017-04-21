@@ -15,9 +15,23 @@ use Pho\Lib\Graph;
 use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 use Zend\File\ClassFileLocator;
 
+/**
+ * Abstract Node
+ * 
+ * This constitutes the basis of all node classes that are part of the
+ * Pho Framework; namely {@link Actor},  {@link Frame} and {@link Object}.
+ * 
+ * Pho Framework nodes extend Pho\Lib\Graph\Node
+ * 
+ * 
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 abstract class AbstractNode extends Graph\Node implements NodeInterface {
 
     /**
+     * Incoming Edges
+     * 
      * A constant node property of edges that are directed towards this node.
      * 
      * @var array An array of class names (with their namespaces)
@@ -25,6 +39,8 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     const EDGES_IN = [];
     
     /**
+     * Getter Labels of Incoming Edges
+     * 
      * A simple array of tail labels of incoming edges.
      * Tail labels in string format.
      *
@@ -33,6 +49,8 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     protected $edge_in_getter_methods = [];
 
     /**
+     * Getter Classes of Incoming Edges
+     * 
      * An array of tail labels of incoming edges as key
      * and associated class name as value.
      * Both in string format.
@@ -42,6 +60,8 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     protected $edge_in_getter_classes = [];
 
     /**
+     * Setter Labels of Outgoing Edges
+     * 
      * A simple array of edge names
      *
      * @var array
@@ -49,6 +69,8 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     protected $edge_out_setter_methods = [];
 
     /**
+     * Setter Classes of Outgoing Edges
+     * 
      * An array of edge labels as key
      * and associated class name as value.
      * Both in string format.
@@ -58,6 +80,8 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     protected $edge_out_setter_classes = [];
 
     /**
+     * Class Associations for Outgoing Edges 
+     * 
      * An array of node types that can be set by this
      * node's outgoing edges. Edge labels (string) as 
      * key, settables as array.
@@ -67,6 +91,8 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     protected $edge_out_setter_settables = [];
 
     /**
+     * Getter Labels of Outgoing Edges
+     * 
      * A simple array of head labels of outgoing edges.
      * Labels in string format.
      *
@@ -75,6 +101,8 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     protected $edge_out_getter_methods = [];
 
     /**
+     * Getter Classes of Outgoing Edges
+     * 
      * An array of head labels of outgoing edges as key,
      * associated class names as value.
      * Both in string format.
@@ -84,7 +112,9 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
     protected $edge_out_getter_classes = [];
 
     /**
-     * {@inheritdoc}
+     * Constructor.
+     * 
+     * @param Pho\Lib\Graph\GraphInterface $graph The graph that this node belongs to.
      */
     public function __construct(Graph\GraphInterface $graph) {
         parent::__construct($graph);
@@ -92,6 +122,15 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
         $this->_setupEdgesOut();
     }
 
+    /**
+     * Sets up incoming edges.
+     * 
+     * Given the configurations set in the node class itself 
+     * (e.g. EDGES_IN constant), configures the way the 
+     * class will act.
+     *
+     * @return void
+     */
     protected function _setupEdgesIn(): void 
     {
         //eval(\Psy\sh());
@@ -108,12 +147,20 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
         }
     }
 
+    /**
+     * Sets up outgoing edges.
+     * 
+     * Given the configurations set in {ClassName}/{EdgeName}
+     * classes , configures the way the class will act.
+     *
+     * @return void
+     */
     protected function _setupEdgesOut(): void
     {
-        // we use reflection method so that __DIR__ behaves properly with child classes.
+        // !!! we use reflection method so that __DIR__ behaves properly with child classes.
         $self_reflector = new \ReflectionObject($this);
-        $edge_dir = dirname($self_reflector->getFileName()) . DIRECTORY_SEPARATOR . $self_reflector->getShortName();  
-        //
+        $edge_dir = dirname($self_reflector->getFileName()) . DIRECTORY_SEPARATOR . $self_reflector->getShortName() . "Out";  
+        // !!! do not replace this with __DIR__
 
         if(!file_exists($edge_dir))
             return;
@@ -135,10 +182,14 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
             }
         }
     }
-    
 
-    
-
+    /**
+     * Internal method 
+     *
+     * @param string $name
+     * @param array $args
+     * @return void
+     */
     public function __call(string $name, array $args) {
         if(in_array($name, $this->edge_out_setter_methods)) {
             $check = false;
@@ -170,6 +221,7 @@ abstract class AbstractNode extends Graph\Node implements NodeInterface {
             });
             return $return;
         }
+        throw new InvalidNodeMethodException(__CLASS__, $name);
     }
 
 

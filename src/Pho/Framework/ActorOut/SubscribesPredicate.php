@@ -9,6 +9,6 @@
  * file that was distributed with this source code.
  */
 
-namespace Pho\Framework\Actor;
+namespace Pho\Framework\ActorOut;
 
 class SubscribesPredicate extends \Pho\Lib\Graph\Predicate {}

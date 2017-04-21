@@ -14,12 +14,16 @@ namespace Pho\Framework\Exceptions;
 use Pho\Framework\NodeInterface;
 
 /**
- * Thrown when a node's edge method is called with an argument of type that 
- * is not supported by the edge itself.
+ * Thrown when a node is called with an unknown function
+ * (e.g invalid edge etc.) 
+ * 
+ * Since all node functions are dynamic (using magic method
+ * _call) erroneous method calls are possible and not handled 
+ * by native PHP errors.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class InvalidEdgeHeadTypeException extends \Exception {
+class InvalidNodeMethodException extends \Exception {
 
     /**
      * Constructor.
@@ -27,13 +31,13 @@ class InvalidEdgeHeadTypeException extends \Exception {
      * @param NodeInterface $object
      * @param array $settables
      */
-    public function __construct(NodeInterface $object, array $settables)
+    public function __construct(string $class_name, string $method)
     {
         parent::__construct();
         $this->message = sprintf(
-            "The given edge head is of type %s. Only the following types are allowed; %s",
-            get_class($object),
-            implode(", ", $settables)
+            "The node %s was called with the invalid method: %s",
+            $class_name,
+            $method
         );
     }
 
