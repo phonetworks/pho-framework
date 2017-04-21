@@ -18,15 +18,14 @@ use Zend\File\ClassFileLocator;
 /**
  * The Particle Trait
  * 
- * This constitutes the basis of all node classes that are part of the
+ * This constitutes the basis of all particle classes that are part of the
  * Pho Framework; namely {@link Actor},  {@link Frame} and {@link Object}.
  * 
- * Pho Framework nodes extend Pho\Lib\Graph\Node
+ * Pho Framework particles extend Pho\Lib\Graph\Node
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 trait ParticleTrait {
-//abstract class AbstractNode extends Graph\Node implements NodeInterface {
 
     /**
      * @internal 
@@ -83,8 +82,8 @@ trait ParticleTrait {
     /**
      * Class Associations for Outgoing Edges 
      * 
-     * An array of node types that can be set by this
-     * node's outgoing edges. Edge labels (string) as 
+     * An array of particle types that can be set by this
+     * particle's outgoing edges. Edge labels (string) as 
      * key, settables as array.
      *
      * @var array
@@ -115,7 +114,7 @@ trait ParticleTrait {
     /**
      * Constructor.
      * 
-     * @param Pho\Lib\Graph\GraphInterface $graph The graph that this node belongs to.
+     * @param Pho\Lib\Graph\GraphInterface $graph The graph that this particle belongs to.
      */
     public function __construct(Graph\GraphInterface $graph) {
         parent::__construct($graph);
@@ -126,7 +125,7 @@ trait ParticleTrait {
     /**
      * Sets up incoming edges.
      * 
-     * Given the configurations set in the node class itself 
+     * Given the configurations set in the particle class itself 
      * (e.g. EDGES_IN constant), configures the way the 
      * class will act.
      *
@@ -222,7 +221,7 @@ trait ParticleTrait {
             });
             return $return;
         }
-        throw new InvalidNodeMethodException(__CLASS__, $name);
+        throw new InvalidParticleMethodException(__CLASS__, $name);
     }
 
 

@@ -14,7 +14,7 @@ namespace Pho\Framework\Exceptions;
 use Pho\Framework\ParticleInterface;
 
 /**
- * Thrown when a node's edge method is called with an argument of type that 
+ * Thrown when a particle's edge method is called with an argument of type that 
  * is not supported by the edge itself.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
@@ -24,7 +24,7 @@ class InvalidEdgeHeadTypeException extends \Exception {
     /**
      * Constructor.
      *
-     * @param NodeInterface $object
+     * @param ParticleInterface $object
      * @param array $settables
      */
     public function __construct(ParticleInterface $object, array $settables)

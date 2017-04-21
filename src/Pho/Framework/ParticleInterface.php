@@ -14,14 +14,17 @@ namespace Pho\Framework;
 /**
  * Particle Interface
  * 
- * Merely a placeholder. Does not hold a method except defining
- * the classes that implement it that they are actually Pho
- * Framework compatible nodes.
+ * A "Particle" is a foundational Pho Framework node that constitutes
+ * the basis of all other Pho Stack nodes.
  * 
- * In Pho Framework, both {@link Actor} and {@link Object} extend 
- * {@link AbstractNode} but {@link Frame} doesn't. 
- * Therefore this interface provides a common ground that all 
- * foundational nodes can be based off of.
+ * This interface does not hold a method. The classes that implement 
+ * this do it, in order to define that they are Pho Framework particles.
+ * Otherwise, In Pho Framework, both {@link Actor} and {@link Object} extend 
+ * Pho\Lib\Graph\Node but {@link Frame} doesn't, it extends 
+ * Pho\Lib\Graph\SubGraph which is also a subclass of Pho\Lib\Graph\Node
+ * but with additional graph-like traits. Therefore this interface provides 
+ * a common ground that all foundational nodes can be based off of, and we 
+ * call them Particles.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
