@@ -11,4 +11,16 @@
 
 namespace Pho\Framework\ActorOut;
 
-class SubscribesPredicate extends \Pho\Lib\Graph\Predicate {}
+
+/**
+ * Subscribes Predicate
+ * 
+ * This class is for testing and demonstrational purposes 
+ * only. It represents how to use predicate classes 
+ * along with  edges.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
+class SubscribesPredicate extends \Pho\Lib\Graph\Predicate {
+
+}

@@ -19,6 +19,8 @@ namespace Pho\Framework;
  * * {@link Actor\Writes}
  * * {@link Actor\Subscribes}
  * 
+ * @method AbstractEdge reads(ParticleInterface $particle)
+ * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {

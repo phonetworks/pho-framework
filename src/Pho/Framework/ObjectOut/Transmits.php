@@ -13,6 +13,15 @@ namespace Pho\Framework\ObjectOut;
 
 use Pho\Framework;
 
+/**
+ * Transmits Edge
+ * 
+ * **"Transmits"** is the only outgoing edge of the 
+ * {@link Pho\Framework\Object} particle. It links the
+ * Object with other nodes, allowing message passing.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Transmits extends Framework\AbstractEdge {
 
     const HEAD_LABEL = "receiver";

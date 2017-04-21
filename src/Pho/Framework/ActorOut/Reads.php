@@ -13,6 +13,17 @@ namespace Pho\Framework\ActorOut;
 
 use Pho\Framework;
 
+/**
+ * Reads Edge
+ * 
+ * **"Reads"** is one of the three outgoing edges of the 
+ * {@link Pho\Framework\Actor} particle. 
+ * 
+ * The "reads" name comes from the UNIX world. It represents 
+ * consumption of existing {@link Pho\Framework\Object}s.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Reads extends Framework\AbstractEdge {
 
     const HEAD_LABEL = "read";

@@ -13,6 +13,17 @@ namespace Pho\Framework\ActorOut;
 
 use Pho\Framework;
 
+/**
+ * Subscribes Edge
+ * 
+ * **"Subscribes"** is one of the three outgoing edges of the 
+ * {@link Pho\Framework\Actor} particle. 
+ * 
+ * When an actor subscribes to another node, it declares intent
+ * to listen for updates from that node.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Subscribes extends Framework\AbstractEdge {
 
     const HEAD_LABEL = "subscription";
