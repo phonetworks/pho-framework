@@ -12,7 +12,7 @@
 namespace Pho\Framework;
 
 /**
- * The Object Node
+ * The Object Particle
  * 
  * One of the three foundational nodes in the Pho Framework.
  * Objects do one and only one thing, they "transmit"
@@ -21,8 +21,17 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Object extends AbstractNode /* !!DOES NOT!! implements ObjectInterface */ {
+class Object extends \Pho\Lib\Graph\Node implements ParticleInterface {
 
+    use ParticleTrait;
+
+    /**
+     * Incoming Edges
+     * 
+     * A constant node property of edges that are directed towards this node.
+     * 
+     * @var array An array of class names (with their namespaces)
+     */
     const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ActorOut\Writes::class, ObjectOut\Transmits::class];
 
 }

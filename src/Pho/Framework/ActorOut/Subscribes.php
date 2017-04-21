@@ -19,6 +19,6 @@ class Subscribes extends Framework\AbstractEdge {
     const HEAD_LABELS = "subscriptions";
     const TAIL_LABEL = "subscriber";
     const TAIL_LABELS = "subscribers";
-    const SETTABLES = [Framework\NodeInterface::class];
+    const SETTABLES = [Framework\ParticleInterface::class];
 
 }

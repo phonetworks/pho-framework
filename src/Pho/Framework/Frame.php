@@ -14,7 +14,7 @@ namespace Pho\Framework;
 use Pho\Lib\Graph\SubGraph;
 
 /**
- * The Frame Node
+ * The Frame Particle
  * 
  * At its core, Frame is a graph, or more specifically, a subgraph.
  * It extends the Pho\Lib\Graph\SubGraph class, which is a regular node,
@@ -31,8 +31,17 @@ use Pho\Lib\Graph\SubGraph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Frame extends SubGraph implements NodeInterface {
+class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface {
 
+    use ParticleTrait;
+
+    /**
+     * Incoming Edges
+     * 
+     * A constant node property of edges that are directed towards this node.
+     * 
+     * @var array An array of class names (with their namespaces)
+     */
     const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ActorOut\Writes::class, ObjectOut\Transmits::class];
 
 }

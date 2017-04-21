@@ -20,6 +20,6 @@ class Transmits extends Framework\AbstractEdge {
     const TAIL_LABEL = "transmitter";
     const TAIL_LABELS = "transmitters";
 
-    const SETTABLES = [Framework\NodeInterface::class];
+    const SETTABLES = [Framework\ParticleInterface::class];
 
 }

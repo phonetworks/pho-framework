@@ -19,6 +19,6 @@ class Reads extends Framework\AbstractEdge {
     const HEAD_LABELS = "reads";
     const TAIL_LABEL = "reader";
     const TAIL_LABELS = "readers";
-    const SETTABLES = [Framework\NodeInterface::class];
+    const SETTABLES = [Framework\ParticleInterface::class];
 
 }

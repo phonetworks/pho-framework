@@ -11,7 +11,7 @@
 
 namespace Pho\Framework\Exceptions;
 
-use Pho\Framework\NodeInterface;
+use Pho\Framework\ParticleInterface;
 
 /**
  * Thrown when a node's edge method is called with an argument of type that 
@@ -27,7 +27,7 @@ class InvalidEdgeHeadTypeException extends \Exception {
      * @param NodeInterface $object
      * @param array $settables
      */
-    public function __construct(NodeInterface $object, array $settables)
+    public function __construct(ParticleInterface $object, array $settables)
     {
         parent::__construct();
         $this->message = sprintf(

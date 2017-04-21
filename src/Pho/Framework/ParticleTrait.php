@@ -16,27 +16,28 @@ use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 use Zend\File\ClassFileLocator;
 
 /**
- * Abstract Node
+ * The Particle Trait
  * 
  * This constitutes the basis of all node classes that are part of the
  * Pho Framework; namely {@link Actor},  {@link Frame} and {@link Object}.
  * 
  * Pho Framework nodes extend Pho\Lib\Graph\Node
  * 
- * 
- * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-abstract class AbstractNode extends Graph\Node implements NodeInterface {
+trait ParticleTrait {
+//abstract class AbstractNode extends Graph\Node implements NodeInterface {
 
     /**
+     * @internal 
+     * 
      * Incoming Edges
      * 
      * A constant node property of edges that are directed towards this node.
      * 
      * @var array An array of class names (with their namespaces)
      */
-    const EDGES_IN = [];
+    // const EDGES_IN = [];
     
     /**
      * Getter Labels of Incoming Edges

@@ -12,7 +12,7 @@
 namespace Pho\Framework;
 
 /**
- * The Actor Node
+ * The Actor Particle
  * 
  * Actors have three outgoing edges:
  * * {@link Actor\Reads}
@@ -21,8 +21,17 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Actor extends AbstractNode /* !!DOES NOT!! implements ActorInterface */ {
+class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {
 
+    use ParticleTrait;
+
+    /**
+     * Incoming Edges
+     * 
+     * A constant node property of edges that are directed towards this node.
+     * 
+     * @var array An array of class names (with their namespaces)
+     */
     const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ObjectOut\Transmits::class];
 
 }

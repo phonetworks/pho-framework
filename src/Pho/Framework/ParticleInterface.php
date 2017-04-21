@@ -12,7 +12,7 @@
 namespace Pho\Framework;
 
 /**
- * Node Interface
+ * Particle Interface
  * 
  * Merely a placeholder. Does not hold a method except defining
  * the classes that implement it that they are actually Pho
@@ -25,6 +25,6 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-interface NodeInterface {
+interface ParticleInterface {
     
 }
