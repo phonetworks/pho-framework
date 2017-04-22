@@ -184,26 +184,59 @@ trait ParticleTrait {
     }
 
     /**
-     * Internal method 
+     * @internal
      *
      * @param string $name
      * @param array $args
      * @return void
+     * 
+     * @throws InvalidParticleMethodException when no matching method found.
      */
     public function __call(string $name, array $args) {
         if(in_array($name, $this->edge_out_setter_methods)) {
-            $check = false;
-            foreach($this->edge_out_setter_settables[$name] as $settable)
-                $check |= is_a($args[0], $settable);
-            if(!$check) 
-                throw new InvalidEdgeHeadTypeException($args[0], $this->edge_out_setter_settables[$name]);
-            $edge = new $this->edge_out_setter_classes[$name]($this, $args[0]);
-            return $edge;
-            // return $edge(); // returns the head() // not at framework level.
+            return $this->_callSetter($name, $args);
         }
-        else if( ! (strlen($name) > 3 && substr($name, 0, 3) == "get" ) ) {
-            return;
+        else if( (strlen($name) > 3 && substr($name, 0, 3) == "get" ) ) {
+            try {
+                return $this->_callGetter($name, $args);
+            }
+            catch(InvalidParticleMethodException $e) {
+                throw $e;
+            }
         }
+        throw new InvalidParticleMethodException(__CLASS__, $name);
+    }
+
+    /**
+     * Catch-all method for setters
+     *
+     * @param string $name Catch-all method name
+     * @param array $args Catch-all method arguments
+     * @return \Pho\Lib\Graph\NodeInterface
+     */
+    protected function _callSetter(string $name, array $args): AbstractEdge
+    {
+        $check = false;
+        foreach($this->edge_out_setter_settables[$name] as $settable)
+            $check |= is_a($args[0], $settable);
+        if(!$check) 
+            throw new InvalidEdgeHeadTypeException($args[0], $this->edge_out_setter_settables[$name]);
+        $edge = new $this->edge_out_setter_classes[$name]($this, $args[0]);
+        return $edge;
+        // return $edge(); // returns the head() // not at framework level.
+    }
+
+    /**
+     * Catch-all method for getters
+     *
+     * @param string $name Catch-all method name
+     * @param array $args Catch-all method arguments
+     * @return array An array of ParticleInterface objects
+     * 
+     * @throws InvalidParticleMethodException when no matching method found.
+     */
+    protected function _callGetter(string $name, array $args): array
+    {
         $name = strtolower(substr($name, 3));
         if(in_array($name, $this->edge_out_getter_methods)) {
             $edges_out = $this->edges()->out();
