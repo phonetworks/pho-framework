@@ -190,7 +190,7 @@ trait ParticleTrait {
      * @param array $args
      * @return void
      * 
-     * @throws InvalidParticleMethodException when no matching method found.
+     * @throws Exceptions\InvalidParticleMethodException when no matching method found.
      */
     public function __call(string $name, array $args) {
         if(in_array($name, $this->edge_out_setter_methods)) {
@@ -204,7 +204,7 @@ trait ParticleTrait {
                 throw $e;
             }
         }
-        throw new InvalidParticleMethodException(__CLASS__, $name);
+        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
 
     /**
@@ -233,7 +233,7 @@ trait ParticleTrait {
      * @param array $args Catch-all method arguments
      * @return array An array of ParticleInterface objects
      * 
-     * @throws InvalidParticleMethodException when no matching method found.
+     * @throws Exceptions\InvalidParticleMethodException when no matching method found.
      */
     protected function _callGetter(string $name, array $args): array
     {
@@ -256,7 +256,7 @@ trait ParticleTrait {
             });
             return $return;
         }
-        throw new InvalidParticleMethodException(__CLASS__, $name);
+        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
 
 
