@@ -17,4 +17,8 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge {
     const HEAD_LABEL = "";
     const HEAD_NODE_TYPES = [];
 
+    public function __invoke() {
+        return $this->head();
+    }
+
 }
