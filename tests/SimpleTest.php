@@ -85,6 +85,14 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $edge = $actor1->writes($actor2);
     }
 
+    public function testEdgeInvoke() {
+        $actor = new Framework\Actor($this->graph);
+        $object = new Framework\Object($this->graph);
+        $edge = $actor->writes($object);
+        $this->assertInstanceOf(Framework\Object::class, $edge());
+        $this->assertEquals($object->id(), $edge()->id());
+    }
+
 
     
 

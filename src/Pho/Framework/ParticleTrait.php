@@ -199,7 +199,7 @@ trait ParticleTrait {
                 throw new InvalidEdgeHeadTypeException($args[0], $this->edge_out_setter_settables[$name]);
             $edge = new $this->edge_out_setter_classes[$name]($this, $args[0]);
             return $edge;
-            // return $edge(); // returns the head()
+            // return $edge(); // returns the head() // not at framework level.
         }
         else if( ! (strlen($name) > 3 && substr($name, 0, 3) == "get" ) ) {
             return;
