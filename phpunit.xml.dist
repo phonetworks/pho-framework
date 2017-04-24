@@ -8,7 +8,7 @@
 >
 
     <testsuites>
-        <testsuite name="Pho Lib OCAF Test Suite">
+        <testsuite name="Pho Framework Test Suite">
             <directory>./tests/</directory>=
         </testsuite>
     </testsuites>
