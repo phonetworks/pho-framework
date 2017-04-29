@@ -11,7 +11,6 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph;
 use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 use Zend\File\ClassFileLocator;
 
@@ -112,12 +111,16 @@ trait ParticleTrait {
     protected $edge_out_getter_classes = [];
 
     /**
-     * Constructor.
-     * 
-     * @param Pho\Lib\Graph\GraphInterface $graph The graph that this particle belongs to.
+     * Access Control List object
+     *
+     * @var Acl
      */
-    public function __construct(Graph\GraphInterface $graph) {
-        parent::__construct($graph);
+    protected $acl;
+
+    /**
+     * Trait constructor.
+     */
+    protected function setupEdges() {
         $this->_setupEdgesIn();
         $this->_setupEdgesOut();
     }
@@ -259,5 +262,12 @@ trait ParticleTrait {
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
 
+
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        $array["acl"] = $this->acl->toArray();
+        return $array;
+    }
 
 }

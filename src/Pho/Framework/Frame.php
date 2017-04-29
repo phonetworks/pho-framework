@@ -11,7 +11,7 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph\SubGraph;
+use Pho\Lib\Graph;
 
 /**
  * The Frame Particle
@@ -31,7 +31,7 @@ use Pho\Lib\Graph\SubGraph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface {
+class Frame extends Graph\SubGraph implements ParticleInterface {
 
     use ParticleTrait;
 
@@ -43,5 +43,11 @@ class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface {
      * @var array An array of class names (with their namespaces)
      */
     const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ActorOut\Writes::class, ObjectOut\Transmits::class];
+
+    public function __construct(Actor $creator, Graph\GraphInterface $context) {
+        parent::__construct($context);
+        $this->acl = new Acl($creator, $context);
+        $this->setupEdges();
+    }
 
 }

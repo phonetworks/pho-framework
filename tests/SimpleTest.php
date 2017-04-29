@@ -34,7 +34,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     public function testActorEdge() {
         $actor = new Framework\Actor($this->graph);
-        $object = new Framework\Object($this->graph);
+        $object = new Framework\Object($actor, $this->graph);
         $edge = $actor->writes($object);
         $this->assertInstanceOf(Framework\ActorOut\Writes::class, $edge);
         $this->assertInstanceOf(Graph\Predicate::class, $edge->predicate());
@@ -42,14 +42,14 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     public function testActorPredicate() {
         $actor = new Framework\Actor($this->graph);
-        $object = new Framework\Object($this->graph);
+        $object = new Framework\Object($actor, $this->graph);
         $edge = $actor->subscribes($object);
         $this->assertInstanceOf(Framework\ActorOut\SubscribesPredicate::class, $edge->predicate());
     }
 
     public function testObjectGetter() {
         $actor = new Framework\Actor($this->graph);
-        $object = new Framework\Object($this->graph);
+        $object = new Framework\Object($actor, $this->graph);
         $edge = $actor->writes($object);
         $this->assertInstanceOf(Framework\ActorOut\Writes::class, $object->getWriters()[0]);
         $this->assertCount(1, $object->getWriters());
@@ -59,7 +59,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
      public function testFiltering() {
         $actor = new Framework\Actor($this->graph);
-        $object = new Framework\Object($this->graph);
+        $object = new Framework\Object($actor, $this->graph);
         $edge = $actor->writes($object);
         $edge = $actor->reads($object);
         $this->assertCount(1, $actor->getWrites());
@@ -70,7 +70,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
      */
     public function testEdgeInheritance() {
         $actor = new Framework\Actor($this->graph);
-        $object = new Framework\Object($this->graph);
+        $object = new Framework\Object($actor, $this->graph);
         $edge = $actor->writes($object);
         $this->assertCount(1, $actor->getSubscriptions());
         $this->assertCount(0, $actor->getReads());
@@ -87,13 +87,46 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     public function testEdgeInvoke() {
         $actor = new Framework\Actor($this->graph);
-        $object = new Framework\Object($this->graph);
+        $object = new Framework\Object($actor, $this->graph);
         $edge = $actor->writes($object);
         $this->assertInstanceOf(Framework\Object::class, $edge());
         $this->assertEquals($object->id(), $edge()->id());
     }
 
 
-    
+    public function testActorToArray() {
+        $actor = new Framework\Actor($this->graph);
+        $array = $actor->toArray();
+        $faker = Faker\Factory::create();
+        $this->assertArrayHasKey("id", $array);
+        $this->assertArrayHasKey("attributes", $array);
+        $this->assertCount(0, $array["attributes"]);
+        $actor->attributes()->username = $faker->username;
+        $this->assertCount(1, $actor->toArray()["attributes"]);
+        $this->assertArrayHasKey("edge_list", $array);
+        $this->assertArrayHasKey("acl", $array);
+        $this->assertCount(2, $array["acl"]);
+        $this->assertArrayHasKey("context", $array["acl"]);
+        $this->assertArrayHasKey("creator", $array["acl"]);
+    }
+
+    public function testFrameToArray() {
+        $faker = Faker\Factory::create();
+        $actor = new Framework\Actor($this->graph);
+        $frame = new Framework\Frame($actor, $this->graph);
+        $edge = $actor->writes($frame);
+        $array = $frame->toArray();
+        $this->assertArrayHasKey("id", $array);
+        $this->assertArrayHasKey("attributes", $array);
+        $this->assertCount(0, $array["attributes"]);
+        $actor->attributes()->username = $faker->username;
+        $this->assertCount(1, $actor->toArray()["attributes"]);
+        $this->assertArrayHasKey("edge_list", $array);
+        $this->assertArrayHasKey("acl", $array);
+        $this->assertCount(2, $array["acl"]);
+        $this->assertArrayHasKey("context", $array["acl"]);
+        $this->assertArrayHasKey("creator", $array["acl"]);
+        $this->assertEquals($actor->id(), $array["acl"]["creator"]);
+    }
 
 }

@@ -11,6 +11,8 @@
 
 namespace Pho\Framework;
 
+use Pho\Lib\Graph;
+
 /**
  * The Actor Particle
  * 
@@ -23,7 +25,7 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {
+class Actor extends Graph\Node implements ParticleInterface {
 
     use ParticleTrait;
 
@@ -35,5 +37,11 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {
      * @var array An array of class names (with their namespaces)
      */
     const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ObjectOut\Transmits::class];
+
+    public function __construct(Graph\GraphInterface $context) {
+        parent::__construct($context);
+        $this->acl = new Acl($this, $context);
+        $this->setupEdges();
+    }
 
 }
