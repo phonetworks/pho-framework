@@ -38,7 +38,7 @@ class Object extends \Pho\Lib\Graph\Node implements ParticleInterface {
 
     public function __construct(Actor $creator, Graph\GraphInterface $context) {
         parent::__construct($context);
-        $this->acl = new Acl($creator, $context);
+        $this->acl = new AclCore($creator, $context);
         $this->setupEdges();
     }
 

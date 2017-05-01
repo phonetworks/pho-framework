@@ -4,7 +4,7 @@ namespace Pho\Framework;
 
 use Pho\Lib\Graph;
 
-class Acl {
+class AclCore {
 
     protected $creator;
     protected $context;

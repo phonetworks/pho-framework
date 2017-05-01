@@ -40,7 +40,7 @@ class Actor extends Graph\Node implements ParticleInterface {
 
     public function __construct(Graph\GraphInterface $context) {
         parent::__construct($context);
-        $this->acl = new Acl($this, $context);
+        $this->acl = new AclCore($this, $context);
         $this->setupEdges();
     }
 
