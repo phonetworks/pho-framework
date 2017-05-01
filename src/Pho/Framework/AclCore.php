@@ -11,8 +11,6 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph;
-
 /**
  * AclCore (Access Control Lists Core)
  * 
@@ -35,8 +33,8 @@ class AclCore {
 
     /**
      * In what context this node was created. Must point to a node 
-     * that implements Pho\Lib\Graph\GraphInterface
-     * @var Pho\Lib\Graph\GraphInterface
+     * that implements ContextInterface
+     * @var ContextInterface
      */
     protected $context;
 
@@ -44,9 +42,9 @@ class AclCore {
      * Constructor.
      * 
      * @param Actor $creator The creator of this node.
-     * @param \Pho\Lib\Graph\GraphInterface $context The context in which this node is created and will exist
+     * @param ContextInterface $context The context in which this node is created and will exist
      */
-    public function __construct(Actor $creator, Graph\GraphInterface $context) {
+    public function __construct(Actor $creator, ContextInterface $context) {
         $this->creator = $creator;
         $this->context = $context;
     }
@@ -63,7 +61,7 @@ class AclCore {
         //eval(\Psy\sh());
         return [
             "creator" => (string) $this->creator->id(),
-            "context" => ($this->context instanceof Graph\Graph) ? Graph\Graph::class : (string) $this->context->id()
+            "context" => ($this->context instanceof Graph) ? Graph::class : (string) $this->context->id()
         ]; 
     }
 

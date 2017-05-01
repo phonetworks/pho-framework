@@ -11,8 +11,6 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph;
-
 /**
  * The Frame Particle
  * 
@@ -24,14 +22,14 @@ use Pho\Lib\Graph;
  * any confusions with Pho\Lib\Graph's nomenclature, this class is called
  * Frame instead.
  * 
- * In contrast to other (particles?), Frame doesn't contain edges but 
- * its **"contains"** edge acts similarly to an edge.
+ * In contrast to other particles, Frame doesn't contain edges but 
+ * its **"contains"** method acts similarly to an edge.
  * 
  * 
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Frame extends Graph\SubGraph implements ParticleInterface {
+class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, ContextInterface {
 
     use ParticleTrait;
 
@@ -44,7 +42,7 @@ class Frame extends Graph\SubGraph implements ParticleInterface {
      */
     const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ActorOut\Writes::class, ObjectOut\Transmits::class];
 
-    public function __construct(Actor $creator, Graph\GraphInterface $context) {
+    public function __construct(Actor $creator, ContextInterface $context) {
         parent::__construct($context);
         $this->acl = new AclCore($creator, $context);
         $this->setupEdges();

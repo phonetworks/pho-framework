@@ -11,8 +11,6 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph;
-
 /**
  * The Object Particle
  * 
@@ -36,7 +34,7 @@ class Object extends \Pho\Lib\Graph\Node implements ParticleInterface {
      */
     const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ActorOut\Writes::class, ObjectOut\Transmits::class];
 
-    public function __construct(Actor $creator, Graph\GraphInterface $context) {
+    public function __construct(Actor $creator, ContextInterface $context) {
         parent::__construct($context);
         $this->acl = new AclCore($creator, $context);
         $this->setupEdges();

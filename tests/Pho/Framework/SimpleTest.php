@@ -11,14 +11,14 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph;
+use Pho\Lib\Graph\Predicate;
 
 class SimpleTest extends \PHPUnit\Framework\TestCase 
 {
     private $graph;
 
     public function setUp() {
-        $this->graph = new Graph\Graph();
+        $this->graph = new Graph();
     }
 
     public function tearDown() {
@@ -36,7 +36,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $object = new Object($actor, $this->graph);
         $edge = $actor->writes($object);
         $this->assertInstanceOf(ActorOut\Writes::class, $edge);
-        $this->assertInstanceOf(Graph\Predicate::class, $edge->predicate());
+        $this->assertInstanceOf(Predicate::class, $edge->predicate());
     }
 
     public function testActorPredicate() {
@@ -126,6 +126,13 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey("context", $array["acl"]);
         $this->assertArrayHasKey("creator", $array["acl"]);
         $this->assertEquals($actor->id(), $array["acl"]["creator"]);
+    }
+
+    public function testContextInterface() {
+        $this->assertInstanceOf(ContextInterface::class, $this->graph);
+        $actor = new Actor($this->graph);
+        $frame = new Frame($actor, $this->graph);
+        $this->assertInstanceOf(ContextInterface::class, $frame);
     }
 
 }
