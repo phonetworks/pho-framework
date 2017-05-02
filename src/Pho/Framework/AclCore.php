@@ -50,6 +50,26 @@ class AclCore {
     }
 
     /**
+     * Getter for the Creator object.
+     *
+     * @return Actor
+     */
+    public function creator(): Actor
+    {
+        return $this->creator;
+    }
+
+    /**
+     * Getter for the Context object.
+     *
+     * @return ContextInterface
+     */
+    public function context(): ContextInterface
+    {
+        return $this->context;
+    }
+
+    /**
      * Converts the object into a portable PHP array
      *
      * Useful for custom serialization.
