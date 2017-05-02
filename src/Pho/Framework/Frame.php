@@ -48,4 +48,27 @@ class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
         $this->setupEdges();
     }
 
+     /**
+     * {@inheritdoc}
+     */
+    public function belongsOrEquals(ContextInterface $context): bool
+    {
+        /*if($context instanceof Graph)
+            return true;*/
+        $members = $context->members();
+        foreach($members as $member) {
+            if($member instanceof Frame) {
+                if($member->id() == $this->id()) {
+                    return true;
+                }
+                else {
+                    if($this->belongsOrEquals($member)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

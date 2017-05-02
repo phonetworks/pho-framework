@@ -22,4 +22,12 @@ namespace Pho\Framework;
  */
 interface ContextInterface extends \Pho\Lib\Graph\GraphInterface {
 
+    /**
+     * Checks if the given context is equal to or a subelement of this context.
+     *
+     * @param ContextInterface $context
+     * @return bool
+     */
+    public function belongsOrEquals(ContextInterface $context): bool;
+
 }
