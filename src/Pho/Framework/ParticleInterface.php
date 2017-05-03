@@ -29,5 +29,12 @@ namespace Pho\Framework;
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 interface ParticleInterface {
+
+    /**
+     * Retrieves the object's ACL
+     *
+     * @return AclCore
+     */
+    public function acl(): AclCore;
     
 }

@@ -262,12 +262,28 @@ trait ParticleTrait {
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
 
-
+    /**
+     * Converts the particle into array
+     * 
+     * For serialization and portability.
+     *
+     * @return array
+     */
     public function toArray(): array
     {
         $array = parent::toArray();
         $array["acl"] = $this->acl->toArray();
         return $array;
+    }
+
+    /**
+     * Retrieves the object's ACL
+     *
+     * @return AclCore
+     */
+    public function acl(): AclCore
+    {
+        return $this->acl;
     }
 
 }
