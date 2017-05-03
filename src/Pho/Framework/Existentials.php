@@ -12,17 +12,19 @@
 namespace Pho\Framework;
 
 /**
- * AclCore (Access Control Lists Core)
+ * Existentials
  * 
- * Access Control List is a gateway authority between graph nodes.
- * Pho Framework introduces the core of this authority as an 
- * abstract implementation and expects the higher level packages
- * to extend itself. The core is by default immutable; meaning
- * the two values (creator and context) cannot be altered.
+ * Existentials is an immutable list of properties that constitute
+ * the basis of the node. 
+ * 
+ * Existentials may be used by Access Control List(ACL) as a gateway 
+ * authority between graph nodes.The actual ACL is expected to be 
+ * implemented separately in higher levels (optional) and the 
+ * Existentials would behave as its core.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class AclCore {
+class Existentials {
 
     /**
      * Who created this node. Must point to an Actor.

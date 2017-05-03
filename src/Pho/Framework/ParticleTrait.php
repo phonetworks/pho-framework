@@ -112,10 +112,12 @@ trait ParticleTrait {
 
     /**
      * Access Control List object
+     * 
+     * Null since it is not implemented at this level.
      *
-     * @var Acl
+     * @var null
      */
-    protected $acl;
+    // protected $acl = null;
 
     /**
      * Trait constructor.
@@ -272,7 +274,8 @@ trait ParticleTrait {
     public function toArray(): array
     {
         $array = parent::toArray();
-        $array["acl"] = $this->acl->toArray();
+        $array["acl"] = [];
+        $array["acl"]["core"] = $this->existentials->toArray();
         return $array;
     }
 
@@ -281,9 +284,9 @@ trait ParticleTrait {
      *
      * @return AclCore
      */
-    public function acl(): AclCore
+    public function existentials(): Existentials
     {
-        return $this->acl;
+        return $this->existentials;
     }
 
 }

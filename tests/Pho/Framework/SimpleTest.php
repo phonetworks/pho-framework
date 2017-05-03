@@ -104,10 +104,12 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $actor->toArray()["attributes"]);
         $this->assertArrayHasKey("edge_list", $array);
         $this->assertArrayHasKey("acl", $array);
-        $this->assertCount(3, $array["acl"]);
-        $this->assertArrayHasKey("context", $array["acl"]);
-        $this->assertArrayHasKey("creator", $array["acl"]);
-        $this->assertArrayHasKey("node", $array["acl"]);
+        $this->assertCount(1, $array["acl"]);
+        $this->assertArrayHasKey("core", $array["acl"]);
+        $this->assertCount(3, $array["acl"]["core"]);
+        $this->assertArrayHasKey("context", $array["acl"]["core"]);
+        $this->assertArrayHasKey("creator", $array["acl"]["core"]);
+        $this->assertArrayHasKey("node", $array["acl"]["core"]);
     }
 
     public function testFrameToArray() {
@@ -123,11 +125,13 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $actor->toArray()["attributes"]);
         $this->assertArrayHasKey("edge_list", $array);
         $this->assertArrayHasKey("acl", $array);
-        $this->assertCount(3, $array["acl"]);
-        $this->assertArrayHasKey("context", $array["acl"]);
-        $this->assertArrayHasKey("creator", $array["acl"]);
-        $this->assertArrayHasKey("node", $array["acl"]);
-        $this->assertEquals($actor->id(), $array["acl"]["creator"]);
+        $this->assertCount(1, $array["acl"]);
+        $this->assertArrayHasKey("core", $array["acl"]);
+        $this->assertCount(3, $array["acl"]["core"]);
+        $this->assertArrayHasKey("context", $array["acl"]["core"]);
+        $this->assertArrayHasKey("creator", $array["acl"]["core"]);
+        $this->assertArrayHasKey("node", $array["acl"]["core"]);
+        $this->assertEquals($actor->id(), $array["acl"]["core"]["creator"]);
     }
 
     public function testContextInterface() {

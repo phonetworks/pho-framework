@@ -31,10 +31,17 @@ namespace Pho\Framework;
 interface ParticleInterface {
 
     /**
-     * Retrieves the object's ACL
+     * Retrieves the object's existential properties
      *
-     * @return AclCore
+     * Existential properties are:
+     * * The node itself ($this)
+     * * Its context
+     * * Its creator
+     * 
+     * These properties can never be altered.
+     * 
+     * @return Existentials
      */
-    public function acl(): AclCore;
+    public function existentials(): Existentials;
     
 }

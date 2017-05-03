@@ -44,7 +44,7 @@ class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
 
     public function __construct(Actor $creator, ContextInterface $context) {
         parent::__construct($context);
-        $this->acl = new AclCore($this, $creator, $context);
+        $this->existentials = new Existentials($this, $creator, $context);
         $this->setupEdges();
     }
 
