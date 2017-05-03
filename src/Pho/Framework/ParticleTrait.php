@@ -236,6 +236,7 @@ trait ParticleTrait {
      *
      * @param string $name Catch-all method name
      * @param array $args Catch-all method arguments
+     * 
      * @return array An array of ParticleInterface objects
      * 
      * @throws Exceptions\InvalidParticleMethodException when no matching method found.
@@ -248,7 +249,7 @@ trait ParticleTrait {
             $return = [];
             array_walk($edges_out, function($item, $key) use (&$return, $name) {
                 if($item instanceof $this->edge_out_getter_classes[$name])
-                   $return[] = $item;
+                   $return[] = $item();
             });
             return $return;
         }   
@@ -257,7 +258,7 @@ trait ParticleTrait {
             $return = [];
             array_walk($edges_in, function($item, $key) use (&$return, $name) {
                 if($item instanceof $this->edge_in_getter_classes[$name])
-                   $return[] = $item;
+                   $return[] = $item->tail()->node();
             });
             return $return;
         }
