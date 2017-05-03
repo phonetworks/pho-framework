@@ -39,12 +39,20 @@ class AclCore {
     protected $context;
 
     /**
+     * A reference to the node itself
+     *
+     * @var ParticleInterface
+     */
+    protected $node;
+
+    /**
      * Constructor.
      * 
      * @param Actor $creator The creator of this node.
      * @param ContextInterface $context The context in which this node is created and will exist
      */
-    public function __construct(Actor $creator, ContextInterface $context) {
+    public function __construct(ParticleInterface $node, Actor $creator, ContextInterface $context) {
+        $this->node    = $node;
         $this->creator = $creator;
         $this->context = $context;
     }
@@ -70,6 +78,16 @@ class AclCore {
     }
 
     /**
+     * Getter for the node object.
+     *
+     * @return ParticleInterface
+     */
+    public function node(): ParticleInterface
+    {
+        return $this->node;
+    }
+
+    /**
      * Converts the object into a portable PHP array
      *
      * Useful for custom serialization.
@@ -80,6 +98,7 @@ class AclCore {
     {
         //eval(\Psy\sh());
         return [
+            "node"    => (string) $this->node->id(),
             "creator" => (string) $this->creator->id(),
             "context" => ($this->context instanceof Graph) ? Graph::class : (string) $this->context->id()
         ]; 

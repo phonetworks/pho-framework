@@ -104,9 +104,10 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $actor->toArray()["attributes"]);
         $this->assertArrayHasKey("edge_list", $array);
         $this->assertArrayHasKey("acl", $array);
-        $this->assertCount(2, $array["acl"]);
+        $this->assertCount(3, $array["acl"]);
         $this->assertArrayHasKey("context", $array["acl"]);
         $this->assertArrayHasKey("creator", $array["acl"]);
+        $this->assertArrayHasKey("node", $array["acl"]);
     }
 
     public function testFrameToArray() {
@@ -122,9 +123,10 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $actor->toArray()["attributes"]);
         $this->assertArrayHasKey("edge_list", $array);
         $this->assertArrayHasKey("acl", $array);
-        $this->assertCount(2, $array["acl"]);
+        $this->assertCount(3, $array["acl"]);
         $this->assertArrayHasKey("context", $array["acl"]);
         $this->assertArrayHasKey("creator", $array["acl"]);
+        $this->assertArrayHasKey("node", $array["acl"]);
         $this->assertEquals($actor->id(), $array["acl"]["creator"]);
     }
 
