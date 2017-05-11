@@ -45,7 +45,7 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {
 
     public function __construct(ContextInterface $context) {
         parent::__construct($context);
-        $this->existentials = new Existentials($this, $this, $context);
+        $this->creator = $this;
         $this->enter($context);
         $this->setupEdges();
     }

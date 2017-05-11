@@ -27,6 +27,15 @@ use Zend\File\ClassFileLocator;
 trait ParticleTrait {
 
     /**
+     * Who created this node. Must point to an Actor.
+     * 
+     * Points to self by Actor particles.
+     *
+     * @var Actor
+     */
+    protected $creator;
+
+    /**
      * @internal 
      * 
      * Incoming Edges
@@ -275,19 +284,9 @@ trait ParticleTrait {
     public function toArray(): array
     {
         $array = parent::toArray();
-        $array["acl"] = [];
-        $array["acl"]["core"] = $this->existentials->toArray();
+        $array["creator"] = $this->creator->id();
         return $array;
     }
 
-    /**
-     * Retrieves the object's ACL
-     *
-     * @return AclCore
-     */
-    public function existentials(): Existentials
-    {
-        return $this->existentials;
-    }
 
 }
