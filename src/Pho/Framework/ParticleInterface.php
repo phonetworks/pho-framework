@@ -29,19 +29,5 @@ namespace Pho\Framework;
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 interface ParticleInterface {
-
-    /**
-     * Retrieves the object's existential properties
-     *
-     * Existential properties are:
-     * * The node itself ($this)
-     * * Its context
-     * * Its creator
-     * 
-     * These properties can never be altered.
-     * 
-     * @return Existentials
-     */
-    public function existentials(): Existentials;
     
 }
