@@ -30,4 +30,18 @@ namespace Pho\Framework;
  */
 interface ParticleInterface {
     
+    /**
+     * Retrieves the object's existential properties
+     *
+     * Existential properties are:
+     * * The node itself ($this)
+     * * Its context
+     * * Its creator
+     * 
+     * These properties can never be altered.
+     * 
+     * @return array
+     */
+    public function existentials(): array;
+
 }

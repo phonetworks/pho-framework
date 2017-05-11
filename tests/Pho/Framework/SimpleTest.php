@@ -132,4 +132,13 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(ContextInterface::class, $frame);
     }
 
+    public function testExistentials() {
+        $actor = new Actor($this->graph);
+        $frame = new Frame($actor, $this->graph);
+        $this->assertCount(3, $actor->existentials());
+        $this->assertEquals((string)$frame->id(), $frame->existentials()["node"]);
+        $this->assertEquals((string)$actor->id(), $frame->existentials()["creator"]);
+        $this->assertEquals(Graph::class, $frame->existentials()["context"]);
+    }
+
 }
