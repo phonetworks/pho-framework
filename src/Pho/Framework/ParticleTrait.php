@@ -289,16 +289,14 @@ trait ParticleTrait {
     }
 
     /**
-     * Retrieves the object's ACL
-     *
-     * @return AclCore
+     * {@inheritdoc}
      */
     public function existentials(): array
     {
         return [
-            "node"    => (string) $this->id,
-            "creator" => (string) $this->creator->id(),
-            "context" => ($this->context instanceof Graph) ? Graph::class : (string) $this->context->id()
+            "node"    => $this,
+            "creator" => $this->creator,
+            "context" => $this->context
         ];
     }
 

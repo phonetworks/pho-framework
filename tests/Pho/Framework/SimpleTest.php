@@ -136,9 +136,9 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $actor = new Actor($this->graph);
         $frame = new Frame($actor, $this->graph);
         $this->assertCount(3, $actor->existentials());
-        $this->assertEquals((string)$frame->id(), $frame->existentials()["node"]);
-        $this->assertEquals((string)$actor->id(), $frame->existentials()["creator"]);
-        $this->assertEquals(Graph::class, $frame->existentials()["context"]);
+        $this->assertEquals($frame, $frame->existentials()["node"]);
+        $this->assertEquals($actor, $frame->existentials()["creator"]);
+        $this->assertEquals($this->graph, $frame->existentials()["context"]);
     }
 
 }
