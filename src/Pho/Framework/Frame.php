@@ -45,6 +45,7 @@ class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
     public function __construct(Actor $creator, ContextInterface $context) {
         parent::__construct($context);
         $this->creator = $creator;
+        $this->creator_id = $creator->id();
         $this->setupEdges();
     }
 

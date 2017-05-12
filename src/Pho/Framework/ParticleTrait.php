@@ -35,6 +35,14 @@ trait ParticleTrait {
      */
     protected $creator;
 
+
+    /**
+     * The creator's ID
+     *
+     * @var string
+     */
+    protected $creator_id;
+
     /**
      * @internal 
      * 
@@ -284,7 +292,7 @@ trait ParticleTrait {
     public function toArray(): array
     {
         $array = parent::toArray();
-        $array["creator"] = $this->creator->id();
+        $array["creator"] = $this->creator_id;
         return $array;
     }
 
