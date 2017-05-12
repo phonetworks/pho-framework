@@ -303,9 +303,22 @@ trait ParticleTrait {
     {
         return [
             "node"    => $this,
-            "creator" => $this->creator,
-            "context" => $this->context
+            "creator" => $this->creator(),
+            "context" => $this->context()
         ];
+    }
+
+    public function creator(): Actor
+    {
+        if(isset($this->creator))
+            return $this->creator;
+        else
+            return $this->hydratedCreator();
+    }
+
+    protected function hydratedCreator(): Actor
+    {
+
     }
 
 
