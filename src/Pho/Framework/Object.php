@@ -37,7 +37,7 @@ class Object extends \Pho\Lib\Graph\Node implements ParticleInterface {
     public function __construct(Actor $creator, ContextInterface $context) {
         parent::__construct($context);
         $this->creator = $creator;
-        $this->creator_id = $creator->id();
+        $this->creator_id = (string) $creator->id();
         $this->setupEdges();
     }
 
