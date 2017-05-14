@@ -58,6 +58,16 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Object::class, $actor->getWrites()[0]);
     }
 
+    public function testObjectHaser() {
+        $actor = new Actor($this->graph);
+        $object = new Object($actor, $this->graph);
+        $edge = $actor->writes($object);
+        $this->assertTrue($object->hasWriter($actor->id()));
+        $this->assertTrue($actor->hasWrite($object->id()));
+        $this->assertFalse($actor->hasWrite($this->graph->id()));
+        $this->assertFalse($actor->hasWrite($actor->id()));
+    }
+
      public function testFiltering() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);

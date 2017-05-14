@@ -13,6 +13,7 @@ namespace Pho\Framework;
 
 use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 use Zend\File\ClassFileLocator;
+use Pho\Lib\Graph\ID;
 
 /**
  * The Particle Trait
@@ -57,7 +58,7 @@ trait ParticleTrait {
     /**
      * Getter Labels of Incoming Edges
      * 
-     * A simple array of tail labels of incoming edges.
+     * A simple array of tail labels of incoming edges in plural.
      * Tail labels in string format.
      *
      * @var array
@@ -67,13 +68,34 @@ trait ParticleTrait {
     /**
      * Getter Classes of Incoming Edges
      * 
-     * An array of tail labels of incoming edges as key
+     * An array of tail labels of incoming edges in plural as key
      * and associated class name as value.
      * Both in string format.
      *
      * @var array
      */
     protected $edge_in_getter_classes = [];
+
+    /**
+     * Haser Labels of Incoming Edges
+     * 
+     * A simple array of tail labels of incoming edges in singular.
+     * Tail labels in string format.
+     *
+     * @var array
+     */
+    protected $edge_in_haser_methods = [];
+
+    /**
+     * Haser Classes of Incoming Edges
+     * 
+     * An array of tail labels of incoming edges in singular as key
+     * and associated class name as value.
+     * Both in string format.
+     *
+     * @var array
+     */
+    protected $edge_in_haser_classes = [];
 
     /**
      * Setter Labels of Outgoing Edges
@@ -83,6 +105,8 @@ trait ParticleTrait {
      * @var array
      */
     protected $edge_out_setter_methods = [];
+
+    
 
     /**
      * Setter Classes of Outgoing Edges
@@ -109,7 +133,7 @@ trait ParticleTrait {
     /**
      * Getter Labels of Outgoing Edges
      * 
-     * A simple array of head labels of outgoing edges.
+     * A simple array of head labels of outgoing edges in plural.
      * Labels in string format.
      *
      * @var array
@@ -119,13 +143,34 @@ trait ParticleTrait {
     /**
      * Getter Classes of Outgoing Edges
      * 
-     * An array of head labels of outgoing edges as key,
+     * An array of head labels of outgoing edges in plural as key,
      * associated class names as value.
      * Both in string format.
      *
      * @var array
      */
     protected $edge_out_getter_classes = [];
+
+    /**
+     * Haser Labels of Outgoing Edges
+     * 
+     * A simple array of head labels of outgoing edges in singular.
+     * Labels in string format.
+     *
+     * @var array
+     */
+    protected $edge_out_haser_methods = [];
+
+    /**
+     * Haser Classes of Outgoing Edges
+     * 
+     * An array of head labels of outgoing edges in singular as key,
+     * associated class names as value.
+     * Both in string format.
+     *
+     * @var array
+     */
+    protected $edge_out_haser_classes = [];
 
     /**
      * Access Control List object
@@ -165,6 +210,9 @@ trait ParticleTrait {
                 $method = $edge_in_class_reflector->getConstant("TAIL_LABELS");
                 $this->edge_in_getter_methods[] = $method;
                 $this->edge_in_getter_classes[$method] = $edge_in_class;
+                $method = $edge_in_class_reflector->getConstant("TAIL_LABEL");
+                $this->edge_in_haser_methods[] = $method;
+                $this->edge_in_haser_classes[$method] = $edge_in_class;
             }
         }
     }
@@ -201,6 +249,10 @@ trait ParticleTrait {
                 $_method = $reflector->getConstant("HEAD_LABELS");
                 $this->edge_out_getter_methods[] = $_method;
                 $this->edge_out_getter_classes[$_method] = $class;
+                $_method = $reflector->getConstant("HEAD_LABEL");
+                $this->edge_out_haser_methods[] = $_method;
+                $this->edge_out_haser_classes[$_method] = $class;
+
             }
         }
     }
@@ -218,12 +270,16 @@ trait ParticleTrait {
         if(in_array($name, $this->edge_out_setter_methods)) {
             return $this->_callSetter($name, $args);
         }
-        else if( (strlen($name) > 3 && substr($name, 0, 3) == "get" ) ) {
-            try {
-                return $this->_callGetter($name, $args);
-            }
-            catch(InvalidParticleMethodException $e) {
-                throw $e;
+        else if(strlen($name) > 3) {
+            $func_prefix = substr($name, 0, 3);
+            $funcs = ["get"=>"_callGetter", "has"=>"_callHaser"];
+            if ( array_key_exists($func_prefix, $funcs) )  {
+                try {
+                    return $this->{$funcs[$func_prefix]}($name, $args);
+                }
+                catch(Exceptions\InvalidParticleMethodException $e) {
+                    throw $e;
+                }
             }
         }
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
@@ -278,6 +334,46 @@ trait ParticleTrait {
                    $return[] = $item->tail()->node();
             });
             return $return;
+        }
+        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+    }
+
+
+    /**
+     * Catch-all method for hasers -hasSomething()-
+     *
+     * @param string $name Catch-all method name
+     * @param array $args Catch-all method arguments. Must contain a single ID for the queried object, or it will throw an exception.
+     * 
+     * @return bool whether the node exists or not
+     * 
+     * @throws InvalidArgumentException when the method is called without a single ID object as argument.
+     * @throws Exceptions\InvalidParticleMethodException when no matching method found.
+     */
+    protected function _callHaser(string $name, array $args): bool
+    {
+        if( !isset($args[0]) || !$args[0] instanceof ID ) {
+            throw new \InvalidArgumentException(
+                sprintf('The function %s must be called with a single argument that is strictly a \Pho\Lib\Graph\ID object', $name)
+            );
+        }
+        $id = $args[0];
+        $name = strtolower(substr($name, 3));
+        if(in_array($name, $this->edge_out_haser_methods)) {
+            $edges_out = $this->edges()->out();
+            foreach($edges_out as $edge) {
+                if($edge instanceof $this->edge_out_haser_classes[$name] && $edge->headID()->equals($id))
+                    return true;
+            }
+            return false;
+        }   
+        else if(in_array($name, $this->edge_in_haser_methods)) {
+            $edges_in = $this->edges()->in();
+            foreach($edges_in as $edge) {
+                if($edge instanceof $this->edge_in_haser_classes[$name] && $edge->tailID()->equals($id))
+                    return true;
+            }
+            return false;
         }
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
