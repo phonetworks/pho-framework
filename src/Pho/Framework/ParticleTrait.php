@@ -358,6 +358,7 @@ trait ParticleTrait {
             );
         }
         $id = $args[0];
+        $original_name = $name;
         $name = strtolower(substr($name, 3));
         if(in_array($name, $this->edge_out_haser_methods)) {
             $edges_out = $this->edges()->out();
@@ -375,7 +376,7 @@ trait ParticleTrait {
             }
             return false;
         }
-        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $original_name);
     }
 
     /**
