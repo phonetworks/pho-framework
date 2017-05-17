@@ -98,6 +98,8 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge {
     * @param string $data 
     *
     * @return void
+    * 
+    * @throws Exceptions\PredicateClassDoesNotExistException when the predicate class does not exist.
     */
     public function unserialize(/* mixed */ $data): void 
     {
@@ -105,7 +107,10 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge {
         $this->id = Graph\ID::fromString($data["id"]);
         $this->tail_id = $data["tail"];
        $this->head_id = $data["head"];
-       $this->predicate_label = $data["predicate"];
+       if(class_exists($data["predicate"]))
+        $this->predicate_label = new $data["predicate"];
+        else
+        throw new PredicateClassDoesNotExistException((string)$this->id(), $data["predicate"])
        $this->attributes = new Graph\AttributeBag($this, $data["attributes"]);
     }
 
