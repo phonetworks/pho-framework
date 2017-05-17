@@ -11,6 +11,8 @@
 
 namespace Pho\Framework;
 
+use Pho\Lib\Graph;
+
 /**
  * Framework Edge Foundation
  * 
@@ -70,6 +72,41 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge {
     public function __invoke(): ParticleInterface
     {
         return $this->head()->node();
+    }
+    
+    
+    /**
+    * @internal
+    *
+    * Used for serialization. Nothing special here. Declared for 
+    * subclasses.
+    *
+    * @return string in PHP serialized format.
+    */
+     public function serialize(): string 
+   {
+        return serialize($this->toArray());
+    }
+    
+    
+    /**
+    * @internal
+    *
+    * Used for deserialization. Nothing special here. Declared for 
+    * subclasses.
+    *
+    * @param string $data 
+    *
+    * @return void
+    */
+    public function unserialize(/* mixed */ $data): void 
+    {
+        $data = unserialize($data);
+        $this->id = Graph\ID::fromString($data["id"]);
+        $this->tail_id = $data["tail"];
+       $this->head_id = $data["head"];
+       $this->predicate_label = $data["predicate"];
+       $this->attributes = new Graph\AttributeBag($this, $data["attributes"]);
     }
 
 }
