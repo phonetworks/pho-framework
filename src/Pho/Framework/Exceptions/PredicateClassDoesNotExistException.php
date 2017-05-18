@@ -26,8 +26,8 @@ class PredicateClassDoesNotExistException extends \Exception {
     /**
      * Constructor.
      *
-     * @param string $class_name Class name of the particle
-     * @param string $method Invalid method
+     * @param string $edge_id The ID of the edge in pure string format
+     * @param string $predicate_class_name Full class name of the predicate
      */
     public function __construct(string $edge_id, string $predicate_class_name)
     {
