@@ -318,24 +318,49 @@ trait ParticleTrait {
     {
         $name = strtolower(substr($name, 3));
         if(in_array($name, $this->edge_out_getter_methods)) {
-            $edges_out = $this->edges()->out();
-            $return = [];
-            array_walk($edges_out, function($item, $key) use (&$return, $name) {
-                if($item instanceof $this->edge_out_getter_classes[$name])
-                   $return[] = $item();
-            });
-            return $return;
+            return $this->_callGetterEdgeOut($name);
         }   
         else if(in_array($name, $this->edge_in_getter_methods)) {
-            $edges_in = $this->edges()->in();
-            $return = [];
-            array_walk($edges_in, function($item, $key) use (&$return, $name) {
-                if($item instanceof $this->edge_in_getter_classes[$name])
-                   $return[] = $item->tail()->node();
-            });
-            return $return;
+            return $this->_callGetterEdgeIn($name);
         }
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+    }
+
+
+    /**
+     * Getter Catcher for Edges Out
+     *
+     * @param string $name Representation of nodes to retrieve
+     * 
+     * @return array The edges.
+     */
+    protected function _callGetterEdgeOut(string $name): array
+    {
+        $edges_out = $this->edges()->out();
+        $return = [];
+        array_walk($edges_out, function($item, $key) use (&$return, $name) {
+            if($item instanceof $this->edge_out_getter_classes[$name])
+                $return[] = $item();
+        });
+        return $return;
+    }
+
+    /**
+     * Getter Catcher for Edges Out
+     *
+     * @param string $name Representation of nodes to retrieve
+     * 
+     * @return array The edges.
+     */
+    protected function _callGetterEdgeIn(string $name): array
+    {
+        $edges_in = $this->edges()->in();
+        $return = [];
+        array_walk($edges_in, function($item, $key) use (&$return, $name) {
+            if($item instanceof $this->edge_in_getter_classes[$name])
+                $return[] = $item->tail()->node();
+        });
+        return $return;
     }
 
 
