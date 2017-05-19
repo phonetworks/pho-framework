@@ -318,10 +318,10 @@ trait ParticleTrait {
     {
         $name = strtolower(substr($name, 3));
         if(in_array($name, $this->edge_out_getter_methods)) {
-            return $this->_callGetterEdgeOut($name);
+            return $this->__callGetterEdgeOut($name);
         }   
         else if(in_array($name, $this->edge_in_getter_methods)) {
-            return $this->_callGetterEdgeIn($name);
+            return $this->__callGetterEdgeIn($name);
         }
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
@@ -334,7 +334,7 @@ trait ParticleTrait {
      * 
      * @return array The edges.
      */
-    protected function _callGetterEdgeOut(string $name): array
+    protected function __callGetterEdgeOut(string $name): array
     {
         $edges_out = $this->edges()->out();
         $return = [];
@@ -346,13 +346,13 @@ trait ParticleTrait {
     }
 
     /**
-     * Getter Catcher for Edges Out
+     * Getter Catcher for Edges In
      *
      * @param string $name Representation of nodes to retrieve
      * 
      * @return array The edges.
      */
-    protected function _callGetterEdgeIn(string $name): array
+    protected function __callGetterEdgeIn(string $name): array
     {
         $edges_in = $this->edges()->in();
         $return = [];
@@ -386,23 +386,49 @@ trait ParticleTrait {
         $original_name = $name;
         $name = strtolower(substr($name, 3));
         if(in_array($name, $this->edge_out_haser_methods)) {
-            $edges_out = $this->edges()->out();
-            foreach($edges_out as $edge) {
-                if($edge instanceof $this->edge_out_haser_classes[$name] && $edge->headID()->equals($id))
-                    return true;
-            }
-            return false;
+            return $this->__callHaserEdgeOut($id, $name);
         }   
         else if(in_array($name, $this->edge_in_haser_methods)) {
-            $edges_in = $this->edges()->in();
-            foreach($edges_in as $edge) {
-                if($edge instanceof $this->edge_in_haser_classes[$name] && $edge->tailID()->equals($id))
-                    return true;
-            }
-            return false;
+            return $this->__callHaserEdgeIn($id, $name);
         }
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $original_name);
     }
+
+
+    /**
+     * Haser Catcher for Edges Out
+     *
+     * @param string $name Representation of nodes to check
+     * 
+     * @return bool whether the node exists or not
+     */
+    protected function __callHaserEdgeOut(ID $id, string $name): bool
+    {
+        $edges_out = $this->edges()->out();
+        foreach($edges_out as $edge) {
+            if($edge instanceof $this->edge_out_haser_classes[$name] && $edge->headID()->equals($id))
+                return true;
+         }
+        return false;
+    }
+
+    /**
+     * Haser Catcher for Edges In
+     *
+     * @param string $name Representation of nodes to check
+     * 
+     * @return bool whether the node exists or not
+     */
+    protected function __callHaserEdgeIn(ID $id, string $name): bool
+    {
+        $edges_in = $this->edges()->in();
+        foreach($edges_in as $edge) {
+            if($edge instanceof $this->edge_in_haser_classes[$name] && $edge->tailID()->equals($id))
+                return true;
+        }
+        return false;
+    }
+
 
     /**
      * Converts the particle into array
