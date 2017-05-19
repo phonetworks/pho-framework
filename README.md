@@ -84,6 +84,66 @@ Pho-Framework is built upon pho-lib-graph which has extensive support for hydrat
 
 * **hydratedCreator()**: called when ```creator()``` can't find the creator. Enables you to access ```$creator_id``` to fetch it from external sources. This can be used with any particle; be it an Actor, Object or Frame. The return value is **Actor**.
 
+Also the following functions may be overridden with hydrating functions otherwise the program may not perform well at scale given the fact that the current implementation works by recursing through each and every edge of the given node.
+
+* **__callGetterEdgeIn(string $name)**: Example: called with ```getSubscribers()``` for incoming edges of "Subscribe". $name would resolve as "subscribers" after going through strtolower and trim operations. You may fetch the associated class names with ```$this->edge_in_getter_classes[$name]```. The return value is **array\<EdgeInterface\>**. Current implementation is as follows:
+
+```php
+protected function __callGetterEdgeIn(string $name): array
+    {
+        $edges_in = $this->edges()->in();
+        $return = [];
+        array_walk($edges_in, function($item, $key) use (&$return, $name) {
+            if($item instanceof $this->edge_in_getter_classes[$name])
+                $return[] = $item->tail()->node();
+        });
+        return $return;
+    }
+```
+
+* **__callGetterEdgeOut(string $name)**: Example: called with ```getSubscriptions()``` for outgoing edges of "Subscribe". $name would resolve as "subscriptions" after going through strtolower and trim operations. You may fetch the associated class names with ```$this->edge_out_getter_classes[$name]```. The return value is **array\<EdgeInterface\>**. Current implementation is as follows:
+
+```php
+protected function __callGetterEdgeOut(string $name): array
+    {
+        $edges_out = $this->edges()->out();
+        $return = [];
+        array_walk($edges_out, function($item, $key) use (&$return, $name) {
+            if($item instanceof $this->edge_out_getter_classes[$name])
+                $return[] = $item();
+        });
+        return $return;
+    }
+```
+* **__callHaserEdgeIn(ID $id, string $name)**: Example: called with ```hasSubscriber()``` for incoming edges of "Subscribe". $name would resolve as "subscriber" after going through strtolower and trim operations. You may fetch the associated class names with ```$this->edge_in_haser_classes[$name]```. The return value is **bool**. Current implementation is as follows:
+
+```php
+protected function __callHaserEdgeIn(ID $id, string $name): bool
+    {
+        $edges_in = $this->edges()->in();
+        foreach($edges_in as $edge) {
+            if($edge instanceof $this->edge_in_haser_classes[$name] && $edge->tailID()->equals($id))
+                return true;
+        }
+        return false;
+    }
+```
+
+* **__callHaserEdgeOut(ID $id, string $name)**: Example: called with ```hasSubscription()``` for outgoing edges of "Subscribe". $name would resolve as "subscription" after going through strtolower and trim operations. You may fetch the associated class names with ```$this->edge_out_haser_classes[$name]```. The return value is **bool**. Current implementation is as follows:
+
+```php
+protected function __callHaserEdgeOut(ID $id, string $name): bool
+    {
+        $edges_out = $this->edges()->out();
+        foreach($edges_out as $edge) {
+            if($edge instanceof $this->edge_out_haser_classes[$name] && $edge->headID()->equals($id))
+                return true;
+         }
+        return false;
+    }
+```
+
+
 ## Reference
 
 Valid methods in the Pho Framework stack are:
