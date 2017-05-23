@@ -50,11 +50,11 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
         $edge = $actor->writes($object);
-        $this->assertInstanceOf(ActorOut\Writes::class, $object->edges()->in()[0]);
+        $this->assertInstanceOf(ActorOut\Writes::class, $object->edges()->in()->current());
         $this->assertInstanceOf(Actor::class, $object->getWriters()[0]);
         $this->assertCount(1, $object->getWriters());
         $this->assertCount(1, $actor->getWrites());
-        $this->assertInstanceOf(ActorOut\Writes::class, $actor->edges()->out()[0]);
+        $this->assertInstanceOf(ActorOut\Writes::class, $actor->edges()->out()->current());
         $this->assertInstanceOf(Object::class, $actor->getWrites()[0]);
     }
 
