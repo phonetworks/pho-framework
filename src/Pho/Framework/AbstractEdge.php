@@ -72,7 +72,10 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
      */
     public function __invoke(): ParticleInterface
     {
-        return $this->head()->node();
+        if($this->head() instanceof ParticleInterface) 
+            return $this->head();
+        else
+            return $this->head()->node();
     }
     
     
