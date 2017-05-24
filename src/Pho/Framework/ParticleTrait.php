@@ -282,7 +282,7 @@ trait ParticleTrait {
                 }
             }
         }
-        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+        //throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
 
     /**
