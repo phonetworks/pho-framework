@@ -31,7 +31,7 @@ An actor does three things;
 
 ### Frame
 Frame extends the SubGraph class of pho-lib-graph. Therefore it shows both graph and node properties. It does only one thing;
-* contains
+* contain
 
 ### Object
 Object is what graph actors consume, and are centered around. Objects have one and only one edge:
@@ -41,7 +41,7 @@ To illustrate what these particles do, with real-world examples;
 
 * Users, admins and anonymous users of apps, social networks are **Actors**. They _do_ things; ready, write, subscribe.
 * Groups, events and social networks are **Frames**. They are recursive social graphs, they _contain_ Actors.
-* Blog posts, status updates, Snaps, Tweets are all **Objects**. They are what social network members (Actors) are centered around.
+* Blog posts, status updates, Snaps, Tweets are all **Objects**. They are what social network members (Actors) are centered around. They optionally do one and only one thing; that is to _transmit_. For example, a private message is an object that _transmits_ to a certain actor, while a blog post is not.
 
 ## Architecture
 
@@ -57,7 +57,7 @@ To illustrate this, take a look at [Actor.php](https://github.com/phonetworks/ph
 The line below defines the edges that this particle accepts:
 
 ```php
-const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ObjectOut\Transmits::class];
+const EDGES_IN = [ActorOut\Read::class, ActorOut\Subscribe::class, ObjectOut\Transmit::class];
 ```
 
 Any edge that claims that this particle is its tail, must be listed here, otherwise an exception will be thrown.
@@ -67,7 +67,7 @@ All outgoing edges of a particle must be defined in the {ParticleName}Out/ folde
 An examplary edge is shown below:
 
 ```php
-class Subscribes extends Framework\AbstractEdge {
+class Subscribe extends Framework\AbstractEdge {
     const HEAD_LABEL = "subscription";
     const HEAD_LABELS = "subscriptions";
     const TAIL_LABEL = "subscriber";
@@ -83,9 +83,9 @@ For an edge to be valid, it must:
     * TAIL_LABELS: same as above, in plural. So it's "subscribers"
     * HEAD_LABEL: what the head node of this edge's role is called, in singular. A subscriber subscribes to a *subscription*, hence it's "subscription"
     * HEAD_LABELS: same as above, in plural. So it's "subscriptions"
-    * SETTABLES: what classes can this edge target, in array format. If it's [Framework\ParticleInterface::class], that means it can target any node/particle. If it was [Framework\Object::class, Framework\Frame::class] it can target Frames and Objects only, and not Actors. For example, the [Writes](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Writes.php) edge cannot target Actor particles, because a user can't create a user.
+    * SETTABLES: what classes can this edge target, in array format. If it's [Framework\ParticleInterface::class], that means it can target any node/particle. Sometimes this level of flexibility may not be the case for all types of edges; for example, the [Write](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Write.php) edge cannot target Actor particles, because a user can't create a user. Hence its SETTABLES is declared as [Framework\Object::class, Framework\Frame::class] only, so that it can target Frames and Objects only, and not Actors.
     
-As you can see above, the constants defined in the edge class are merely for naming purposes. The mechanics is as follows;
+As you can see above, the constants defined in the edge class are merely for naming purposes. The mechanics function as follows;
 
 ```php 
 // $actor will be our Actor node 
@@ -184,8 +184,9 @@ protected function _callSetter(string $name, array $args): AbstractEdge
 }
 ```
 
-
+<!--
 ## Reference
 
 Valid methods in the Pho Framework stack are:
+-->
 
