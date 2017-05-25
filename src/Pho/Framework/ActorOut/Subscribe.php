@@ -24,7 +24,7 @@ use Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Subscribes extends Framework\AbstractEdge {
+class Subscribe extends Framework\AbstractEdge {
 
     const HEAD_LABEL = "subscription";
     const HEAD_LABELS = "subscriptions";

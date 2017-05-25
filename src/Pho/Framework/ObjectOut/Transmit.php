@@ -22,7 +22,7 @@ use Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Transmits extends Framework\AbstractEdge {
+class Transmit extends Framework\AbstractEdge {
 
     const HEAD_LABEL = "receiver";
     const HEAD_LABELS = "receivers";

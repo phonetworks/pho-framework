@@ -41,7 +41,7 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {
      * 
      * @var array An array of class names (with their namespaces)
      */
-    const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ObjectOut\Transmits::class];
+    const EDGES_IN = [ActorOut\Read::class, ActorOut\Subscribe::class, ObjectOut\Transmit::class];
 
     public function __construct(ContextInterface $context) {
         parent::__construct($context);

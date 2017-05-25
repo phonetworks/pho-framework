@@ -40,7 +40,7 @@ class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
      * 
      * @var array An array of class names (with their namespaces)
      */
-    const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ActorOut\Writes::class, ObjectOut\Transmits::class];
+    const EDGES_IN = [ActorOut\Read::class, ActorOut\Subscribe::class, ActorOut\Write::class, ObjectOut\Transmit::class];
 
     public function __construct(Actor $creator, ContextInterface $context) {
         parent::__construct($context);

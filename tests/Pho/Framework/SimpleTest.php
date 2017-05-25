@@ -34,34 +34,34 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     public function testActorEdge() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
-        $edge = $actor->writes($object);
-        $this->assertInstanceOf(ActorOut\Writes::class, $edge);
+        $edge = $actor->write($object);
+        $this->assertInstanceOf(ActorOut\Write::class, $edge);
         $this->assertInstanceOf(Predicate::class, $edge->predicate());
     }
 
     public function testActorPredicate() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
-        $edge = $actor->subscribes($object);
-        $this->assertInstanceOf(ActorOut\SubscribesPredicate::class, $edge->predicate());
+        $edge = $actor->subscribe($object);
+        $this->assertInstanceOf(ActorOut\SubscribePredicate::class, $edge->predicate());
     }
 
     public function testObjectGetter() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
-        $edge = $actor->writes($object);
-        $this->assertInstanceOf(ActorOut\Writes::class, $object->edges()->in()->current());
+        $edge = $actor->write($object);
+        $this->assertInstanceOf(ActorOut\Write::class, $object->edges()->in()->current());
         $this->assertInstanceOf(Actor::class, $object->getWriters()[0]);
         $this->assertCount(1, $object->getWriters());
         $this->assertCount(1, $actor->getWrites());
-        $this->assertInstanceOf(ActorOut\Writes::class, $actor->edges()->out()->current());
+        $this->assertInstanceOf(ActorOut\Write::class, $actor->edges()->out()->current());
         $this->assertInstanceOf(Object::class, $actor->getWrites()[0]);
     }
 
     public function testObjectHaser() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
-        $edge = $actor->writes($object);
+        $edge = $actor->write($object);
         $this->assertTrue($object->hasWriter($actor->id()));
         $this->assertTrue($actor->hasWrite($object->id()));
         $this->assertFalse($actor->hasWrite($this->graph->id()));
@@ -71,7 +71,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
      public function testFiltering() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
-        $edge = $actor->writes($object);
+        $edge = $actor->write($object);
         $edge = $actor->reads($object);
         $this->assertCount(1, $actor->getWrites());
     }
@@ -82,7 +82,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     public function testEdgeInheritance() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
-        $edge = $actor->writes($object);
+        $edge = $actor->write($object);
         $this->assertCount(1, $actor->getSubscriptions());
         $this->assertCount(0, $actor->getReads());
     }
@@ -93,13 +93,13 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     public function testImpossibleEdge() {
         $actor1 = new Actor($this->graph);
         $actor2 = new Actor($this->graph);
-        $edge = $actor1->writes($actor2);
+        $edge = $actor1->write($actor2);
     }
 
     public function testEdgeInvoke() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
-        $edge = $actor->writes($object);
+        $edge = $actor->write($object);
         $this->assertInstanceOf(Object::class, $edge());
         $this->assertEquals($object->id(), $edge()->id());
     }
@@ -123,7 +123,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $faker = \Faker\Factory::create();
         $actor = new Actor($this->graph);
         $frame = new Frame($actor, $this->graph);
-        $edge = $actor->writes($frame);
+        $edge = $actor->write($frame);
         $array = $frame->toArray();
         $this->assertArrayHasKey("id", $array);
         $this->assertArrayHasKey("attributes", $array);
