@@ -1,7 +1,7 @@
 # Pho-Framework
 
 Pho-Framework is the foundational component of Pho Stack. It establishes
-the object-centered actor/graph framework that all Pho compoenets are built upon.
+the object-centered actor/graph framework that all Pho components are built upon.
 
 
 ## Install
@@ -14,7 +14,7 @@ The recommended way to install pho-framework is through composer.
 
 Pho-Framework is built upon [pho-lib-graph](https://github.com/phonetworks/pho-lib-graph) to constitute the basis of the [Pho stack](https://github.com/phonetworks/). Readers should study pho-lib-graph before starting with Pho Framework.
 
-With Pho, the framework nodes are called "particles" and they all implement ParticleInterface.
+With Pho, the framework nodes are called "particles" and they all implement [ParticleInterface](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ParticleInterface.php).
 
 There are three types of particles:
 
@@ -37,6 +37,12 @@ Frame extends the SubGraph class of pho-lib-graph. Therefore it shows both graph
 Object is what graph actors consume, and are centered around. Objects have one and only one edge:
 * transmit
 
+To illustrate what these particles do, with real-world examples;
+
+* Users, admins and anonymous users of apps, social networks are **Actors**. They _do_ things; ready, write, subscribe.
+* Groups, events and social networks are **Frames**. They are recursive social graphs, they _contain_ Actors.
+* Blog posts, status updates, Snaps, Tweets are all **Objects**. They are what social network members (Actors) are centered around.
+
 ## Architecture
 
 In Pho-Framework architecture, the folder structure is as follows:
@@ -44,7 +50,7 @@ In Pho-Framework architecture, the folder structure is as follows:
 {ParticleName.php}
 {ParticleName}Out/{EdgeName}.php
 
-To illustrate this, take a look at Actor.php and the Actor folder.
+To illustrate this, take a look at [Actor.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Actor.php) and the [ActorOut](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut) folder.
 
 ## Creating & Extending Particles
 
@@ -54,29 +60,48 @@ The line below defines the edges that this particle accepts:
 const EDGES_IN = [ActorOut\Reads::class, ActorOut\Subscribes::class, ObjectOut\Transmits::class];
 ```
 
-Any edge that claims that this particle is its tail, must be listed here, otherwise the {....} exception will be thrown.
+Any edge that claims that this particle is its tail, must be listed here, otherwise an exception will be thrown.
 
 All outgoing edges of a particle must be defined in the {ParticleName}Out/ folder.
 
 An examplary edge is shown below:
 
 ```php
-class Reads extends Framework\AbstractEdge {
-    const HEAD_LABEL = "read";
-    const HEAD_LABELS = "reads";
-    const TAIL_LABEL = "reader";
-    const TAIL_LABELS = "readers";
+class Subscribes extends Framework\AbstractEdge {
+    const HEAD_LABEL = "subscription";
+    const HEAD_LABELS = "subscriptions";
+    const TAIL_LABEL = "subscriber";
+    const TAIL_LABELS = "subscribers";
     const SETTABLES = [Framework\ParticleInterface::class];
 }
 ```
 
 For an edge to be valid, it must:
 * extend Framework\AbstractEdge
-* have five different constants:
-* HEAD_LABEL
+* have five different constants where:
+    * TAIL_LABEL: what the tail node of this edge's role is called, in singular. A *subscriber* subscribes. So it's "subscriber"
+    * TAIL_LABELS: same as above, in plural. So it's "subscribers"
+    * HEAD_LABEL: what the head node of this edge's role is called, in singular. A subscriber subscribes to a *subscription*, hence it's "subscription"
+    * HEAD_LABELS: same as above, in plural. So it's "subscriptions"
+    * SETTABLES: what classes can this edge target, in array format. If it's [Framework\ParticleInterface::class], that means it can target any node/particle. If it was [Framework\Object::class, Framework\Frame::class] it can target Frames and Objects only, and not Actors. For example, the [Writes](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Writes.php) edge cannot target Actor particles, because a user can't create a user.
+    
+As you can see above, the constants defined in the edge class are merely for naming purposes. The mechanics is as follows;
 
-Once it is set this way, it may be called:
-$actor->get...
+```php 
+// $actor will be our Actor node 
+$actor = new Actor($graph);
+
+// This is a set function, generate automatically from the ActorOut/Susbcribes.php edge. 
+$actor->subscribes($content);
+
+// This is a ActorOut/Subscribes.php edge getter where $actor is in "head node" position, and it retrieves its tails.
+// again generated automatically.
+$actor->getSubscribers();
+
+// This is a ActorOut/Subscribes.php edge getter where $actor is in "tail node" position, and it retrieves its heads.
+// again generated automatically.
+$actor->getSubscriptions();
+```
 
 ## Extending Particles for Hydration
 
@@ -141,6 +166,22 @@ protected function __callHaserEdgeOut(ID $id, string $name): bool
          }
         return false;
     }
+```
+
+* **__callSetter(string $name, array $args)**: Example: called with ```subscribes()``` to set up a new edge of "Subscribes". $name would resolve as "subscribes" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_setter_settables[$name]```. The return value is **AbstractEdge**. Current implementation is as follows:
+
+```php
+protected function _callSetter(string $name, array $args): AbstractEdge
+    {
+        $check = false;
+        foreach($this->edge_out_setter_settables[$name] as $settable)
+            $check |= is_a($args[0], $settable);
+        if(!$check) 
+            throw new InvalidEdgeHeadTypeException($args[0], $this->edge_out_setter_settables[$name]);
+        $edge = new $this->edge_out_setter_classes[$name]($this, $args[0]);
+        return $edge;
+        // return $edge(); // returns the head() // not at framework level.
+}
 ```
 
 
