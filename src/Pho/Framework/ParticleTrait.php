@@ -456,6 +456,11 @@ trait ParticleTrait {
         ];
     }
 
+    /**
+     * Retrieves the creator of this node.
+     *
+     * @return Actor
+     */
     public function creator(): Actor
     {
         if(isset($this->creator))
@@ -464,6 +469,13 @@ trait ParticleTrait {
             return $this->hydratedCreator();
     }
 
+    /**
+     * A protected hydrating method for persistence
+     *
+     * @see creator() to see where this is called from.
+     * 
+     * @return Actor
+     */
     protected function hydratedCreator(): Actor
     {
 
