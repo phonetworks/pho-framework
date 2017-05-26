@@ -14,9 +14,9 @@ namespace Pho\Framework\ActorOut;
 use Pho\Framework;
 
 /**
- * Subscribes Edge
+ * Subscribe Edge
  * 
- * **"Subscribes"** is one of the three outgoing edges of the 
+ * **"Subscribe"** is one of the three outgoing edges of the 
  * {@link Pho\Framework\Actor} particle. 
  * 
  * When an actor subscribes to another node, it declares intent
@@ -31,5 +31,4 @@ class Subscribe extends Framework\AbstractEdge {
     const TAIL_LABEL = "subscriber";
     const TAIL_LABELS = "subscribers";
     const SETTABLES = [Framework\ParticleInterface::class];
-
 }

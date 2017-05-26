@@ -290,9 +290,10 @@ trait ParticleTrait {
      *
      * @param string $name Catch-all method name
      * @param array $args Catch-all method arguments
-     * @return \Pho\Lib\Graph\NodeInterface
+     * 
+     * @return mixed Can be an edge or node depending on the edge type.
      */
-    protected function _callSetter(string $name, array $args): AbstractEdge
+    protected function _callSetter(string $name, array $args) // :  AbstractEdge
     {
         $check = false;
         foreach($this->edge_out_setter_settables[$name] as $settable)

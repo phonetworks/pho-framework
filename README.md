@@ -168,11 +168,11 @@ protected function __callHaserEdgeOut(ID $id, string $name): bool
     }
 ```
 
-* **__callSetter(string $name, array $args)**: Example: called with ```subscribes()``` to set up a new edge of "Subscribes". $name would resolve as "subscribes" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_setter_settables[$name]```. The return value is **AbstractEdge**. Current implementation is as follows:
+* **__callSetter(string $name, array $args)**: Example: called with ```subscribes()``` to set up a new edge of "Subscribes". $name would resolve as "subscribes" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_setter_settables[$name]```. The return value is **mixed**. Current implementation is as follows:
 
 ```php
-protected function _callSetter(string $name, array $args): AbstractEdge
-    {
+protected function _callSetter(string $name, array $args)
+{
         $check = false;
         foreach($this->edge_out_setter_settables[$name] as $settable)
             $check |= is_a($args[0], $settable);
