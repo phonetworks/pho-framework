@@ -168,10 +168,10 @@ protected function __callHaserEdgeOut(ID $id, string $name): bool
     }
 ```
 
-* **__callSetter(string $name, array $args)**: Example: called with ```subscribes()``` to set up a new edge of "Subscribes". $name would resolve as "subscribes" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_setter_settables[$name]```. The return value is **mixed**. Current implementation is as follows:
+* **__callSetter(string $name, array $args)**: Example: called with ```subscribes()``` to set up a new edge of "Subscribes". $name would resolve as "subscribes" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_setter_settables[$name]```. Framework returns the Edge but in order to provide flexibility for higher level components, the return value is **\Pho\Lib\Graph\EntityInterface** which is the parent of both NodeInterface and EdgeInterface. Current implementation is as follows:
 
 ```php
-protected function _callSetter(string $name, array $args)
+protected function _callSetter(string $name, array $args): \Pho\Lib\Graph\EntityInterface
 {
         $check = false;
         foreach($this->edge_out_setter_settables[$name] as $settable)

@@ -291,9 +291,9 @@ trait ParticleTrait {
      * @param string $name Catch-all method name
      * @param array $args Catch-all method arguments
      * 
-     * @return mixed Can be an edge or node depending on the edge type.
+     * @return \Pho\Lib\Graph\EntityInterface Returns \Pho\Lib\Graph\EdgeInterface by default, but in order to provide flexibility for higher-level components to return node (in need) the official return value is \Pho\Lib\Graph\EntityInterface which is the parent of both NodeInterface and EdgeInterface.
      */
-    protected function _callSetter(string $name, array $args) // :  AbstractEdge
+    protected function _callSetter(string $name, array $args):  \Pho\Lib\Graph\EntityInterface
     {
         $check = false;
         foreach($this->edge_out_setter_settables[$name] as $settable)
