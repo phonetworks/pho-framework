@@ -232,8 +232,10 @@ trait ParticleTrait {
         $edge_dir = dirname($self_reflector->getFileName()) . DIRECTORY_SEPARATOR . $self_reflector->getShortName() . "Out";  
         // !!! do not replace this with __DIR__
 
-        if(!file_exists($edge_dir))
+        if(!file_exists($edge_dir)) {
+            Logger::warning("Edge directory %s does not exist", $edge_dir);
             return;
+        }
 
         $locator = new ClassFileLocator($edge_dir);
         foreach ($locator as $file) {
