@@ -11,8 +11,6 @@
 
 namespace Pho\Framework;
 
-use Psr\Log\LoggerInterface;
-
 /**
  * A basic logger class compatible with PHP Psr 3 standards
  * 
