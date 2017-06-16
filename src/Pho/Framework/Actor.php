@@ -25,7 +25,9 @@ namespace Pho\Framework;
  */
 class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {
 
-    use ParticleTrait;
+    use ParticleTrait {
+        ParticleTrait::__construct as particleConstructor;
+    }
 
     /**
      * Current context that this actor is in.
@@ -34,21 +36,12 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface {
      */
     protected $current_context;
 
-    /**
-     * Incoming Edges
-     * 
-     * A constant node property of edges that are directed towards this node.
-     * 
-     * @var array An array of class names (with their namespaces)
-     */
-    const EDGES_IN = [ActorOut\Read::class, ActorOut\Subscribe::class, ObjectOut\Transmit::class];
-
     public function __construct(ContextInterface $context) {
         parent::__construct($context);
         $this->creator = $this;
         $this->creator_id = (string) $this->id();
         $this->enter($context);
-        $this->setupEdges();
+        $this->particleConstructor();
     }
 
     /**

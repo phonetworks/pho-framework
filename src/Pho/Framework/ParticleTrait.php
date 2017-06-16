@@ -45,15 +45,14 @@ trait ParticleTrait {
     protected $creator_id;
 
     /**
-     * @internal 
-     * 
      * Incoming Edges
      * 
-     * A constant node property of edges that are directed towards this node.
+     * Lists edges that are directed towards this node. Initiliazed at construction,
+     * and never modified again.
      * 
      * @var array An array of class names (with their namespaces)
      */
-    // const EDGES_IN = [];
+    protected $edges_in = [];
     
     /**
      * Getter Labels of Incoming Edges
@@ -182,11 +181,34 @@ trait ParticleTrait {
     // protected $acl = null;
 
     /**
-     * Trait constructor.
+     * Constructor.
      */
-    protected function setupEdges() {
+    public function __construct() {
+        $this->registerIncomingEdges(
+            ActorOut\Read::class, 
+            ActorOut\Subscribe::class, 
+            ObjectOut\Transmit::class
+        );
         $this->_setupEdgesIn();
         $this->_setupEdgesOut();
+    }
+
+    /**
+     * Registers the incoming edges.
+     *
+     * The default ones for all nodes are:
+     * * ActorOut\Read::class
+     * * ActorOut\Subscribe::class
+     * * ObjectOut\Publish::class
+     * 
+     * @param ...$classes 
+     * 
+     * @return void
+     */
+    protected function registerIncomingEdges(...$classes): void
+    {
+        foreach($classes as $class)
+            $this->edges_in[] = $class;
     }
 
     /**
@@ -201,7 +223,7 @@ trait ParticleTrait {
     protected function _setupEdgesIn(): void 
     {
         //eval(\Psy\sh());
-        foreach(static::EDGES_IN as $edge_in_class) {
+        foreach($this->edges_in as $edge_in_class) {
             $edge_in_class_reflector = new \ReflectionClass($edge_in_class);
             $check = false;
             foreach($edge_in_class_reflector->getConstant("SETTABLES") as $head_node_type)

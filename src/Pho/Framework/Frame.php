@@ -31,22 +31,16 @@ namespace Pho\Framework;
  */
 class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, ContextInterface {
 
-    use ParticleTrait;
-
-    /**
-     * Incoming Edges
-     * 
-     * A constant node property of edges that are directed towards this node.
-     * 
-     * @var array An array of class names (with their namespaces)
-     */
-    const EDGES_IN = [ActorOut\Read::class, ActorOut\Subscribe::class, ActorOut\Write::class, ObjectOut\Transmit::class];
+    use ParticleTrait  {
+        ParticleTrait::__construct as particleConstructor;
+    }
 
     public function __construct(Actor $creator, ContextInterface $context) {
         parent::__construct($context);
         $this->creator = $creator;
         $this->creator_id = (string) $creator->id();
-        $this->setupEdges();
+        $this->registerIncomingEdges(ActorOut\Write::class);
+        $this->particleConstructor();
     }
 
      /**
