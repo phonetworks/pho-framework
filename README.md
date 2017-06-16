@@ -54,15 +54,15 @@ To illustrate this, take a look at [Actor.php](https://github.com/phonetworks/ph
 
 ## Creating & Extending Particles
 
-The line below defines the edges that this particle accepts:
+The function below defines the edges that this particle accepts:
 
 ```php
-const EDGES_IN = [ActorOut\Read::class, ActorOut\Subscribe::class, ObjectOut\Transmit::class];
+$this->registerIncomingEdges(ActorOut\Write::class);
 ```
 
-Any edge that claims that this particle is its tail, must be listed here, otherwise an exception will be thrown.
+This must be called in the constructor, before calling the parent particle's constructor. Any edge that claims that this particle is its tail, and that has not been already registered by the particle's parent, must be defined here, otherwise an exception will be thrown.
 
-All outgoing edges of a particle must be defined in the {ParticleName}Out/ folder.
+Secondly, all outgoing edges of a particle must be defined in the {ParticleName}Out/ folder.
 
 An examplary edge is shown below:
 
