@@ -24,7 +24,8 @@ use Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Write extends Subscribe {
+class Write extends Subscribe
+{
 
     const HEAD_LABEL = "write";
     const HEAD_LABELS = "writes";

@@ -24,18 +24,18 @@ namespace Pho\Framework;
  * 
  * In contrast to other particles, Frame doesn't contain edges but 
  * its **"contains"** method acts similarly to an edge.
- * 
- * 
- * 
+ *
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, ContextInterface {
+class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, ContextInterface
+{
 
     use ParticleTrait  {
         ParticleTrait::__construct as particleConstructor;
     }
 
-    public function __construct(Actor $creator, ContextInterface $context) {
+    public function __construct(Actor $creator, ContextInterface $context) 
+    {
         parent::__construct($context);
         $this->creator = $creator;
         $this->creator_id = (string) $creator->id();
@@ -44,8 +44,8 @@ class Frame extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
     }
 
      /**
-     * {@inheritdoc}
-     */
+      * {@inheritdoc}
+      */
     public function belongsOrEquals(ContextInterface $context): bool
     {
         /*if($context instanceof Graph)

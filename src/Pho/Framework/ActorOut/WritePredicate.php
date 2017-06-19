@@ -20,6 +20,7 @@ namespace Pho\Framework\ActorOut;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class WritePredicate extends \Pho\Lib\Graph\Predicate {
+class WritePredicate extends \Pho\Lib\Graph\Predicate
+{
     protected $binding = true;
 }

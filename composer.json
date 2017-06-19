@@ -26,7 +26,8 @@
         "phpunit/phpunit": "^5.7",
 	    "phpdocumentor/phpdocumentor": "*" ,
         "psy/psysh": "*",
-        "fzaninotto/faker": "^1.6"
+        "fzaninotto/faker": "^1.6",
+        "squizlabs/php_codesniffer": "3.*"
         },
     "autoload": {
 	     "psr-4": {

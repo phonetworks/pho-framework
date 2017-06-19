@@ -23,13 +23,14 @@ use Pho\Framework\ParticleInterface;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class InvalidParticleMethodException extends \Exception {
+class InvalidParticleMethodException extends \Exception
+{
 
     /**
      * Constructor.
      *
      * @param string $class_name Class name of the particle
-     * @param string $method Invalid method
+     * @param string $method     Invalid method
      */
     public function __construct(string $class_name, string $method)
     {

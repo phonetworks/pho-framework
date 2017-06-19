@@ -28,7 +28,8 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-interface ParticleInterface {
+interface ParticleInterface
+{
     
     /**
      * Retrieves the object's existential properties

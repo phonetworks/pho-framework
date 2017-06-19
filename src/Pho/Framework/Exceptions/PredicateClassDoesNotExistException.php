@@ -21,12 +21,13 @@ use Pho\Framework\ParticleInterface;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class PredicateClassDoesNotExistException extends \Exception {
+class PredicateClassDoesNotExistException extends \Exception
+{
 
     /**
      * Constructor.
      *
-     * @param string $edge_id The ID of the edge in pure string format
+     * @param string $edge_id              The ID of the edge in pure string format
      * @param string $predicate_class_name Full class name of the predicate
      */
     public function __construct(string $edge_id, string $predicate_class_name)

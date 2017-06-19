@@ -21,13 +21,15 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Object extends \Pho\Lib\Graph\Node implements ParticleInterface {
+class Object extends \Pho\Lib\Graph\Node implements ParticleInterface
+{
 
     use ParticleTrait {
         ParticleTrait::__construct as particleConstructor;
     }
 
-    public function __construct(Actor $creator, ContextInterface $context) {
+    public function __construct(Actor $creator, ContextInterface $context) 
+    {
         parent::__construct($context);
         $this->creator = $creator;
         $this->creator_id = (string) $creator->id();

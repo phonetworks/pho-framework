@@ -72,21 +72,22 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
      */
     public function __invoke(): ParticleInterface
     {
-        if($this->head() instanceof ParticleInterface) 
+        if($this->head() instanceof ParticleInterface) { 
             return $this->head();
-        else
+        } else {
             return $this->head()->node();
+        }
     }
     
     
     /**
-    * @internal
-    *
-    * Used for serialization. Nothing special here. Declared for
-    * subclasses.
-    *
-    * @return string in PHP serialized format.
-    */
+     * @internal
+     *
+     * Used for serialization. Nothing special here. Declared for
+     * subclasses.
+     *
+     * @return string in PHP serialized format.
+     */
     public function serialize(): string
     {
         return serialize($this->toArray());
@@ -94,17 +95,17 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
     
     
     /**
-    * @internal
-    *
-    * Used for deserialization. Nothing special here. Declared for
-    * subclasses.
-    *
-    * @param string $data
-    *
-    * @return void
-    *
-    * @throws Exceptions\PredicateClassDoesNotExistException when the predicate class does not exist.
-    */
+     * @internal
+     *
+     * Used for deserialization. Nothing special here. Declared for
+     * subclasses.
+     *
+     * @param string $data
+     *
+     * @return void
+     *
+     * @throws Exceptions\PredicateClassDoesNotExistException when the predicate class does not exist.
+     */
     public function unserialize(/* mixed */ $data): void
     {
         $data = unserialize($data);

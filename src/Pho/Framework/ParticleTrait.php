@@ -25,7 +25,8 @@ use Pho\Lib\Graph\ID;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-trait ParticleTrait {
+trait ParticleTrait
+{
 
     /**
      * Who created this node. Must point to an Actor.
@@ -183,7 +184,8 @@ trait ParticleTrait {
     /**
      * Constructor.
      */
-    public function __construct() {
+    public function __construct() 
+    {
         $this->registerIncomingEdges(
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
@@ -207,8 +209,9 @@ trait ParticleTrait {
      */
     protected function registerIncomingEdges(...$classes): void
     {
-        foreach($classes as $class)
+        foreach($classes as $class) {
             $this->edges_in[] = $class;
+        }
     }
 
     /**
@@ -226,8 +229,9 @@ trait ParticleTrait {
         foreach($this->edges_in as $edge_in_class) {
             $edge_in_class_reflector = new \ReflectionClass($edge_in_class);
             $check = false;
-            foreach($edge_in_class_reflector->getConstant("SETTABLES") as $head_node_type)
+            foreach($edge_in_class_reflector->getConstant("SETTABLES") as $head_node_type) {
                 $check |= is_a($this, $head_node_type);
+            }
             if($check) {
                 $method = $edge_in_class_reflector->getConstant("TAIL_LABELS");
                 $this->edge_in_getter_methods[] = $method;
@@ -264,8 +268,9 @@ trait ParticleTrait {
             $filename = str_replace($edge_dir . DIRECTORY_SEPARATOR, '', $file->getRealPath());
             foreach ($file->getClasses() as $class) {
                 $reflector = new \ReflectionClass($class);
-                if(!$reflector->isSubclassOf(AbstractEdge::class)) 
+                if(!$reflector->isSubclassOf(AbstractEdge::class)) { 
                     continue 1;
+                }
                 $_method = (string) strtolower($reflector->getShortName());
                 $this->edge_out_setter_methods[] = $_method;
                 $this->edge_out_setter_classes[$_method] = $class;
@@ -285,19 +290,20 @@ trait ParticleTrait {
      * @internal
      *
      * @param string $name
-     * @param array $args
+     * @param array  $args
      * @return void
      * 
      * @throws Exceptions\InvalidParticleMethodException when no matching method found.
      */
-    public function __call(string $name, array $args) {
+    public function __call(string $name, array $args) 
+    {
         if(in_array($name, $this->edge_out_setter_methods)) {
             return $this->_callSetter($name, $args);
         }
         else if(strlen($name) > 3) {
             $func_prefix = substr($name, 0, 3);
             $funcs = ["get"=>"_callGetter", "has"=>"_callHaser"];
-            if ( array_key_exists($func_prefix, $funcs) )  {
+            if (array_key_exists($func_prefix, $funcs) ) {
                 try {
                     return $this->{$funcs[$func_prefix]}($name, $args);
                 }
@@ -313,17 +319,19 @@ trait ParticleTrait {
      * Catch-all method for setters
      *
      * @param string $name Catch-all method name
-     * @param array $args Catch-all method arguments
+     * @param array  $args Catch-all method arguments
      * 
      * @return \Pho\Lib\Graph\EntityInterface Returns \Pho\Lib\Graph\EdgeInterface by default, but in order to provide flexibility for higher-level components to return node (in need) the official return value is \Pho\Lib\Graph\EntityInterface which is the parent of both NodeInterface and EdgeInterface.
      */
     protected function _callSetter(string $name, array $args):  \Pho\Lib\Graph\EntityInterface
     {
         $check = false;
-        foreach($this->edge_out_setter_settables[$name] as $settable)
+        foreach($this->edge_out_setter_settables[$name] as $settable) {
             $check |= is_a($args[0], $settable);
-        if(!$check) 
+        }
+        if(!$check) { 
             throw new InvalidEdgeHeadTypeException($args[0], $this->edge_out_setter_settables[$name]);
+        }
         $edge = new $this->edge_out_setter_classes[$name]($this, $args[0]);
         return $edge;
         // return $edge(); // returns the head() // not at framework level.
@@ -333,7 +341,7 @@ trait ParticleTrait {
      * Catch-all method for getters
      *
      * @param string $name Catch-all method name
-     * @param array $args Catch-all method arguments
+     * @param array  $args Catch-all method arguments
      * 
      * @return array An array of ParticleInterface objects
      * 
@@ -363,10 +371,13 @@ trait ParticleTrait {
     {
         $edges_out = $this->edges()->out();
         $return = [];
-        array_walk($edges_out, function($item, $key) use (&$return, $name) {
-            if($item instanceof $this->edge_out_getter_classes[$name])
-                $return[] = $item();
-        });
+        array_walk(
+            $edges_out, function ($item, $key) use (&$return, $name) {
+                if($item instanceof $this->edge_out_getter_classes[$name]) {
+                    $return[] = $item();
+                }
+            }
+        );
         return $return;
     }
 
@@ -381,10 +392,13 @@ trait ParticleTrait {
     {
         $edges_in = $this->edges()->in();
         $return = [];
-        array_walk($edges_in, function($item, $key) use (&$return, $name) {
-            if($item instanceof $this->edge_in_getter_classes[$name])
-                $return[] = $item->tail()->node();
-        });
+        array_walk(
+            $edges_in, function ($item, $key) use (&$return, $name) {
+                if($item instanceof $this->edge_in_getter_classes[$name]) {
+                    $return[] = $item->tail()->node();
+                }
+            }
+        );
         return $return;
     }
 
@@ -393,7 +407,7 @@ trait ParticleTrait {
      * Catch-all method for hasers -hasSomething()-
      *
      * @param string $name Catch-all method name
-     * @param array $args Catch-all method arguments. Must contain a single ID for the queried object, or it will throw an exception.
+     * @param array  $args Catch-all method arguments. Must contain a single ID for the queried object, or it will throw an exception.
      * 
      * @return bool whether the node exists or not
      * 
@@ -402,7 +416,7 @@ trait ParticleTrait {
      */
     protected function _callHaser(string $name, array $args): bool
     {
-        if( !isset($args[0]) || !$args[0] instanceof ID ) {
+        if(!isset($args[0]) || !$args[0] instanceof ID ) {
             throw new \InvalidArgumentException(
                 sprintf('The function %s must be called with a single argument that is strictly a \Pho\Lib\Graph\ID object', $name)
             );
@@ -431,9 +445,10 @@ trait ParticleTrait {
     {
         $edges_out = $this->edges()->out();
         foreach($edges_out as $edge) {
-            if($edge instanceof $this->edge_out_haser_classes[$name] && $edge->headID()->equals($id))
+            if($edge instanceof $this->edge_out_haser_classes[$name] && $edge->headID()->equals($id)) {
                 return true;
-         }
+            }
+        }
         return false;
     }
 
@@ -448,8 +463,9 @@ trait ParticleTrait {
     {
         $edges_in = $this->edges()->in();
         foreach($edges_in as $edge) {
-            if($edge instanceof $this->edge_in_haser_classes[$name] && $edge->tailID()->equals($id))
+            if($edge instanceof $this->edge_in_haser_classes[$name] && $edge->tailID()->equals($id)) {
                 return true;
+            }
         }
         return false;
     }
@@ -488,10 +504,11 @@ trait ParticleTrait {
      */
     public function creator(): Actor
     {
-        if(isset($this->creator))
+        if(isset($this->creator)) {
             return $this->creator;
-        else
+        } else {
             return $this->hydratedCreator();
+        }
     }
 
     /**

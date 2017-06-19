@@ -20,6 +20,7 @@ namespace Pho\Framework\ObjectOut;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class TransmitPredicate extends \Pho\Lib\Graph\Predicate {
+class TransmitPredicate extends \Pho\Lib\Graph\Predicate
+{
 
 }

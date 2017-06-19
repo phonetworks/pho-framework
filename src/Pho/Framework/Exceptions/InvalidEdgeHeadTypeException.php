@@ -19,13 +19,14 @@ use Pho\Framework\ParticleInterface;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class InvalidEdgeHeadTypeException extends \Exception {
+class InvalidEdgeHeadTypeException extends \Exception
+{
 
     /**
      * Constructor.
      *
      * @param ParticleInterface $object
-     * @param array $settables
+     * @param array             $settables
      */
     public function __construct(ParticleInterface $object, array $settables)
     {

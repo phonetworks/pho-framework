@@ -20,6 +20,7 @@ namespace Pho\Framework\ActorOut;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class SubscribePredicate extends \Pho\Lib\Graph\Predicate {
+class SubscribePredicate extends \Pho\Lib\Graph\Predicate
+{
 
 }

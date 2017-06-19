@@ -20,7 +20,8 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Graph extends \Pho\Lib\Graph\Graph implements ContextInterface {
+class Graph extends \Pho\Lib\Graph\Graph implements ContextInterface
+{
 
     /**
      * The title of the graph.
@@ -36,7 +37,8 @@ class Graph extends \Pho\Lib\Graph\Graph implements ContextInterface {
      *
      * @param string $title Optional. Leave blank for a random title.
      */
-    public function __construct(string $title = "") {
+    public function __construct(string $title = "") 
+    {
         if(empty($title)) {
             $this->title = uniqid("graph_", true);
         }

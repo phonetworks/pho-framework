@@ -16,6 +16,7 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Logger extends \Pho\Lib\Graph\Logger {
+class Logger extends \Pho\Lib\Graph\Logger
+{
 
 }
