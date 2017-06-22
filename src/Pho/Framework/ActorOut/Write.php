@@ -31,6 +31,6 @@ class Write extends Subscribe
     const HEAD_LABELS = "writes";
     const TAIL_LABEL = "writer";
     const TAIL_LABELS = "writers";
-    const SETTABLES = [Framework\Frame::class, Framework\Object::class]; /* inherits the values in Edits */
+    const SETTABLES = [Framework\Graph::class, Framework\Object::class]; /* inherits the values in Edits */
 
 }
