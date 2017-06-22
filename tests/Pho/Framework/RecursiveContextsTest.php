@@ -15,43 +15,46 @@ use Pho\Lib\Graph\Predicate;
 
 class RecursiveContextsTest extends \PHPUnit\Framework\TestCase 
 {
-    private $graph;
+    private $space;
 
     public function setUp() {
-        $this->graph = new Graph();
+        $this->space = new Space();
     }
 
     public function tearDown() {
-        unset($this->graph);
+        unset($this->space);
+    }
+
+    public function testSpace() {
+        $this->assertTrue($this->space->in($this->space));
     }
 
     public function testGraph() {
-        $this->assertTrue($this->graph->belongsOrEquals($this->graph));
+        $actor = new Actor($this->space);
+        $graph = new Graph($actor, $this->space);
+        $this->assertTrue($graph->in($this->space));
     }
 
-    public function testFrame() {
-        $actor = new Actor($this->graph);
-        $frame = new Frame($actor, $this->graph);
-        $this->assertTrue($frame->belongsOrEquals($this->graph));
+    public function testSubGraph() {
+        $actor = new Actor($this->space);
+        $graph = new Graph($actor, $this->space);
+        $subgraph = new Graph($actor, $graph);
+        $this->assertTrue($subgraph->in($this->space));
+        $this->assertTrue($subgraph->in($graph));
     }
 
-    public function testSubFrame() {
-        $actor = new Actor($this->graph);
-        $frame = new Frame($actor, $this->graph);
-        $subframe = new Frame($actor, $frame);
-        $this->assertTrue($subframe->belongsOrEquals($this->graph));
-        $this->assertTrue($subframe->belongsOrEquals($frame));
+    /*
+    // !! SPACE CAN NO LONGER BE DISPARATE !!
+    public function testDisparateSpaces() {
+        $new_space = new Space();
+        $actor = new Actor($this->space);
+        $graph = new Graph($actor, $this->space);
+        $subgraph = new Graph($actor, $graph);
+        $this->assertFalse($this->space->in($new_space));
+        $this->assertFalse($graph->in($new_space));
+        $this->assertFalse($subgraph->in($new_space));
+        $this->assertTrue($subgraph->in($this->space));
     }
-
-    public function testDisparateGraphs() {
-        $new_graph = new Graph();
-        $actor = new Actor($this->graph);
-        $frame = new Frame($actor, $this->graph);
-        $subframe = new Frame($actor, $frame);
-        $this->assertFalse($this->graph->belongsOrEquals($new_graph));
-        $this->assertFalse($frame->belongsOrEquals($new_graph));
-        $this->assertFalse($subframe->belongsOrEquals($new_graph));
-        $this->assertTrue($subframe->belongsOrEquals($this->graph));
-    }
+    */
 
 }

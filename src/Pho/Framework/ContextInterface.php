@@ -24,11 +24,11 @@ interface ContextInterface extends \Pho\Lib\Graph\GraphInterface
 {
 
     /**
-     * Checks if the given context is equal to or a subelement of this context.
+     * Checks if the given context is contained by or equal to this graph.
      *
      * @param  ContextInterface $context
      * @return bool
      */
-    public function belongsOrEquals(ContextInterface $context): bool;
+    public function in(ContextInterface $context): bool;
 
 }

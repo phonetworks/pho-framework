@@ -15,10 +15,10 @@ use Pho\Lib\Graph\Predicate;
 
 class LoggerTest extends \PHPUnit\Framework\TestCase 
 {
-    private $graph;
+    private $space;
 
     public function setUp() {
-        $this->graph = new Graph();
+        $this->space = new Space();
         \Pho\Lib\Graph\Logger::setVerbosity(2);
     }
 
@@ -29,7 +29,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
 
     public function testLogging() {
         ob_start();
-        $node = new Actor($this->graph);
+        $node = new Actor($this->space);
         $output = ob_get_clean();
         $expected = "A node with id \"";
         $this->assertEquals($expected, substr($output,0,strlen($expected)));
