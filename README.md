@@ -14,13 +14,15 @@ The recommended way to install pho-framework is through composer.
 
 Pho-Framework is built upon [pho-lib-graph](https://github.com/phonetworks/pho-lib-graph) to constitute the basis of the [Pho stack](https://github.com/phonetworks/). Readers should study pho-lib-graph before starting with Pho Framework.
 
-With Pho, the framework nodes are called "particles" and they all implement [ParticleInterface](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ParticleInterface.php).
+In Pho Framework, everything resides in Space, which is a direct extension of pho-lib-graph's Graph class. The framework nodes are called "particles" and they all must implement [ParticleInterface](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ParticleInterface.php).
 
 There are three types of particles:
 
 1. Actor
-2. Frame
+2. Graph (which is the equivalent of pho-lib-graph's SubGraph)
 3. Object
+
+You may wonder why we've created confusion by renaming pho-lib-graph's Graph and SubGraph classes as Space and Graph respectively. That's because Graph and SubGraph are general Graph Theory concepts, which we didn't want to touch, and pho-lib-graph is meant to be a general-purpose graph theory library. On the other hand, in Pho universe, a social network itself is a **graph** that exists in a **space** along with many other social networks. In other words, a social network is a subgraph of the Space; e.g. Facebook is a subgraph of the Space, Twitter is a subgraph of the Space, and the list goes on. Calling all these networks, along with their subgraphs (think of Facebook Groups, Facebook Events, Twitter Lists, your contact list on Snapchat etc.) would create redundancy of the prefix "sub", hence we decided to call them all "graphs" and use the terms "subgraph" and "supergraph" to determine their positioning in respect to each other within the Pho universe.
 
 ### Actor
 An actor does three things;
@@ -29,18 +31,18 @@ An actor does three things;
 * write
 * subscribe
 
-### Frame
-Frame extends the SubGraph class of pho-lib-graph. Therefore it shows both graph and node properties. It does only one thing;
+### Graph
+Graph extends the SubGraph class of pho-lib-graph. Therefore it shows both graph and node properties. It does only one thing;
 * contain
 
 ### Object
 Object is what graph actors consume, and are centered around. Objects have one and only one edge:
 * transmit
 
-To illustrate what these particles do, with real-world examples;
+To illustrate what these particles do with real-world examples;
 
 * Users, admins and anonymous users of apps, social networks are **Actors**. They _do_ things; ready, write, subscribe.
-* Groups, events and social networks are **Frames**. They are recursive social graphs, they _contain_ Actors.
+* Groups, events and social networks, friend lists are **Graphs**. They are recursive social graphs, they _contain_ Actors.
 * Blog posts, status updates, Snaps, Tweets are all **Objects**. They are what social network members (Actors) are centered around. They optionally do one and only one thing; that is to _transmit_. For example, a private message is an object that _transmits_ to a certain actor, while a blog post is not.
 
 ## Architecture
@@ -83,7 +85,7 @@ For an edge to be valid, it must:
     * TAIL_LABELS: same as above, in plural. So it's "subscribers"
     * HEAD_LABEL: what the head node of this edge's role is called, in singular. A subscriber subscribes to a *subscription*, hence it's "subscription"
     * HEAD_LABELS: same as above, in plural. So it's "subscriptions"
-    * SETTABLES: what classes can this edge target, in array format. If it's [Framework\ParticleInterface::class], that means it can target any node/particle. Sometimes this level of flexibility may not be the case for all types of edges; for example, the [Write](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Write.php) edge cannot target Actor particles, because a user can't create a user. Hence its SETTABLES is declared as [Framework\Object::class, Framework\Frame::class] only, so that it can target Frames and Objects only, and not Actors.
+    * SETTABLES: what classes can this edge target, in array format. If it's [Framework\ParticleInterface::class], that means it can target any node/particle. Sometimes this level of flexibility may not be the case for all types of edges; for example, the [Write](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Write.php) edge cannot target Actor particles, because a user can't create a user. Hence its SETTABLES is declared as [Framework\Object::class, Framework\Graph::class] only, so that it can target Graphs and Objects only, and not Actors.
     
 As you can see above, the constants defined in the edge class are merely for naming purposes. The mechanics function as follows;
 
@@ -107,7 +109,7 @@ $actor->getSubscriptions();
 
 Pho-Framework is built upon pho-lib-graph which has extensive support for hydration that can be used for several applications such as persistence. Pho-Framework adds up to that, by adding a new hydrating function ```hydratedCreator()```.
 
-* **hydratedCreator()**: called when ```creator()``` can't find the creator. Enables you to access ```$creator_id``` to fetch it from external sources. This can be used with any particle; be it an Actor, Object or Frame. The return value is **Actor**.
+* **hydratedCreator()**: called when ```creator()``` can't find the creator. Enables you to access ```$creator_id``` to fetch it from external sources. This can be used with any particle; be it an Actor, Object or Graph. The return value is **Actor**.
 
 Also the following functions may be overridden with hydrating functions otherwise the program may not perform well at scale given the fact that the current implementation works by recursing through each and every edge of the given node.
 
