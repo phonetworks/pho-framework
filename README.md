@@ -1,7 +1,7 @@
 # Pho-Framework
 
 Pho-Framework is the foundational component of Pho Stack. It establishes
-the object-centered actor/graph framework that all Pho components are built upon.
+the object-centered actor/graph framework that all Pho components are built upon. It is stateless, which means, it doesn't provide persistence of its objects in any way, but it is designed for such extensibility via hydrator functions.
 
 
 ## Install
