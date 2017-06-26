@@ -21,7 +21,7 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Object extends \Pho\Lib\Graph\Node implements ParticleInterface
+class Object extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserver, \SplSubject
 {
 
     use ParticleTrait {

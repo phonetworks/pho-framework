@@ -20,7 +20,7 @@ namespace Pho\Framework\ActorOut;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class ReadPredicate extends \Pho\Lib\Graph\Predicate
+class ReadPredicate extends \Pho\Framework\Predicate
 {
-
+    const T_CONSUMER = true;
 }

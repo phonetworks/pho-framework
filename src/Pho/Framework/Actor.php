@@ -23,7 +23,7 @@ namespace Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface
+class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserver, \SplSubject
 {
 
     use ParticleTrait {
@@ -37,11 +37,19 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface
      */
     protected $current_context;
 
+    /**
+     * Notifications
+     *
+     * @var NotificationList
+     */
+    protected $notifications;
+
     public function __construct(ContextInterface $context) 
     {
         parent::__construct($context);
         $this->creator = $this;
         $this->creator_id = (string) $this->id();
+        $this->notifications = new NotificationList;
         $this->enter($context);
         $this->particleConstructor();
     }

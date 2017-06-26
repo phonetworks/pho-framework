@@ -22,7 +22,7 @@ use Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Transmit extends Framework\AbstractEdge
+class Notify extends Framework\AbstractEdge
 {
 
     const HEAD_LABEL = "receiver";
@@ -31,5 +31,17 @@ class Transmit extends Framework\AbstractEdge
     const TAIL_LABELS = "transmitters";
 
     const SETTABLES = [Framework\ParticleInterface::class];
+
+    const NOTIFICATION = __NAMESPACE__ . "\\ObjectNotification";
+
+    protected function execute(): void
+    {
+        $notification_class = static::NOTIFICATION;
+        $notification = new $notification_class($this->tail());
+        if(!$notification instanceof Framework\Notification) {
+            throw new Framework\Exceptions\NotificationNotFoundException(get_class($this));
+        }
+        $this->head()->notifications()->add($notification);
+    }
 
 }

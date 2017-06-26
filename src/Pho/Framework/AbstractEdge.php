@@ -65,6 +65,21 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
      */
     const SETTABLES = [];
 
+    public function __construct(ParticleInterface $tail, ?ParticleInterface $head = null, ?Predicate $predicate = null) 
+    {
+        parent::__construct(
+            $tail, 
+            $head, 
+            $this->_resolvePredicate($predicate, Predicate::class)
+        );
+        $this->execute();
+    }
+
+    protected function execute(): void
+    {
+        
+    }
+
     /**
      * When invoked, returns the head node.
      *
@@ -118,5 +133,21 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
             throw new PredicateClassDoesNotExistException((string)$this->id(), $data["predicate"]);
         }
         $this->attributes = new Graph\AttributeBag($this, $data["attributes"]);
+    }
+
+    /**
+     * Returns the edge's value
+     * 
+     * If its predicate is consumer, then the head node, otherwise
+     * the edge itself.
+     *
+     * @return \Pho\Lib\Graph\EntityInterface
+     */
+    public function return(): \Pho\Lib\Graph\EntityInterface
+    {
+        if($this->predicate()->consumer()) {
+            return $this->head()->node();
+        }
+        return $this;
     }
 }
