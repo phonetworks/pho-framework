@@ -16,11 +16,13 @@ Pho-Framework is built upon [pho-lib-graph](https://github.com/phonetworks/pho-l
 
 In Pho Framework, everything resides in Space, which is a direct extension of pho-lib-graph's Graph class. The framework nodes are called "particles" and they all must implement [ParticleInterface](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ParticleInterface.php).
 
-There are three types of particles:
+[Space](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Space.php) is the [Graph](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/Graph.php) equivalent of [pho-lib-graph](https://github.com/phonetworks/pho-lib-graph). It is the master graph, always stateless, and figuratively contains all nodes and edges, in all Pho installations. Though, no one can access it.
 
-1. Actor
-2. Graph (which is the equivalent of pho-lib-graph's SubGraph)
-3. Object
+There are three types of particles in the Space:
+
+1. [Actor](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Actor.php)
+2. [Graph](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Graph.php) (which is the equivalent of pho-lib-graph's [SubGraph](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/SubGraph.php))
+3. [Object](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Object.php)
 
 You may wonder why we've created confusion by renaming pho-lib-graph's Graph and SubGraph classes as Space and Graph respectively. That's because Graph and SubGraph are general Graph Theory concepts, which we didn't want to touch, and pho-lib-graph is meant to be a general-purpose graph theory library. On the other hand, in Pho universe, a social network itself is a **graph** that exists in a **space** along with many other social networks. In other words, a social network is a subgraph of the Space; e.g. Facebook is a subgraph of the Space, Twitter is a subgraph of the Space, and the list goes on. Calling all these networks, along with their subgraphs (think of Facebook Groups, Facebook Events, Twitter Lists, your contact list on Snapchat etc.) would create redundancy of the prefix "sub", hence we decided to call them all "graphs" and use the terms "subgraph" and "supergraph" to determine their positioning in respect to each other within the Pho universe.
 
@@ -37,13 +39,13 @@ Graph extends the SubGraph class of pho-lib-graph. Therefore it shows both graph
 
 ### Object
 Object is what graph actors consume, and are centered around. Objects have one and only one edge:
-* transmit
+* mention
 
 To illustrate what these particles do with real-world examples;
 
 * Users, admins and anonymous users of apps, social networks are **Actors**. They _do_ things; ready, write, subscribe.
 * Groups, events and social networks, friend lists are **Graphs**. They are recursive social graphs, they _contain_ Actors.
-* Blog posts, status updates, Snaps, Tweets are all **Objects**. They are what social network members (Actors) are centered around. They optionally do one and only one thing; that is to _transmit_. For example, a private message is an object that _transmits_ to a certain actor, while a blog post is not.
+* Blog posts, status updates, Snaps, Tweets are all **Objects**. They are what social network members (Actors) are centered around. They optionally do one and only one thing; that is to _mention_. For example, a private message is an object that _mentions_ a certain actor, while a blog post is not.
 
 ## Architecture
 
@@ -52,7 +54,68 @@ In Pho-Framework architecture, the folder structure is as follows:
 {ParticleName.php}
 {ParticleName}Out/{EdgeName}.php
 
-To illustrate this, take a look at [Actor.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Actor.php) and the [ActorOut](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut) folder.
+To illustrate this, take a look at [Object.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Object.php) and the [ObjectOut](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ObjectOut) folder, where you can find its one and only edge; [Mention](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ObjectOut/Mention.php).
+
+The {ParticleName}Out folders may contain multiple edges. Again, take a look at the [ActorOut](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut) folder to see all three of Write, Read and Subscribe edges (and their notifications, predicates) in one place.
+
+Besides the edges, the {ParticleName}Out folders may also contain predicates and notifications associated with each of these edges. These predicates and notifications may be stored either in the same file with the edge, or in different files within the same folder. So, in the example of the Actor's Write edge, we have:
+
+* ActorOut/Write.php
+* ActorOut/WritePredicate.php
+* ActorOut/WriteNotification.php
+
+the edge, its predicate, and notification, all in separate files. Alternatively, one could have stuck all three classes in one file e.g. Write.php, but the class naming must remain identical as to:
+
+* **{ParticleName}Out/{EdgeName}Predicate** for predicates. (if available)
+* **{ParticleName}Out/{EdgeName}Notification** for notifications. (if available)
+
+To reiterate, the predicate and notification classes are optional.
+
+## Predicates
+
+Predicates must extend the Predicate class in Pho-Framework. A predicate has four configurable traits:
+
+1. **Notifier**: a notifier edge, sends a Notification to its head node.
+2. **Subscriber**: a subscriber edge, makes its tail listen to notification updates from its head node.
+3. **Consumer**:  a consumer edge, once its "return()" function called, would return the head node in response, and not the edge itself.
+4. **Binding**: a binding edge, once deleted, would also delete its head node.
+
+You can learn the traits of a predicate by calling the boolean methods;
+
+```php
+$predicate->notifier();
+$predicate->subscriber();
+$predicate->consumer();
+$predicate->binding();
+```
+
+Or, you can do that from the edge, with:
+
+```php
+$edge->predicate()->notifier();
+$edge->predicate()->subscriber();
+$edge->predicate()->consumer();
+$edge->predicate()->binding();
+```
+
+The edges notifier, subscriber, consumer, binding characteristics are set by their respective class files. To learn more about it, check out [Predicate.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Predicate.php) and pho-framework level implementations:
+
+* [ActorOut/WritePredicate](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/WritePredicate.php): adopts subscriber and binding traits.
+* [ActorOut/ReadPredicate](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/ReadPredicate.php): adopts consumer trait:
+* [ActorOut/SubscribePredicate](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/SubscribePredicate.php): adopts subscriber trait.
+* [ObjectOut/MentionPredicate](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ObjectOut/MentionPredicate.php): adopts notifier trait.
+
+## Notifications
+
+Take a look at 
+* [AbstractNotification.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/AbstractNotification.php) class.
+* and [ObjectOut/MentionNotification.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ObjectOut/MentionNotification.php) class.
+
+to see how notifications works.
+
+Notifications are called by the ```execute()``` method of the edges. Example: [ObjectOut/Mention.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ObjectOut/Mention.php) and [ActorOut/Write.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Write.php)
+
+!!! hydratedEdge!!!
 
 ## Creating & Extending Particles
 

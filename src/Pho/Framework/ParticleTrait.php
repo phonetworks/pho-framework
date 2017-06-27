@@ -189,7 +189,7 @@ trait ParticleTrait
         $this->registerIncomingEdges(
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
-            ObjectOut\Transmit::class
+            ObjectOut\Mention::class
         );
         $this->_setupEdgesIn();
         $this->_setupEdgesOut();
@@ -522,5 +522,22 @@ trait ParticleTrait
 
     }
 
+
+    /**************************************************
+     * The rest are Subscription/Publisher related 
+     * functions
+     *************************************************/
+
+    /**
+     * Notifies observers about deletion
+     * 
+     * @return void
+     */
+    public function notifySubscribers(AbstractNotification $notification): void
+    {
+        foreach ($this->getSubscribers() as $subscriber) {
+            $subscriber->notifications()->add($notification);
+        }
+    }
 
 }

@@ -11,7 +11,7 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph\Predicate;
+//use Pho\Lib\Graph\Predicate;
 
 class SimpleTest extends \PHPUnit\Framework\TestCase 
 {

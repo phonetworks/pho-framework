@@ -66,6 +66,48 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
     const SETTABLES = [];
 
     /**
+     * The notification object associated with this edge.
+     *
+     * Optional. Not always formed.
+     * 
+     * @var AbstractNotification
+     */
+    protected $notification;
+
+    public function __construct(ParticleInterface $tail, ?ParticleInterface $head = null, ?Predicate $predicate = null) 
+    {
+        parent::__construct(
+            $tail, 
+            $head, 
+            $this->_resolvePredicate($predicate, Predicate::class)
+        );
+        $this->_setNotification()->execute();
+    }
+
+    protected function _setNotification(): AbstractEdge
+    {
+        $is_a_notification = function(string $class_name): bool
+        {
+            if(!class_exists($class_name))
+                return false;
+            $reflector = new \ReflectionClass($class_name);
+            return $reflector->isSubclassOf(AbstractNotification::class);
+        };
+
+            $notification_class = get_class($this)."Notification";
+            if($is_a_notification($notification_class)) {
+                $this->notification = new $notification_class($this);
+            }
+        
+        return $this;
+    }
+
+    protected function execute(): void
+    {
+
+    }
+
+    /**
      * When invoked, returns the head node.
      *
      * @return ParticleInterface
@@ -118,5 +160,21 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
             throw new PredicateClassDoesNotExistException((string)$this->id(), $data["predicate"]);
         }
         $this->attributes = new Graph\AttributeBag($this, $data["attributes"]);
+    }
+
+    /**
+     * Returns the edge's value
+     * 
+     * If its predicate is consumer, then the head node, otherwise
+     * the edge itself.
+     *
+     * @return \Pho\Lib\Graph\EntityInterface
+     */
+    public function return(): \Pho\Lib\Graph\EntityInterface
+    {
+        if($this->predicate()->consumer()) {
+            return $this->head()->node();
+        }
+        return $this;
     }
 }

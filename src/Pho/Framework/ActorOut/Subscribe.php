@@ -32,4 +32,9 @@ class Subscribe extends Framework\AbstractEdge
     const TAIL_LABEL = "subscriber";
     const TAIL_LABELS = "subscribers";
     const SETTABLES = [Framework\ParticleInterface::class];
+
+    protected function execute(): void
+    {
+        
+    }
 }

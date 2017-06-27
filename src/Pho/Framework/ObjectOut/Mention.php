@@ -9,30 +9,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Pho\Framework\ActorOut;
+namespace Pho\Framework\ObjectOut;
 
 use Pho\Framework;
 
 /**
- * Writes Edge
+ * Transmits Edge
  * 
- * **"Writes"** is one of the three outgoing edges of the 
- * {@link Pho\Framework\Actor} particle. 
- * 
- * The "writes" name comes from the UNIX world. It represents 
- * creation or editing of new {@link Pho\Framework\Object}s.
+ * **"Transmits"** is the only outgoing edge of the 
+ * {@link Pho\Framework\Object} particle. It links the
+ * Object with other nodes, allowing message passing.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Write extends Subscribe
+class Mention extends Framework\AbstractEdge
 {
 
-    const HEAD_LABEL = "write";
-    const HEAD_LABELS = "writes";
-    const TAIL_LABEL = "writer";
-    const TAIL_LABELS = "writers";
-    const SETTABLES = [Framework\Graph::class, Framework\Object::class]; /* inherits the values in Edits */
+    const HEAD_LABEL = "mention";
+    const HEAD_LABELS = "mentions";
+    const TAIL_LABEL = "mentioner";
+    const TAIL_LABELS = "mentioners";
 
+    const SETTABLES = [Framework\ParticleInterface::class];
 
     protected function execute(): void
     {
@@ -43,7 +41,8 @@ class Write extends Subscribe
             throw new Framework\Exceptions\NotificationNotFoundException(get_class($this));
         }*/
         if(isset($this->notification))
-            $this->tail()->node()->notifySubscribers($this->notification);
+            if( $this->head()->node() instanceof Framework\Actor )
+                $this->head()->node()->notifications()->add($this->notification);
     }
 
 }

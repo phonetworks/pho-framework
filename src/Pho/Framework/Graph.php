@@ -27,7 +27,7 @@ namespace Pho\Framework;
  *
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Graph extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, ContextInterface
+class Graph extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, ContextInterface, \SplObserver, \SplSubject
 {
 
     use ParticleTrait  {
