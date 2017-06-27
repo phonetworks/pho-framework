@@ -7,9 +7,17 @@ class NotificationList implements \SplSubject
     protected $list = [];
     protected $observers = [];
 
-    public function __construct(Actor $owner)
+    public function __construct(Actor $owner, array $data = [])
     {
         $this->attach($owner);
+        $this->import($data);
+    }
+
+    protected function import(array $data): void
+    {
+        foreach($data as $d) {
+            $this->add($d);
+        }
     }
 
     public function add(AbstractNotification $notification): void
