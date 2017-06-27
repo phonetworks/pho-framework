@@ -81,8 +81,14 @@ abstract class AbstractNotification implements \Serializable
    public function toArray(): array
    {
         return array(
-            "edge" => $this->edge_id
+            "label" => $this->label(),
+            "edge" => (string) $this->edge_id
         );
+   }
+
+   public function label(): string
+   {
+       return (new \ReflectionObject($this))->getShortName();
    }
 
 /*

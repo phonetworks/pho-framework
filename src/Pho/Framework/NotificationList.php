@@ -26,7 +26,7 @@ class NotificationList implements \SplSubject
     {
         return array_map(function(AbstractNotification $notification) {
             return $notification->toArray();
-        }, $this->notifications);
+        }, $this->list);
     }
 
     // also deletes
