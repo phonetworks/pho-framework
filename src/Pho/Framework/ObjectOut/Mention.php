@@ -22,26 +22,27 @@ use Pho\Framework;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Notify extends Framework\AbstractEdge
+class Mention extends Framework\AbstractEdge
 {
 
-    const HEAD_LABEL = "receiver";
-    const HEAD_LABELS = "receivers";
-    const TAIL_LABEL = "transmitter";
-    const TAIL_LABELS = "transmitters";
+    const HEAD_LABEL = "mention";
+    const HEAD_LABELS = "mentions";
+    const TAIL_LABEL = "mentioner";
+    const TAIL_LABELS = "mentioners";
 
     const SETTABLES = [Framework\ParticleInterface::class];
 
-    const NOTIFICATION = __NAMESPACE__ . "\\ObjectNotification";
-
     protected function execute(): void
     {
+        /*
         $notification_class = static::NOTIFICATION;
-        $notification = new $notification_class($this->tail());
+        $notification = new $notification_class($this);
         if(!$notification instanceof Framework\Notification) {
             throw new Framework\Exceptions\NotificationNotFoundException(get_class($this));
-        }
-        $this->head()->notifications()->add($notification);
+        }*/
+        if(isset($this->notification))
+            if( $this->head()->node() instanceof Framework\Actor )
+                $this->head()->node()->notifications()->add($this->notification);
     }
 
 }

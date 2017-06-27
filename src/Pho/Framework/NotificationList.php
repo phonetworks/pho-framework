@@ -12,7 +12,7 @@ class NotificationList implements \SplSubject
         $this->attach($owner);
     }
 
-    public function add(Notification $notification): void
+    public function add(AbstractNotification $notification): void
     {
         $this->list[] = $notification;
     }
@@ -24,7 +24,7 @@ class NotificationList implements \SplSubject
 
     public function toArray(): array
     {
-        return array_map(function(Notification $notification) {
+        return array_map(function(AbstractNotification $notification) {
             return $notification->toArray();
         }, $this->notifications);
     }

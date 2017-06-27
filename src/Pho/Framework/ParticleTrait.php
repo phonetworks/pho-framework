@@ -189,7 +189,7 @@ trait ParticleTrait
         $this->registerIncomingEdges(
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
-            ObjectOut\Transmit::class
+            ObjectOut\Mention::class
         );
         $this->_setupEdgesIn();
         $this->_setupEdgesOut();
@@ -533,7 +533,7 @@ trait ParticleTrait
      * 
      * @return void
      */
-    public function notifySubscribers(Notification $notification): void
+    public function notifySubscribers(AbstractNotification $notification): void
     {
         foreach ($this->getSubscribers() as $subscriber) {
             $subscriber->notifications()->add($notification);

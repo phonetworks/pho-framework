@@ -65,6 +65,15 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
      */
     const SETTABLES = [];
 
+    /**
+     * The notification object associated with this edge.
+     *
+     * Optional. Not always formed.
+     * 
+     * @var AbstractNotification
+     */
+    protected $notification;
+
     public function __construct(ParticleInterface $tail, ?ParticleInterface $head = null, ?Predicate $predicate = null) 
     {
         parent::__construct(
@@ -72,12 +81,30 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
             $head, 
             $this->_resolvePredicate($predicate, Predicate::class)
         );
-        $this->execute();
+        $this->_setNotification()->execute();
+    }
+
+    protected function _setNotification(): AbstractEdge
+    {
+        $is_a_notification = function(string $class_name): bool
+        {
+            if(!class_exists($class_name))
+                return false;
+            $reflector = new \ReflectionClass($class_name);
+            return $reflector->isSubclassOf(AbstractNotification::class);
+        };
+
+            $notification_class = get_class($this)."Notification";
+            if($is_a_notification($notification_class)) {
+                $this->notification = new $notification_class($this);
+            }
+        
+        return $this;
     }
 
     protected function execute(): void
     {
-        
+
     }
 
     /**

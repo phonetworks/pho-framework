@@ -77,11 +77,11 @@ class EdgeRolesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($edge->predicate()->binding());
     }
     
-    public function testTransmitEdge() {
+    public function testMentionEdge() {
         $actor = new Actor($this->graph);
         $object = new Object($actor, $this->graph);
         $actor2 = new Actor($this->graph);
-        $edge = $object->transmit($actor2);
+        $edge = $object->mention($actor2);
         $this->assertFalse($edge->predicate()->consumer());
         $this->assertTrue($edge->predicate()->notifier());
         $this->assertFalse($edge->predicate()->subscriber());

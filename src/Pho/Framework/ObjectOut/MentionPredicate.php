@@ -20,7 +20,7 @@ namespace Pho\Framework\ObjectOut;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class NotifyPredicate extends \Pho\Framework\Predicate
+class MentionPredicate extends \Pho\Framework\Predicate
 {
     const T_NOTIFIER = true;
 }
