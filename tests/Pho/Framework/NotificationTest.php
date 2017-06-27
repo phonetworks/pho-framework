@@ -79,4 +79,12 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($edge2->id()->toString(), $friend2->notifications()->toArray()[0]["edge"]);
     }
 
+    public function testSerialization() {
+        $actor = new Actor($this->graph);
+        $obj = new Object($actor, $this->graph);
+        $edge = $obj->mention($actor);
+        $this->assertEquals(1,  $actor->notifications()->count());
+        $this->assertArrayHasKey("notifications",  $actor->toArray());
+    }
+
 }

@@ -481,6 +481,9 @@ trait ParticleTrait
     {
         $array = parent::toArray();
         $array["creator"] = $this->creator_id;
+        if($this instanceof Actor) {
+            $array["notifications"] = $this->notifications()->toArray();
+        }
         return $array;
     }
 
