@@ -33,4 +33,17 @@ class Write extends Subscribe
     const TAIL_LABELS = "writers";
     const SETTABLES = [Framework\Graph::class, Framework\Object::class]; /* inherits the values in Edits */
 
+    const NOTIFICATION = __NAMESPACE__ . "\\ObjectNotification";
+
+
+    protected function execute(): void
+    {
+        $notification_class = static::NOTIFICATION;
+        $notification = new $notification_class($this->tail());
+        if(!$notification instanceof Framework\Notification) {
+            throw new Framework\Exceptions\NotificationNotFoundException(get_class($this));
+        }
+        $this->notifySubscribers($notification);
+    }
+
 }

@@ -523,4 +523,21 @@ trait ParticleTrait
     }
 
 
+    /**************************************************
+     * The rest are Subscription/Publisher related 
+     * functions
+     *************************************************/
+
+    /**
+     * Notifies observers about deletion
+     * 
+     * @return void
+     */
+    public function notifySubscribers(Notification $notification): void
+    {
+        foreach ($this->getSubscribers() as $subscriber) {
+            $subscriber->notifications()->add($notification);
+        }
+    }
+
 }

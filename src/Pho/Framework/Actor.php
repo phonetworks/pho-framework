@@ -49,7 +49,7 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
         parent::__construct($context);
         $this->creator = $this;
         $this->creator_id = (string) $this->id();
-        $this->notifications = new NotificationList;
+        $this->notifications = new NotificationList($this);
         $this->enter($context);
         $this->particleConstructor();
     }
@@ -117,6 +117,23 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
     public function pwd(): ContextInterface 
     {
         return $this->where();
+    }
+
+
+
+    public function update(\SplSubject $subject): void
+    {
+        if($subject instanceof NotificationList) {
+            $this->observeNotificationListUpdate($subject);
+        }
+        else {
+            parent::update($subject);
+        }
+    }
+
+    protected function observeNotificationListUpdate(): void
+    {
+
     }
 
 }
