@@ -1,10 +1,28 @@
 <?php
 
+/*
+ * This file is part of the Pho package.
+ *
+ * (c) Emre Sokullu <emre@phonetworks.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Pho\Framework;
 
 use Pho\Lib\Graph\EdgeInterface;
 use Pho\Lib\Graph\SerializableTrait;
 
+/**
+ * An abstract Notification class.
+ * 
+ * Notifications are the messages passed between notifiers and objects, or 
+ * subscribers and their subscriptions. Notifications constitute a basic component
+ * of all social networks.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 abstract class AbstractNotification implements \Serializable 
 {
 
@@ -41,11 +59,23 @@ abstract class AbstractNotification implements \Serializable
         $this->edge_id = $edge->id();
     }
 
+    /**
+     * A shortcut to the edge() method.
+     *
+     * @see edge
+     * 
+     * @return mixed It's actually the EdgeInterface method.
+     */
     public function __invoke() //: mixed
     {
         return $this->edge();
     }
 
+    /**
+     * Returns the edge of this notification.
+     *
+     * @return EdgeInterface The edge associated with this notification.
+     */
     public function edge(): EdgeInterface
     {
         if(isset($this->edge)) 
@@ -54,6 +84,15 @@ abstract class AbstractNotification implements \Serializable
             return $this->hydratedEdge();
     }
 
+    /**
+     * Used to retrieve edge after serialization/deserialization.
+     * 
+     * As of this layer, this method is not implemented, but declared to 
+     * be implemented by higher levels that may require persistence 
+     * features.
+     *
+     * @return EdgeInterface
+     */
     protected function hydratedEdge(): EdgeInterface
     {
 
@@ -86,6 +125,14 @@ abstract class AbstractNotification implements \Serializable
         );
    }
 
+   /**
+    * The class name of this notification.
+    *
+    * Important, since the class name is what defines the
+    * notification message and behaviour.
+    *
+    * @return string
+    */
    public function label(): string
    {
        return (new \ReflectionObject($this))->getShortName();
