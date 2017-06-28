@@ -191,8 +191,22 @@ trait ParticleTrait
             ActorOut\Subscribe::class, 
             ObjectOut\Mention::class
         );
+        $this->onConstruction();
         $this->_setupEdgesIn();
         $this->_setupEdgesOut();
+    }
+
+    /**
+     * Called when registering incoming edges.
+     * 
+     * This a placeholder that may be used by higher level packages
+     * to priovide incoming edge registration capabilities.
+     *
+     * @return void
+     */
+    protected function onIncomingEdgeRegistration(): void
+    {
+
     }
 
     /**
