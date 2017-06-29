@@ -31,5 +31,10 @@ class Predicate extends AbstractPredicate {
      * it returns the edge itself.
      */
     const T_CONSUMER = false;
+
+    /**
+     * A formative edge creates new nodes.
+     */
+    const T_FORMATIVE = false;
     
 }

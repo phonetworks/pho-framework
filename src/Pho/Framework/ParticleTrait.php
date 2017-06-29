@@ -106,6 +106,16 @@ trait ParticleTrait
      */
     protected $edge_out_setter_methods = [];
 
+
+    /**
+     * Formative Labels of Outgoing Edges
+     * 
+     * A simple array of edge names
+     * 
+     * @var array
+     */ 
+    protected $edge_out_formative_methods = [];
+
     
 
     /**
@@ -281,23 +291,49 @@ trait ParticleTrait
         foreach ($locator as $file) {
             $filename = str_replace($edge_dir . DIRECTORY_SEPARATOR, '', $file->getRealPath());
             foreach ($file->getClasses() as $class) {
+                $this->registerEdgeOutClass($class);
+            }
+        }
+    }
+
+
+    /**
+     * Registes an Edge Out class that meets the requirements.
+     *
+     * @param string $class
+     * 
+     * @return void
+     */
+    public function registerEdgeOutClass(string $class): void
+    {
                 $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(AbstractEdge::class)) { 
-                    continue 1;
+                    // maybe log?
+                    return;
                 }
+
                 $_method = (string) strtolower($reflector->getShortName());
-                $this->edge_out_setter_methods[] = $_method;
-                $this->edge_out_setter_classes[$_method] = $class;
-                $this->edge_out_setter_settables[$_method] = $reflector->getConstant("SETTABLES");
+                $_predicate = $class."Predicate";
+                
+                if($_predicate::T_FORMATIVE) {
+                    $this->edge_out_formative_methods[] = $_method;
+                    $this->edge_out_formative_classes[$_method] = $_predicate::FORMATION_PATTERNS;
+                    /*
+                    ["string:int"] => X\Y\Z::class
+                    */
+                }
+                else {
+                    $this->edge_out_setter_methods[] = $_method;
+                    $this->edge_out_setter_classes[$_method] = $class;
+                    $this->edge_out_setter_settables[$_method] = $reflector->getConstant("SETTABLES");
+                }
+
                 $_method = $reflector->getConstant("HEAD_LABELS");
                 $this->edge_out_getter_methods[] = $_method;
                 $this->edge_out_getter_classes[$_method] = $class;
                 $_method = $reflector->getConstant("HEAD_LABEL");
                 $this->edge_out_haser_methods[] = $_method;
                 $this->edge_out_haser_classes[$_method] = $class;
-
-            }
-        }
     }
 
     /**
@@ -314,6 +350,9 @@ trait ParticleTrait
         if(in_array($name, $this->edge_out_setter_methods)) {
             return $this->_callSetter($name, $args);
         }
+        else if(in_array($name, $this->edge_out_formative_methods)) {
+            return $this->_callFormer($name, $args);
+        }
         else if(strlen($name) > 3) {
             $func_prefix = substr($name, 0, 3);
             $funcs = ["get"=>"_callGetter", "has"=>"_callHaser"];
@@ -327,6 +366,44 @@ trait ParticleTrait
             }
         }
         //throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+    }
+
+    /**
+     * Catch-all method for formers
+     *
+     * @param string $name Catch-all method name
+     * @param array  $args Catch-all method arguments
+     * 
+     * @return \Pho\Lib\Graph\EntityInterface Returns \Pho\Lib\Graph\EdgeInterface by default, but in order to provide flexibility for higher-level components to return node (in need) the official return value is \Pho\Lib\Graph\EntityInterface which is the parent of both NodeInterface and EdgeInterface.
+     */
+    protected function _callFormer(string $name, array $args): \Pho\Lib\Graph\EntityInterface
+    {
+        
+        $class = $this->__findFormativeClass($name, $args);
+        if(count($args)>0) {
+            return new $class($this, $this->where($args), ...$args);
+        }
+        else {
+            return new $class($this, $this->where($args));
+        }
+    }
+
+    protected function __findFormativeClass(string $name, array $args): string
+    {
+        $argline = "";
+        if(count($args)>0) {
+            foreach($args as $arg) {
+                $argline .= sprintf("%s:", gettype($arg));
+            }
+            $argline = substr($argline, 0, -1);
+        }
+        else {
+            $argline = ":";
+        }
+        if(!isset($this->edge_out_formative_classes[$name][$argline])) {
+            // throw
+        }
+        return $this->edge_out_formative_classes[$name][$argline];
     }
 
     /**
