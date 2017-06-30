@@ -71,6 +71,11 @@ the edge, its predicate, and notification, all in separate files. Alternatively,
 
 To reiterate, the predicate and notification classes are optional.
 
+> There is an alternative way of adding edge-out classes to the particles. You can do so by using the particle's
+> ```registerEdgeOutClass(string $edge_class_name)``` method if the edge class is already included. Although 
+> please note, the predicate and notification classes, if they exist, must be renamed in conformance to 
+> afore-mentioned requirements, and must reside in the same namespace with the edge class.
+
 ## Predicates
 
 Predicates must extend the Predicate class in Pho-Framework. A predicate has four configurable traits:
@@ -79,6 +84,7 @@ Predicates must extend the Predicate class in Pho-Framework. A predicate has fou
 2. **Subscriber**: a subscriber edge, makes its tail listen to notification updates from its head node.
 3. **Consumer**:  a consumer edge, once its "return()" function called, would return the head node in response, and not the edge itself.
 4. **Binding**: a binding edge, once deleted, would also delete its head node.
+5. **Formative**: with formative edges, you don't define a head node, because it is created dynamically at the same time with edge construction.
 
 You can learn the traits of a predicate by calling the boolean methods;
 
@@ -87,6 +93,7 @@ $predicate->notifier();
 $predicate->subscriber();
 $predicate->consumer();
 $predicate->binding();
+$predicate->formative();
 ```
 
 Or, you can do that from the edge, with:
@@ -96,9 +103,11 @@ $edge->predicate()->notifier();
 $edge->predicate()->subscriber();
 $edge->predicate()->consumer();
 $edge->predicate()->binding();
+$edge->predicate()->formative();
+
 ```
 
-The edges notifier, subscriber, consumer, binding characteristics are set by their respective class files. To learn more about it, check out [Predicate.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Predicate.php) and pho-framework level implementations:
+The edges notifier, subscriber, consumer, binding, formative characteristics are set by their respective class files. To learn more about it, check out [Predicate.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/Predicate.php) and pho-framework level implementations:
 
 * [ActorOut/WritePredicate](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/WritePredicate.php): adopts subscriber and binding traits.
 * [ActorOut/ReadPredicate](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/ReadPredicate.php): adopts consumer trait:
@@ -235,7 +244,7 @@ protected function __callHaserEdgeOut(ID $id, string $name): bool
     }
 ```
 
-* **__callSetter(string $name, array $args)**: Example: called with ```subscribes()``` to set up a new edge of "Subscribes". $name would resolve as "subscribes" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_setter_settables[$name]```. Framework returns the Edge but in order to provide flexibility for higher level components, the return value is **\Pho\Lib\Graph\EntityInterface** which is the parent of both NodeInterface and EdgeInterface. Current implementation is as follows:
+* **__callSetter(string $name, array $args)**: Example: called with ```subscribe()``` to set up a new edge of "Subscribe". $name would resolve as "subscribe" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_setter_settables[$name]```. Framework returns the Edge but in order to provide flexibility for higher level components, the return value is **\Pho\Lib\Graph\EntityInterface** which is the parent of both NodeInterface and EdgeInterface. Current implementation is as follows:
 
 ```php
 protected function _callSetter(string $name, array $args): \Pho\Lib\Graph\EntityInterface
@@ -250,6 +259,27 @@ protected function _callSetter(string $name, array $args): \Pho\Lib\Graph\Entity
         // return $edge(); // returns the head() // not at framework level.
 }
 ```
+* **__callFormer(string $name, array $args)**: Example: called with virtual ```post()``` not only to set up a new edge of "Post" --just like what the \_\_callSetter do-- but also to create the head node. Therefore, unlike other methods shown so far, the \_\_callFormer methods (such as "post" in this example) do not take a particle/node as an argument. Instead, they take the formative arguments of that node (minus the creator and context) and pass them to the node in its construction right along. $name would resolve as "post" after going through a strtolower operation. You may fetch the associated class names with ```$this->edge_out_formative_edge_classes[$name]```. Framework returns the Edge but in order to provide flexibility for higher level components, the return value is **\Pho\Lib\Graph\EntityInterface** which is the parent of both NodeInterface and EdgeInterface. Current implementation is as follows:
+
+```php
+protected function _callFormer(string $name, array $args): \Pho\Lib\Graph\EntityInterface
+    {
+        
+        $class = $this->__findFormativeClass($name, $args);
+        if(count($args)>0) {
+            $head = new $class($this, $this->where($args), ...$args);
+        }
+        else {
+            $head = new $class($this, $this->where($args));
+        }
+        $edge_class = $this->edge_out_formative_edge_classes[$name];
+        $edge = new $edge_class($this, $head);
+        return $edge->return();
+    }
+```
+
+As you can see ```__findFormativeClass(string $name, array $args)``` plays a crucial role in execution of this function, and you may need to use in classes that extend this one.
+
 
 <!--
 ## Reference
