@@ -116,7 +116,17 @@ trait ParticleTrait
      */ 
     protected $edge_out_formative_methods = [];
 
-    
+
+    /**
+     * Formative Classes of Outgoing Edges
+     * 
+     * An array of edge labels as key
+     * and associated class name as value.
+     * Both in string format.
+     *
+     * @var array
+     */
+    protected $edge_out_formative_edge_classes = [];    
 
     /**
      * Setter Classes of Outgoing Edges
@@ -317,6 +327,7 @@ trait ParticleTrait
                 
                 if($_predicate::T_FORMATIVE) {
                     $this->edge_out_formative_methods[] = $_method;
+                    $this->edge_out_formative_edge_classes[$_method] = $class;
                     $this->edge_out_formative_classes[$_method] = $_predicate::FORMATION_PATTERNS;
                     /*
                     ["string:int"] => X\Y\Z::class
@@ -381,11 +392,14 @@ trait ParticleTrait
         
         $class = $this->__findFormativeClass($name, $args);
         if(count($args)>0) {
-            return new $class($this, $this->where($args), ...$args);
+            $head = new $class($this, $this->where($args), ...$args);
         }
         else {
-            return new $class($this, $this->where($args));
+            $head = new $class($this, $this->where($args));
         }
+        $edge_class = $this->edge_out_formative_edge_classes[$name];
+        $edge = new $edge_class($this, $head);
+        return $edge->return();
     }
 
     protected function __findFormativeClass(string $name, array $args): string
