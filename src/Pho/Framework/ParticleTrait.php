@@ -321,7 +321,6 @@ trait ParticleTrait
     {
                 $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(AbstractEdge::class)) { 
-                    // maybe log?
                     return;
                 }
 
@@ -350,11 +349,6 @@ trait ParticleTrait
                             $_pattern .= ":::";
                             if($param->isOptional()) {
                                 $pattern .= sprintf("(%s)?", $_pattern);
-                                /*
-                                if($param->isDefaultValueAvailable()) {
-                                    $pattern .= $param->getDefaultValue()."?";
-                                }
-                                */
                             }
                             else
                                 $pattern .= $_pattern;
@@ -362,9 +356,6 @@ trait ParticleTrait
                         $formation_patterns[$settable] = substr(str_replace("\\", ":", $pattern),0 ,-3);
                     }
                     $this->edge_out_formative_edge_patterns[$_method] = $formation_patterns;
-                    /*
-                    ["string:int"] => X\Y\Z::class
-                    */
                 }
                 else {
                     $this->edge_out_setter_methods[] = $_method;
@@ -448,19 +439,13 @@ trait ParticleTrait
             $argline = ":::";
         }
 
-        $matching_key = -1;
         foreach($this->edge_out_formative_edge_patterns[$name] as $settable=>$pattern) {
             if(preg_match("/^".$pattern."$/", $argline)) {
-                $matching_key = $settable;
-                break;
+                return $settable;
             }
         }
 
-        if($matching_key==-1) {
-            throw new UnrecognizedSetOfParametersForFormativeEdgeException($argline, $this->edge_out_formative_edge_patterns[$name]);
-        }
-        
-        return $matching_key;
+        throw new UnrecognizedSetOfParametersForFormativeEdgeException($argline, $this->edge_out_formative_edge_patterns[$name]);
     }
 
     /**
