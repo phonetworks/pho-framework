@@ -14,6 +14,7 @@ namespace Pho\Framework;
 use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 use Zend\File\ClassFileLocator;
 use Pho\Lib\Graph\ID;
+use Pho\Framework\Exceptions\UnrecognizedSetOfParametersForFormativeEdgeException;
 
 /**
  * The Particle Trait
@@ -127,6 +128,15 @@ trait ParticleTrait
      * @var array
      */
     protected $edge_out_formative_edge_classes = [];    
+
+    /**
+     * Arguments that match with each formative edge out.
+     *
+     * In regular expression format.
+     * 
+     * @var array
+     */
+    protected $edge_out_formative_edge_patterns = [];
 
     /**
      * Setter Classes of Outgoing Edges
@@ -318,7 +328,6 @@ trait ParticleTrait
     {
                 $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(AbstractEdge::class)) { 
-                    // maybe log?
                     return;
                 }
 
@@ -328,10 +337,32 @@ trait ParticleTrait
                 if($_predicate::T_FORMATIVE) {
                     $this->edge_out_formative_methods[] = $_method;
                     $this->edge_out_formative_edge_classes[$_method] = $class;
-                    $this->edge_out_formative_classes[$_method] = $_predicate::FORMATION_PATTERNS;
-                    /*
-                    ["string:int"] => X\Y\Z::class
-                    */
+                    $formation_patterns = [];
+                    foreach($reflector->getConstant("SETTABLES") as $settable) {
+                        $pattern = "";
+                        $formable_params = (new \ReflectionMethod($settable, "__construct"))->getParameters();
+                        @array_shift($formable_params);
+                        @array_shift($formable_params);
+                        if(count($formable_params)==0) {
+                            $formation_patterns[$settable] = ":::";
+                            continue;
+                        }
+                        foreach($formable_params as $param) {
+                            $_pattern = "";
+                            if(!$param->hasType())
+                                $_pattern .= ".+?";
+                            else
+                                $_pattern .= $param->getType();
+                            $_pattern .= ":::";
+                            if($param->isOptional()) {
+                                $pattern .= sprintf("(%s)?", $_pattern);
+                            }
+                            else
+                                $pattern .= $_pattern;
+                        }
+                        $formation_patterns[$settable] = substr(str_replace("\\", ":", $pattern),0 ,-3);
+                    }
+                    $this->edge_out_formative_edge_patterns[$_method] = $formation_patterns;
                 }
                 else {
                     $this->edge_out_setter_methods[] = $_method;
@@ -407,17 +438,21 @@ trait ParticleTrait
         $argline = "";
         if(count($args)>0) {
             foreach($args as $arg) {
-                $argline .= sprintf("%s:", gettype($arg));
+                $argline .= sprintf("%s:::", str_replace("\\", ":", gettype($arg)));
             }
-            $argline = substr($argline, 0, -1);
+            $argline = substr($argline, 0, -3);
         }
         else {
-            $argline = ":";
+            $argline = ":::";
         }
-        if(!isset($this->edge_out_formative_classes[$name][$argline])) {
-            // throw
+
+        foreach($this->edge_out_formative_edge_patterns[$name] as $settable=>$pattern) {
+            if(preg_match("/^".$pattern."$/", $argline)) {
+                return $settable;
+            }
         }
-        return $this->edge_out_formative_classes[$name][$argline];
+
+        throw new UnrecognizedSetOfParametersForFormativeEdgeException($argline, $this->edge_out_formative_edge_patterns[$name]);
     }
 
     /**
