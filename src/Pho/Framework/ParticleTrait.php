@@ -129,6 +129,13 @@ trait ParticleTrait
      */
     protected $edge_out_formative_edge_classes = [];    
 
+    /**
+     * Arguments that match with each formative edge out.
+     *
+     * In regular expression format.
+     * 
+     * @var array
+     */
     protected $edge_out_formative_edge_patterns = [];
 
     /**
