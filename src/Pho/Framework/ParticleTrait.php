@@ -340,7 +340,22 @@ trait ParticleTrait
                     $formation_patterns = [];
                     foreach($reflector->getConstant("SETTABLES") as $settable) {
                         $pattern = "";
-                        $formable_params = (new \ReflectionMethod($settable, "__construct"))->getParameters();
+                        // @todo 
+                        // we should do this with recursive
+                        try {
+                            $formable_params = 
+                                (new \ReflectionMethod(
+                                    $settable, 
+                                    "__construct")
+                                )->getParameters();
+                        }
+                        catch(\ReflectionException $e) {
+                            $formable_params = 
+                                (new \ReflectionMethod(
+                                    get_parent_class($settable), 
+                                    "__construct")
+                                )->getParameters();
+                        }
                         @array_shift($formable_params);
                         @array_shift($formable_params);
                         if(count($formable_params)==0) {
