@@ -340,9 +340,6 @@ trait ParticleTrait
                     $formation_patterns = [];
                     foreach($reflector->getConstant("FORMABLES") as $settable) {
                         $pattern = "";
-                        /*for($_c=new \ReflectionClass($settable); (!$_c->hasMethod("__construct") && (!empty(get_parent_class($settable)))); $_c=new \ReflectionClass(get_parent_class($settable))) {
-
-                        }*/
                         // @todo 
                         // we should do this with recursive
                         try{
@@ -386,7 +383,10 @@ trait ParticleTrait
                 else {
                     $this->edge_out_setter_methods[] = $_method;
                     $this->edge_out_setter_classes[$_method] = $class;
-                    $this->edge_out_setter_settables[$_method] = $reflector->getConstant("SETTABLES");
+                    if($reflector->getConstant("SETTABLES_EXTRA")!==false)
+                        $this->edge_out_setter_settables[$_method] = array_merge($reflector->getConstant("SETTABLES"),$reflector->getConstant("SETTABLES_EXTRA")) ;
+                    else 
+                        $this->edge_out_setter_settables[$_method] = $reflector->getConstant("SETTABLES") ;
                 }
 
                 $_method = $reflector->getConstant("HEAD_LABELS");
