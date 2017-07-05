@@ -158,6 +158,8 @@ For an edge to be valid, it must:
     * HEAD_LABEL: what the head node of this edge's role is called, in singular. A subscriber subscribes to a *subscription*, hence it's "subscription"
     * HEAD_LABELS: same as above, in plural. So it's "subscriptions"
     * SETTABLES: what classes can this edge target, in array format. If it's [Framework\ParticleInterface::class], that means it can target any node/particle. Sometimes this level of flexibility may not be the case for all types of edges; for example, the [Write](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Write.php) edge cannot target Actor particles, because a user can't create a user. Hence its SETTABLES is declared as [Framework\Object::class, Framework\Graph::class] only, so that it can target Graphs and Objects only, and not Actors.
+    * SETTABLES_EXTRA: similar to SETTABLES, but allows a subclass to define new settables that extend the parent class' ones, without overriding them (because defining a new SETTABLES constant would override the parents')
+    * FORMABLES: if it's a formative edge (as defined by the predicate) the formables constant defines the classes that this edge can create. Please note, Formables cannot point to an interface, and **must** point to classes with a constructor.
     
 As you can see above, the constants defined in the edge class are merely for naming purposes. The mechanics function as follows;
 
