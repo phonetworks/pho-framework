@@ -276,6 +276,11 @@ trait ParticleTrait
             foreach($edge_in_class_reflector->getConstant("SETTABLES") as $head_node_type) {
                 $check |= is_a($this, $head_node_type);
             }
+            if($edge_in_class_reflector->getConstant("SETTABLES_EXTRA")!==false) {
+                foreach($edge_in_class_reflector->getConstant("SETTABLES_EXTRA") as $head_node_type) {
+                    $check |= is_a($this, $head_node_type);
+                }
+            }
             if($check) {
                 $method = $edge_in_class_reflector->getConstant("TAIL_LABELS");
                 $this->edge_in_getter_methods[] = $method;
