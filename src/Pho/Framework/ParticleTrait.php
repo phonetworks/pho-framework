@@ -338,11 +338,14 @@ trait ParticleTrait
                     $this->edge_out_formative_methods[] = $_method;
                     $this->edge_out_formative_edge_classes[$_method] = $class;
                     $formation_patterns = [];
-                    foreach($reflector->getConstant("SETTABLES") as $settable) {
+                    foreach($reflector->getConstant("FORMABLES") as $settable) {
                         $pattern = "";
+                        /*for($_c=new \ReflectionClass($settable); (!$_c->hasMethod("__construct") && (!empty(get_parent_class($settable)))); $_c=new \ReflectionClass(get_parent_class($settable))) {
+
+                        }*/
                         // @todo 
                         // we should do this with recursive
-                        try {
+                        try{
                             $formable_params = 
                                 (new \ReflectionMethod(
                                     $settable, 
@@ -353,7 +356,8 @@ trait ParticleTrait
                             $formable_params = 
                                 (new \ReflectionMethod(
                                     get_parent_class($settable), 
-                                    "__construct")
+                                    "__construct"
+                                    )
                                 )->getParameters();
                         }
                         @array_shift($formable_params);
