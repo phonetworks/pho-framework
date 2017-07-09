@@ -81,7 +81,7 @@ abstract class AbstractNotification implements \Serializable
         if(isset($this->edge)) 
             return $this->edge;
         else
-            return $this->hydratedEdge();
+            return $this->hyEdge();
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class AbstractNotification implements \Serializable
      *
      * @return EdgeInterface
      */
-    protected function hydratedEdge(): EdgeInterface
+    protected function hyEdge(): EdgeInterface
     {
 
     }

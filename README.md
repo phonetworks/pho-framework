@@ -124,7 +124,7 @@ to see how notifications works.
 
 Notifications are called by the ```execute()``` method of the edges. Example: [ObjectOut/Mention.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ObjectOut/Mention.php) and [ActorOut/Write.php](https://github.com/phonetworks/pho-framework/blob/master/src/Pho/Framework/ActorOut/Write.php)
 
-!!! hydratedEdge!!!
+!!! hyEdge!!!
 
 ## Creating & Extending Particles
 
@@ -181,11 +181,15 @@ $actor->getSubscriptions();
 
 ## Extending Particles for Hydration
 
-Pho-Framework is built upon pho-lib-graph which has extensive support for hydration that can be used for several applications such as persistence. Pho-Framework adds up to that, by adding a new hydrating function ```hydratedCreator()```.
+Pho-Framework is built upon pho-lib-graph which has extensive support for hydration that can be used for several applications such as persistence. Pho-Framework adds up to that, by adding two new hydrating functions ```hyCreator()``` and ```hyEdge()``` (by Notifications.class.php).
 
 * **onIncomingEdgeRegistration**: called by particles when registering incoming edges. This function may be used extra edges easily and independently, without extending the constructor itself.
 
-* **hydratedCreator()**: called when ```creator()``` can't find the creator. Enables you to access ```$creator_id``` to fetch it from external sources. This can be used with any particle; be it an Actor, Object or Graph. The return value is **Actor**.
+* **hyCreator()**: called when ```creator()``` can't find the creator. Enables you to access ```$creator_id``` to fetch it from external sources. This can be used with any particle; be it an Actor, Object or Graph. The return value is **Actor**.
+
+Also the following functions may be overridden with hydrating functions otherwise the program may not perform well at scale given the fact that the current implementation works by recursing through each and every edge of the given node.
+
+* **hyEdge()**: called when ```edge()``` (in NotificationList.php) can't find the edge. Enables you to access ```$edge_id``` to fetch it from external sources. The return value is **\Pho\Lib\Graph\EdgeInterface**.
 
 Also the following functions may be overridden with hydrating functions otherwise the program may not perform well at scale given the fact that the current implementation works by recursing through each and every edge of the given node.
 

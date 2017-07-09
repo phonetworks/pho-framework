@@ -685,7 +685,7 @@ trait ParticleTrait
      * 
      * @return Actor
      */
-    protected function hydratedCreator(): Actor
+    protected function hyCreator(): Actor
     {
 
     }
