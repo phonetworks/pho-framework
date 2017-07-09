@@ -329,7 +329,7 @@ trait ParticleTrait
      * 
      * @return void
      */
-    public function registerEdgeOutClass(string $class): void
+    public function registerEdgeOutClass(string $class, int $trim = 2): void
     {
                 $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(AbstractEdge::class)) { 
@@ -362,8 +362,9 @@ trait ParticleTrait
                                     )
                                 )->getParameters();
                         }
-                        @array_shift($formable_params);
-                        @array_shift($formable_params);
+                        for($i=0;$i<$trim;$i++) {
+                            @array_shift($formable_params);
+                        }
                         if(count($formable_params)==0) {
                             $formation_patterns[$settable] = ":::";
                             continue;
