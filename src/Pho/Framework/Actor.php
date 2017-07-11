@@ -131,7 +131,7 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
         }
     }
 
-    protected function observeNotificationListUpdate(): void
+    protected function observeNotificationListUpdate(AbstractNotification $notification): void
     {
 
     }
