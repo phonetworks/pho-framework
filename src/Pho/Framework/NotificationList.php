@@ -4,11 +4,13 @@ namespace Pho\Framework;
 class NotificationList implements \SplSubject
 {
 
+    protected $owner;
     protected $list = [];
     protected $observers = [];
 
     public function __construct(Actor $owner, array $data = [])
     {
+        $this->owner = $owner;
         $this->attach($owner);
         $this->import($data);
     }
@@ -23,6 +25,7 @@ class NotificationList implements \SplSubject
     public function add(AbstractNotification $notification): void
     {
         $this->list[] = $notification;
+        $this->owner->emit("notification.received", [$notification]);
     }
 
     public function count(): int
