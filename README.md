@@ -295,5 +295,5 @@ Valid methods in the Pho Framework stack are:
 
 ## Signals
 
-* **notification.received**: called when the actor received a notification
+* **notification.received**: called when the actor received a notification. This may alternatively be achieved by overriding the ```observeNotificationListUpdate(AbstractNotification $notification)``` function.
 
