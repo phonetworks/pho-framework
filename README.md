@@ -293,3 +293,7 @@ As you can see ```__findFormativeClass(string $name, array $args)``` plays a cru
 Valid methods in the Pho Framework stack are:
 -->
 
+## Signals
+
+* **notification.received**: called when the actor received a notification
+
