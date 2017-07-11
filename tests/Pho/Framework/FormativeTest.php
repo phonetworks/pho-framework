@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
-
 namespace Pho\Framework {
 
     use Pho\Lib\Graph;
@@ -76,28 +74,20 @@ namespace Pho\Framework\ActorOut {
         const HEAD_LABELS = "posts";
         const TAIL_LABEL = "poster";
         const TAIL_LABELS = "posters";
-        const SETTABLES = [\Pho\Framework\Object::class, \Pho\Framework\MockFable::class]; 
+        const FORMABLES = [\Pho\Framework\Object::class, \Pho\Framework\MockFable::class]; 
     }
     class PostPredicate extends WritePredicate {
         const T_FORMATIVE = true;
-        /*const FORMATION_PATTERNS = [
-            ":" => \Pho\Framework\Object::class,
-            "string" => \Pho\Framework\MockFable::class
-        ];*/
     }
     class ConsumerPost extends Write {
         const HEAD_LABEL = "post";
         const HEAD_LABELS = "posts";
         const TAIL_LABEL = "poster";
         const TAIL_LABELS = "posters";
-        const SETTABLES = [\Pho\Framework\Object::class, \Pho\Framework\MockFable::class]; 
+        const FORMABLES = [\Pho\Framework\Object::class, \Pho\Framework\MockFable::class]; 
     }
     class ConsumerPostPredicate extends WritePredicate {
         const T_FORMATIVE = true;
         const T_CONSUMER = true;
-        /*const FORMATION_PATTERNS = [
-            ":" => \Pho\Framework\Object::class,
-            "string" => \Pho\Framework\MockFable::class
-        ];*/
     }
 };
