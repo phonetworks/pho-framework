@@ -471,9 +471,9 @@ trait ParticleTrait
             $argline = ":::";
         }
 
-        foreach($this->edge_out_formative_edge_patterns[$name] as $settable=>$pattern) {
+        foreach($this->edge_out_formative_edge_patterns[$name] as $formable=>$pattern) {
             if(preg_match("/^".$pattern."$/", $argline)) {
-                return $settable;
+                return $formable;
             }
         }
 
