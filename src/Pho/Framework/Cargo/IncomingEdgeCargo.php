@@ -24,9 +24,9 @@ class IncomingEdgeCargo extends AbstractCargo
      * Lists edges that are directed towards this node. Initiliazed at construction,
      * and never modified again.
      * 
-     * @var array An array of class names (with their namespaces)
+     * {@inheritDoc}
      */
-    public $edges_in = [];
+    public $classes = [];
 
 
     /**
@@ -35,9 +35,9 @@ class IncomingEdgeCargo extends AbstractCargo
      * A simple array of tail labels of incoming edges in plural.
      * Tail labels in string format.
      *
-     * @var array
+     * {@inheritDoc}
      */
-    public $edge_in_getter_methods = [];
+    public $labels = [];
 
     /**
      * Getter Classes of Incoming Edges
@@ -46,28 +46,38 @@ class IncomingEdgeCargo extends AbstractCargo
      * and associated class name as value.
      * Both in string format.
      *
-     * @var array
+     * {@inheritDoc}
      */
-    public $edge_in_getter_classes = [];
+    public $label_class_pairs = [];
 
     /**
-     * Haser Labels of Incoming Edges
+     * "Has" Labels of Incoming Edges
      * 
      * A simple array of tail labels of incoming edges in singular.
      * Tail labels in string format.
      *
-     * @var array
+     * @var array An array of labels in string format.
      */
-    public $edge_in_haser_methods = [];
+    public $singularLabels = [];
 
     /**
-     * Haser Classes of Incoming Edges
+     * "Has" Classes of Incoming Edges
      * 
      * An array of tail labels of incoming edges in singular as key
      * and associated class name as value.
      * Both in string format.
      *
-     * @var array
+     * @var array An array of labels as key, and class names as value.
      */
-    public $edge_in_haser_classes = [];
+    public $singularLabel_class_pairs = [];
+
+    /**
+     * Constrcutor
+     *
+     * @param array $incoming_edges
+     */
+    public function __construct(array $incoming_edges) 
+    {
+        self::$classes = $incoming_edges;
+    }
 }

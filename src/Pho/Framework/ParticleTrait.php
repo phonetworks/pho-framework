@@ -11,6 +11,8 @@
 
 namespace Pho\Framework;
 
+use Pho\Framework\Cargo;
+use Pho\Framework\Loaders;
 use Pho\Framework\Exceptions\UnrecognizedSetOfParametersForFormativeEdgeException;
 
 /**
@@ -25,11 +27,6 @@ use Pho\Framework\Exceptions\UnrecognizedSetOfParametersForFormativeEdgeExceptio
  */
 trait ParticleTrait
 {
-
-    use Helpers\IncomingEdge\BuilderTrait;
-    use Helpers\OutgoingEdge\BuilderTrait;
-    use Handlers\SetterHandlerTrait;
-    use Handlers\GetterHandlerTrait;
 
     /**
      * Who created this node. Must point to an Actor.
@@ -49,6 +46,27 @@ trait ParticleTrait
     protected $creator_id;
 
     /**
+     * Holds handler info for incoming edges
+     *
+     * @var Cargo\IncomingEdgeCargo
+     */
+    protected $cargo_in;
+
+    /**
+     * Holds handler info for outgoing edges
+     *
+     * @var Cargo\OutgoingEdgeCargo
+     */
+    protected $cargo_out;
+
+    /**
+     * An array of incoming edge classes
+     *
+     * @var array
+     */
+    protected $incoming_edges;
+
+    /**
      * Constructor.
      */
     public function __construct() 
@@ -58,11 +76,41 @@ trait ParticleTrait
             ActorOut\Subscribe::class, 
             ObjectOut\Mention::class
         );
+        
         $this->onConstruction();
-        $cargo_in = $this->buildIncomingEdges();
-        $cargo_out = $this->buildOutgoingEdges($this);
-        $this->handleIncomingEdges($cargo_in);
-        $this->handleIncomingEdges($cargo_in);
+        
+        $this->cargo_in = new Cargo\IncomingEdgeCargo($this->incoming_edges);
+        $this->cargo_out = new Cargo\OutgoingEdgeCargo();
+
+        Loaders\IncomingEdgeLoader::pack($this)
+            ->deploy($this->cargo_in); 
+        Loaders\OutgoingEdgeLoader::pack($this)
+            ->deploy($this->cargo_out);
+    }
+
+    /**
+     * Registers the incoming edges.
+     *
+     * The default ones for all nodes are:
+     * * ActorOut\Read::class
+     * * ActorOut\Subscribe::class
+     * * ObjectOut\Publish::class
+     * 
+     * @param ...$classes 
+     * 
+     * @return void
+     */
+    protected function registerIncomingEdges(...$classes): void
+    {
+        foreach($classes as $class) {
+            $this->incoming_edges[] = $class;
+            $this->emit("incoming_edge.registered", [$class]);
+        }
+    }
+
+    public function getRegisteredIncomingEdges(): array
+    {
+        return $this->incoming_edges;
     }
 
     /**
@@ -76,18 +124,21 @@ trait ParticleTrait
      */
     public function __call(string $name, array $args) 
     {
-        if(in_array($name, $this->edge_out_setter_methods)) {
-            return $this->_callSetter($name, $args);
+        if(in_array($name, $this->cargo_out->setter_labels)) {
+            return Handlers\Get::handle($name, $args);
         }
-        else if(in_array($name, $this->edge_out_formative_methods)) {
-            return $this->_callFormer($name, $args);
+        else if(in_array($name, $this->cargo_out->formative_labels)) {
+            return Handlers\Form::handle($name, $args);
         }
         else if(strlen($name) > 3) {
-            $func_prefix = substr($name, 0, 3);
-            $funcs = ["get"=>"_callGetter", "has"=>"_callHaser"];
+            $func_prefix = ucfirst(substr($name, 0, 3));
+            $funcs = [
+                "get"=>"Handlers\Get::handle", 
+                "has"=>"Handlers\Has::handle"
+            ];
             if (array_key_exists($func_prefix, $funcs) ) {
                 try {
-                    return $this->{$funcs[$func_prefix]}($name, $args);
+                    return $funcs[$func_prefix]($name, $args);
                 }
                 catch(Exceptions\InvalidParticleMethodException $e) {
                     throw $e;

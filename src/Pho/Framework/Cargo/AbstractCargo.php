@@ -12,42 +12,41 @@
 namespace Pho\Framework\Cargo;
 
 /**
- * Holds variables in regards to incoming edges of a particle
+ * A cargo class holds variables in regards to particle edges.
+ * 
+ * This helper class' variables are set at construction of a particle,
+ * then accessed by handlers.
+ * 
+ * The variables are public, but the class shall be kept in a protected 
+ * variable within the shell class, hence, not exposed to end-users.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class IncomingEdgeCargo extends AbstractCargo
+abstract class AbstractCargo
 {
     /**
-     * Incoming Edges
-     * 
-     * Lists edges that are directed towards this node. Initiliazed at construction,
-     * and never modified again.
-     * 
      * @var array An array of class names (with their namespaces)
      */
     public $classes = [];
 
+    /**
+     * @var array An array of singular labels in string format.
+     */
+    public $singularLabels = [];
 
     /**
-     * Getter Labels of Incoming Edges
-     * 
-     * A simple array of tail labels of incoming edges in plural.
-     * Tail labels in string format.
-     *
-     * @var array
+     * @var array An array of plural labels in string format.
      */
     public $labels = [];
 
     /**
-     * Getter Classes of Incoming Edges
-     * 
-     * An array of tail labels of incoming edges in plural as key
-     * and associated class name as value.
-     * Both in string format.
-     *
-     * @var array
+     * @var array An array of plural labels as key, and class names as value.
      */
     public $label_class_pairs = [];
+
+    /**
+     * @var array An array of singular labels as key, and class names as value.
+     */
+    public $singularLabel_class_pairs = [];
 
 }

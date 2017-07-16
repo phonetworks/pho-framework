@@ -1,7 +1,12 @@
 <?php
 
-namespace Pho\Framework\Helpers\OutgoingEdge;
+namespace Pho\Framework\Cargo;
 
+/**
+ * Formative properties of outgoing edges.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 trait FormativePropertiesTrait
 {
     /**
@@ -11,7 +16,7 @@ trait FormativePropertiesTrait
      * 
      * @var array
      */ 
-    protected $edge_out_formative_methods = [];
+    protected $formative_labels = [];
 
     /**
      * Formative Classes of Outgoing Edges
@@ -22,7 +27,7 @@ trait FormativePropertiesTrait
      *
      * @var array
      */
-    protected $edge_out_formative_edge_classes = [];    
+    protected $formative_label_class_pairs = [];    
 
     /**
      * Arguments that match with each formative edge out.
@@ -31,5 +36,5 @@ trait FormativePropertiesTrait
      * 
      * @var array
      */
-    protected $edge_out_formative_edge_patterns = [];
+    protected $formative_patterns = [];
 }

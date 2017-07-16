@@ -13,7 +13,7 @@ namespace Pho\Framework\Handlers;
 
 use Pho\Lib\Graph\ID;
 
-trait GetterHandlerTrait 
+class Get
 {
     /**
      * Catch-all method for getters

@@ -1,7 +1,12 @@
 <?php
 
-namespace Pho\Framework\Helpers\OutgoingEdge;
+namespace Pho\Framework\Cargo;
 
+/**
+ * Setter properties of outgoing edges.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 trait SetterPropertiesTrait
 {
     /**
@@ -11,7 +16,7 @@ trait SetterPropertiesTrait
      *
      * @var array
      */
-    protected $edge_out_setter_methods = [];
+    protected $setter_labels = [];
 
     /**
      * Setter Classes of Outgoing Edges
@@ -22,7 +27,7 @@ trait SetterPropertiesTrait
      *
      * @var array
      */
-    protected $edge_out_setter_classes = [];
+    protected $setter_classes = [];
 
     /**
      * Class Associations for Outgoing Edges 
@@ -33,5 +38,6 @@ trait SetterPropertiesTrait
      *
      * @var array
      */
-    protected $edge_out_setter_settables = [];
+    protected $setter_label_settable_pairs = [];
+    
 }
