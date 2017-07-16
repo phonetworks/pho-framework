@@ -59,8 +59,10 @@ trait ParticleTrait
             ObjectOut\Mention::class
         );
         $this->onConstruction();
-        $this->buildIncomingEdges();
-        $this->buildOutgoingEdges($this);
+        $cargo_in = $this->buildIncomingEdges();
+        $cargo_out = $this->buildOutgoingEdges($this);
+        $this->handleIncomingEdges($cargo_in);
+        $this->handleIncomingEdges($cargo_in);
     }
 
     /**
