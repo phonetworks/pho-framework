@@ -297,3 +297,7 @@ Valid methods in the Pho Framework stack are:
 
 * **notification.received**: called when the actor received a notification. This may alternatively be achieved by overriding the ```observeNotificationListUpdate(AbstractNotification $notification)``` function.
 
+## FAQ
+
+* **Is there a way to save the graph in a file or on disk?** 
+Pho-Framework has no built-in server or mechanism for saving/storing/replacing the graph. It is built purely in memory. But you can use [pho-microkernel](https://github.com/phonetworks/pho-framework) for such persistence.
