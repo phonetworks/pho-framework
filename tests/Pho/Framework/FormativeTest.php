@@ -27,7 +27,7 @@ namespace Pho\Framework {
 
         public function testSimpleFormation() {
             $actor = new Actor($this->graph);
-            $actor->registerEdgeOutClass(\Pho\Framework\ActorOut\Post::class);
+            $actor->registerOutgoingEdgeClass(\Pho\Framework\ActorOut\Post::class);
             $edge = $actor->post();
             $this->assertInstanceOf(Object::class, $edge->head()->node());
             $this->assertTrue($edge->predicate()->formative());
@@ -36,7 +36,7 @@ namespace Pho\Framework {
 
         public function testSimpleFormationWithConsumerPost() {
             $actor = new Actor($this->graph);
-            $actor->registerEdgeOutClass(\Pho\Framework\ActorOut\ConsumerPost::class);
+            $actor->registerOutgoingEdgeClass(\Pho\Framework\ActorOut\ConsumerPost::class);
             $object = $actor->consumerpost();
             $this->assertInstanceOf(Object::class, $object);
             $actor_edges = $actor->edges()->out();
@@ -46,7 +46,7 @@ namespace Pho\Framework {
 
         public function testFormationWithArgument() {
             $actor = new Actor($this->graph);
-            $actor->registerEdgeOutClass(\Pho\Framework\ActorOut\Post::class);
+            $actor->registerOutgoingEdgeClass(\Pho\Framework\ActorOut\Post::class);
             $text = "this is a good night story.";
             $edge = $actor->post($text);
             $this->assertInstanceOf(MockFable::class, $edge->head()->node());

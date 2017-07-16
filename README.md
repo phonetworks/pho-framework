@@ -183,8 +183,6 @@ $actor->getSubscriptions();
 
 Pho-Framework is built upon pho-lib-graph which has extensive support for hydration that can be used for several applications such as persistence. Pho-Framework adds up to that, by adding two new hydrating functions ```hyCreator()``` and ```hyEdge()``` (by Notifications.class.php).
 
-* **onIncomingEdgeRegistration**: called by particles when registering incoming edges. This function may be used extra edges easily and independently, without extending the constructor itself.
-
 * **hyCreator()**: called when ```creator()``` can't find the creator. Enables you to access ```$creator_id``` to fetch it from external sources. This can be used with any particle; be it an Actor, Object or Graph. The return value is **Actor**.
 
 Also the following functions may be overridden with hydrating functions otherwise the program may not perform well at scale given the fact that the current implementation works by recursing through each and every edge of the given node.
@@ -296,6 +294,8 @@ Valid methods in the Pho Framework stack are:
 ## Signals
 
 * **notification.received**: called when the actor received a notification. This may alternatively be achieved by overriding the ```observeNotificationListUpdate(AbstractNotification $notification)``` function.
+
+* **incoming_edge.registered**: called by particles when registering incoming edges. This function may be used extra edges easily and independently, without extending the constructor itself.
 
 ## FAQ
 
