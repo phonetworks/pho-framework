@@ -21,7 +21,7 @@ use Pho\Framework\ParticleInterface;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class IncomingEdgeLoader
+class IncomingEdgeLoader extends AbstractLoader
 {
     /**
      * Sets up incoming edges.

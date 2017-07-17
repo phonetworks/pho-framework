@@ -13,7 +13,6 @@ namespace Pho\Framework;
 
 use Pho\Framework\Cargo;
 use Pho\Framework\Loaders;
-use Pho\Framework\Exceptions\UnrecognizedSetOfParametersForFormativeEdgeException;
 
 /**
  * The Particle Trait
@@ -45,6 +44,11 @@ trait ParticleTrait
      */
     protected $creator_id;
 
+    /**
+     * Handles catch-all method calls.
+     *
+     * @var \Pho\Framework\Handlers\Gateway
+     */
     protected $handler;
 
     /**
@@ -65,9 +69,7 @@ trait ParticleTrait
             ObjectOut\Mention::class
         );
         
-        $this->onConstruction();
-        
-        $this->handler = new Handlers\Gateway; 
+        $this->handler = new Handlers\Gateway($this); 
 
         Loaders\IncomingEdgeLoader::pack($this)
             ->deploy($this->handler->cargo_in); 
@@ -101,6 +103,27 @@ trait ParticleTrait
     }
 
     /**
+     * Registers an outgoing edge class
+     * 
+     * As long as it meets the requirements.
+     * 
+     * Please use this function with caution. An erroneous class may
+     * cause irrevocable and unpredictable system-wide problems.
+     *
+     * @param string $class The outgoing edge class to register.
+     * 
+     * @return void
+     */
+    public function registerOutgoingEdgeClass(string $class, int $trim = 2): void
+    {
+        Loaders\OutgoingEdgeLoader::registerOutgoingEdgeClass(
+            $this->handler->cargo_out,
+            $class,
+            $trim
+        );
+    }
+
+    /**
      * @internal
      *
      * @param string $name
@@ -111,7 +134,7 @@ trait ParticleTrait
      */
     public function __call(string $name, array $args) 
     {
-        return $this->handler->handle($name, $args);
+        return $this->handler->switch($name, $args);
         //throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
 

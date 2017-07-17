@@ -11,140 +11,93 @@
 
 namespace Pho\Framework\Handlers;
 
+use Pho\Framework\ParticleInterface;
 use Pho\Lib\Graph\ID;
+use Pho\Lib\Graph\Direction;
 
-class Get
+class Get implements HandlerInterface
 {
+
     /**
-     * Catch-all method for getters
-     *
-     * @param string $name Catch-all method name
-     * @param array  $args Catch-all method arguments
+     * Direction out: is equivalent to head nodes of an edge
+     * Direction in: is equivalent to tail nodes of an edge
      * 
-     * @return array An array of ParticleInterface objects
-     * 
-     * @throws Exceptions\InvalidParticleMethodException when no matching method found.
+     * @var array
      */
-    public static function handle(string $name, array $args, Gateway $carrier): array
+    const ADJACENCY_EQUIVALENT = [
+        "out" => "head",
+        "in" => "tail"
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function handle(
+        ParticleInterface $particle,
+        array $pack,
+        string $name, 
+        array $args // no use -yet-
+        ) /*:  array*/
     {
         $name = strtolower(substr($name, 3));
-        if(in_array($name, $carrier->cargo_out->labels)) {
-            return self::handleEdgeOut($name);
+        if(self::checkDirection($pack, $name, Direction::out())) {
+            return self::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
-        else if(in_array($name, $this->edge_in_getter_methods)) {
-            return self::handleEdgeIn($name);
+        else if(self::checkDirection($pack, $name, Direction::in())) {
+            return self::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
-        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+        throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+    }
+
+    /**
+     * Whether the given method is available for incoming or outgoing edges.
+     *
+     * @param array $pack Holds incoming and outgoing cargos.
+     * @param string $name Method name. Queried among incoming and outgoing labels.
+     * @param Direction $direction Direction in question; in or out.
+     * 
+     * @return bool
+     */
+    protected static function checkDirection(
+        array $pack,
+        string $name,
+        Direction $direction 
+        ): bool
+    {
+        return in_array($name, $pack[(string) $direction]->labels);
     }
 
 
     /**
-     * Getter Catcher for Edges Out
+     * Getter Catcher for Edges In and Out
      *
-     * @param string $name Representation of nodes to retrieve
+     * @param ParticleInterface $particle The particle that this handler is associated with.
+     * @param array  $pack Holds cargo variables extracted by loaders.
+     * @param string $name The edge node label in plural.
+     * @param Direction  $direction The direction of the edge adjacent nodes to look up.
      * 
-     * @return array The edges.
+     * @return array The edge nodes.
      */
-    protected function __callGetterEdgeOut(string $name): array
+    protected static function getEdgeNodes(
+        ParticleInterface $particle, 
+        array $pack,
+        string $name,
+        Direction $direction 
+        ): array
     {
-        $edges_out = $this->edges()->out();
+        $direction = (string) $direction;
+        $node_adj = self::ADJACENCY_EQUIVALENT[$direction];
+        $cargo = $pack[$direction];
+        $edges = $particle->edges()->$direction();
         $return = [];
         array_walk(
-            $edges_out, function ($item, $key) use (&$return, $name) {
-                if($item instanceof $this->edge_out_getter_classes[$name]) {
-                    $return[] = $item();
+            $edges, function ($item, $key) use (&$return, $name, $cargo, $node_adj) {
+                if($item instanceof $cargo->label_class_pairs[$name]) {
+                    $return[] = $item->$node_adj()->node();
                 }
             }
         );
         return $return;
     }
 
-    /**
-     * Getter Catcher for Edges In
-     *
-     * @param string $name Representation of nodes to retrieve
-     * 
-     * @return array The edges.
-     */
-    protected function __callGetterEdgeIn(string $name): array
-    {
-        $edges_in = $this->edges()->in();
-        $return = [];
-        array_walk(
-            $edges_in, function ($item, $key) use (&$return, $name) {
-                if($item instanceof $this->edge_in_getter_classes[$name]) {
-                    $return[] = $item->tail()->node();
-                }
-            }
-        );
-        return $return;
-    }
-
-
-    /**
-     * Catch-all method for hasers -hasSomething()-
-     *
-     * @param string $name Catch-all method name
-     * @param array  $args Catch-all method arguments. Must contain a single ID for the queried object, or it will throw an exception.
-     * 
-     * @return bool whether the node exists or not
-     * 
-     * @throws InvalidArgumentException when the method is called without a single ID object as argument.
-     * @throws Exceptions\InvalidParticleMethodException when no matching method found.
-     */
-    protected function _callHaser(string $name, array $args): bool
-    {
-        if(!isset($args[0]) || !$args[0] instanceof ID) {
-            throw new \InvalidArgumentException(
-                sprintf('The function %s must be called with a single argument that is strictly a \Pho\Lib\Graph\ID object', $name)
-            );
-        }
-        $id = $args[0];
-        $original_name = $name;
-        $name = strtolower(substr($name, 3));
-        if(in_array($name, $this->edge_out_haser_methods)) {
-            return $this->__callHaserEdgeOut($id, $name);
-        }   
-        else if(in_array($name, $this->edge_in_haser_methods)) {
-            return $this->__callHaserEdgeIn($id, $name);
-        }
-        throw new Exceptions\InvalidParticleMethodException(__CLASS__, $original_name);
-    }
-
-
-    /**
-     * Haser Catcher for Edges Out
-     *
-     * @param string $name Representation of nodes to check
-     * 
-     * @return bool whether the node exists or not
-     */
-    protected function __callHaserEdgeOut(ID $id, string $name): bool
-    {
-        $edges_out = $this->edges()->out();
-        foreach($edges_out as $edge) {
-            if($edge instanceof $this->edge_out_haser_classes[$name] && $edge->headID()->equals($id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Haser Catcher for Edges In
-     *
-     * @param string $name Representation of nodes to check
-     * 
-     * @return bool whether the node exists or not
-     */
-    protected function __callHaserEdgeIn(ID $id, string $name): bool
-    {
-        $edges_in = $this->edges()->in();
-        foreach($edges_in as $edge) {
-            if($edge instanceof $this->edge_in_haser_classes[$name] && $edge->tailID()->equals($id)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

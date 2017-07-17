@@ -22,7 +22,7 @@ use Pho\Framework\ParticleInterface;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class OutgoingEdgeLoader
+class OutgoingEdgeLoader extends AbstractLoader
 {
     /**
      * Sets up outgoing edges.
@@ -32,9 +32,9 @@ class OutgoingEdgeLoader
      *
      * {@inheritDoc}
      */
-    protected function pack(Framework\ParticleInterface $particle): AbstractLoader
+    public static function pack(Framework\ParticleInterface $particle): AbstractLoader
     {
-        $obj = new OutgoingEdgeLoader();
+        $obj = new OutgoingEdgeLoader;
         // !!! we use reflection method so that __DIR__ behaves properly with child classes.
         $self_reflector = new \ReflectionObject($particle);
         $edge_dir = 
@@ -53,7 +53,7 @@ class OutgoingEdgeLoader
         foreach ($locator as $file) {
             $filename = str_replace($edge_dir . DIRECTORY_SEPARATOR, '', $file->getRealPath());
             foreach ($file->getClasses() as $class) {
-                self::registerOutgoingEdgeClass($obj, $class);
+                self::registerOutgoingEdgeClass($obj->cargo, $class);
             }
         }
         return $obj;
@@ -62,13 +62,17 @@ class OutgoingEdgeLoader
     /**
      * Registers an Edge Out class that meets the requirements.
      *
-     * @param OutgoingEdgeLoader $obj The object to fill data with
+     * @param OutgoingEdgeCargo $cargo The cago to fill data with
      * @param string $class
      * @param int $trim how many arguments in constructor to skip
      * 
      * @return void
      */
-    protected static function registerOutgoingEdgeClass(OutgoingEdgeLoader & $obj, string $class, int $trim = 2): void
+    public static function registerOutgoingEdgeClass(
+        OutgoingEdgeCargo & $cargo, 
+        string $class, 
+        int $trim = 2
+        ): void
     {
                 $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(Framework\AbstractEdge::class)) { 
@@ -79,8 +83,8 @@ class OutgoingEdgeLoader
                 $_predicate = $class."Predicate";
                 
                 if($_predicate::T_FORMATIVE) {
-                    $obj->cargo->formative_labels[] = $_method;
-                    $obj->cargo->formative_label_class_pairs[$_method] = $class;
+                    $cargo->formative_labels[] = $_method;
+                    $cargo->formative_label_class_pairs[$_method] = $class;
                     $formation_patterns = [];
                     foreach($reflector->getConstant("FORMABLES") as $formable) {
                         $pattern = "";
@@ -105,7 +109,7 @@ class OutgoingEdgeLoader
                             @array_shift($formable_params);
                         }
                         if(count($formable_params)==0) {
-                            $formation_patterns[$settable] = ":::";
+                            $formation_patterns[$formable] = ":::";
                             continue;
                         }
                         foreach($formable_params as $param) {
@@ -121,29 +125,29 @@ class OutgoingEdgeLoader
                             else
                                 $pattern .= $_pattern;
                         }
-                        $formation_patterns[$settable] = substr(str_replace("\\", ":", $pattern),0 ,-3);
+                        $formation_patterns[$formable] = substr(str_replace("\\", ":", $pattern),0 ,-3);
                     }
-                    $obj->cargo->formative_patterns[$_method] = $formation_patterns;
+                    $cargo->formative_patterns[$_method] = $formation_patterns;
                 }
                 else {
-                    $obj->cargo->setter_labels[] = $_method;
-                    $obj->cargo->setter_classes[$_method] = $class;
+                    $cargo->setter_labels[] = $_method;
+                    $cargo->setter_classes[$_method] = $class;
                     if($reflector->getConstant("SETTABLES_EXTRA")!==false)
-                        $obj->cargo->setter_label_settable_pairs[$_method] = 
+                        $cargo->setter_label_settable_pairs[$_method] = 
                             array_merge(
                                 $reflector->getConstant("SETTABLES"),
                                 $reflector->getConstant("SETTABLES_EXTRA")
                             ) ;
                     else 
-                        $obj->cargo->setter_label_settable_pairs[$_method] = 
+                        $cargo->setter_label_settable_pairs[$_method] = 
                             $reflector->getConstant("SETTABLES") ;
                 }
 
                 $_method = $reflector->getConstant("HEAD_LABELS");
-                $obj->cargo->labels[] = $_method;
-                $obj->cargo->label_class_pairs[$_method] = $class;
+                $cargo->labels[] = $_method;
+                $cargo->label_class_pairs[$_method] = $class;
                 $_method = $reflector->getConstant("HEAD_LABEL");
-                $obj->cargo->singularLabels[] = $_method;
-                $obj->cargo->singularLabel_class_pairs[$_method] = $class;
+                $cargo->singularLabels[] = $_method;
+                $cargo->singularLabel_class_pairs[$_method] = $class;
     }
 }

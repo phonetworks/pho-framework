@@ -40,12 +40,12 @@ abstract class AbstractCargo
     public $labels = [];
 
     /**
-     * @var array An array of plural labels as key, and class names as value.
+     * @var array An array of plural labels as key, and edge class names as value.
      */
     public $label_class_pairs = [];
 
     /**
-     * @var array An array of singular labels as key, and class names as value.
+     * @var array An array of singular labels as key, and edge class names as value.
      */
     public $singularLabel_class_pairs = [];
 

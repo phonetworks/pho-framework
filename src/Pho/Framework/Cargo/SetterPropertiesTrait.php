@@ -14,20 +14,20 @@ trait SetterPropertiesTrait
      * 
      * A simple array of edge names
      *
-     * @var array
+     * @var array Edge Labels
      */
-    protected $setter_labels = [];
+    public $setter_labels = [];
 
     /**
      * Setter Classes of Outgoing Edges
      * 
      * An array of edge labels as key
-     * and associated class name as value.
+     * and associated edge class name as value.
      * Both in string format.
      *
-     * @var array
+     * @var array Edge Label => Edge Class
      */
-    protected $setter_classes = [];
+    public $setter_classes = [];
 
     /**
      * Class Associations for Outgoing Edges 
@@ -36,8 +36,8 @@ trait SetterPropertiesTrait
      * particle's outgoing edges. Edge labels (string) as 
      * key, settables as array.
      *
-     * @var array
+     * @var array Edge Label => Settable Node Classes
      */
-    protected $setter_label_settable_pairs = [];
+    public $setter_label_settable_pairs = [];
     
 }

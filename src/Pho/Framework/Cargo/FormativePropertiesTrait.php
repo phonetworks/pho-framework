@@ -14,27 +14,27 @@ trait FormativePropertiesTrait
      * 
      * A simple array of edge names
      * 
-     * @var array
+     * @var array Edge Labels
      */ 
-    protected $formative_labels = [];
+    public $formative_labels = [];
 
     /**
      * Formative Classes of Outgoing Edges
      * 
      * An array of edge labels as key
-     * and associated class name as value.
+     * and associated edge class name as value.
      * Both in string format.
      *
-     * @var array
+     * @var array Edge Label => Edge Class
      */
-    protected $formative_label_class_pairs = [];    
+    public $formative_label_class_pairs = [];    
 
     /**
      * Arguments that match with each formative edge out.
      *
      * In regular expression format.
      * 
-     * @var array
+     * @var array Edge label as key, arguments pattern as value
      */
-    protected $formative_patterns = [];
+    public $formative_patterns = [];
 }

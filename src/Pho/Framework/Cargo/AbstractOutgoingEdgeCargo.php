@@ -56,7 +56,7 @@ abstract class AbstractOutgoingEdgeCargo extends AbstractCargo
      *
      * {@inheritDoc}
      */
-    protected $singularLabels = [];
+    public $singularLabels = [];
 
     /**
      * "Has" Classes of Outgoing Edges
@@ -67,6 +67,6 @@ abstract class AbstractOutgoingEdgeCargo extends AbstractCargo
      *
      * {@inheritDoc}
      */
-    protected $singularLabel_class_pairs = [];
+    public $singularLabel_class_pairs = [];
 
 }

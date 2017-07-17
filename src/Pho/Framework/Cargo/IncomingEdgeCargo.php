@@ -78,6 +78,6 @@ class IncomingEdgeCargo extends AbstractCargo
      */
     public function __construct(array $incoming_edges) 
     {
-        self::$classes = $incoming_edges;
+        $this->classes = $incoming_edges;
     }
 }

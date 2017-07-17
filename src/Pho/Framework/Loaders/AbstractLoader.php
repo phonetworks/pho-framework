@@ -11,6 +11,10 @@
 
 namespace Pho\Framework\Loaders;
 
+use Pho\Framework\Cargo\AbstractCargo;
+use Pho\Framework\ParticleInterface;
+
+
 /**
  * In a nutshell, loaders pack (create) cargos (variable holders) and load 
  * them to particles (nodes).
@@ -27,7 +31,7 @@ abstract class AbstractLoader
      *
      * @var \Pho\Framework\Cargo\AbstractCargo
      */
-    protected $cargo;
+    public $cargo;
 
     /**
      * Constructor.
@@ -38,7 +42,7 @@ abstract class AbstractLoader
      * @param array $data Any preliminary data, if available.
      */
     protected function __construct(array $data=[]) {
-        $class = __CLASS__;
+        $class = (new \ReflectionObject($this))->getName();
         $class = str_replace(["Loaders", "Loader"], "Cargo", $class);
         if(count($data)>0)
             $this->cargo  = new $class($data);
@@ -49,19 +53,19 @@ abstract class AbstractLoader
     /**
      * @param ParticleInterface $particle The particle that this loader is associated with.
      * 
-     * @return AbstractPacker The loader object itself, so that the deploy command can be called.
+     * @return AbstractLoader The loader object itself, so that the deploy command can be called.
      */
-    abstract public static function pack(ParticleInterface $particle): AbstractPacker;
+    abstract public static function pack(ParticleInterface $particle): AbstractLoader;
     
     /**
      * Assigns the private variable into the particle's given cargo variable.
      *
-     * @param AbstractCargo $cargo The particle's own cargo variable.
+     * @param mixed $cargo The particle's own cargo variable. It's actually a nullable AbstractCargo (?AbstractCargo)
      * 
      * @return void
      */
-    public static function deploy(AbstractCargo &$cargo): void
+    public function deploy(/*AbstractCargo*/ &$cargo): void
     {
-        $cargo = $this->$cargo;
+        $cargo = $this->cargo;
     }
 }
