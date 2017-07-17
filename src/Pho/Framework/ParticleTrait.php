@@ -59,6 +59,9 @@ trait ParticleTrait
      */
     protected $cargo_out;
 
+
+    protected $handler;
+
     /**
      * An array of incoming edge classes
      *
@@ -79,13 +82,12 @@ trait ParticleTrait
         
         $this->onConstruction();
         
-        $this->cargo_in = new Cargo\IncomingEdgeCargo($this->incoming_edges);
-        $this->cargo_out = new Cargo\OutgoingEdgeCargo();
+        $this->handler = new Handlers\Factory; 
 
         Loaders\IncomingEdgeLoader::pack($this)
-            ->deploy($this->cargo_in); 
+            ->deploy($this->handler->cargo_in); 
         Loaders\OutgoingEdgeLoader::pack($this)
-            ->deploy($this->cargo_out);
+            ->deploy($this->handler->cargo_out);
     }
 
     /**
@@ -125,13 +127,13 @@ trait ParticleTrait
     public function __call(string $name, array $args) 
     {
         if(in_array($name, $this->cargo_out->setter_labels)) {
-            return Handlers\Get::handle($name, $args);
+            return $this->handler->set($name, $args);
         }
         else if(in_array($name, $this->cargo_out->formative_labels)) {
-            return Handlers\Form::handle($name, $args);
+            return $this->handler->form($name, $args);
         }
         else if(strlen($name) > 3) {
-            $func_prefix = ucfirst(substr($name, 0, 3));
+            $func_prefix = substr($name, 0, 3);
             $funcs = [
                 "get"=>"Handlers\Get::handle", 
                 "has"=>"Handlers\Has::handle"

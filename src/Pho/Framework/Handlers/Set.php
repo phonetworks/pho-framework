@@ -13,9 +13,9 @@ namespace Pho\Framework\Handlers;
 
 use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 
-trait SetterHandlerTrait
+class Set
 {
-        /**
+    /**
      * Catch-all method for formers
      *
      * @param string $name Catch-all method name
@@ -23,10 +23,10 @@ trait SetterHandlerTrait
      * 
      * @return \Pho\Lib\Graph\EntityInterface Returns \Pho\Lib\Graph\EdgeInterface by default, but in order to provide flexibility for higher-level components to return node (in need) the official return value is \Pho\Lib\Graph\EntityInterface which is the parent of both NodeInterface and EdgeInterface.
      */
-    protected function _callFormer(string $name, array $args): \Pho\Lib\Graph\EntityInterface
+    public static function handle(string $name, array $args): \Pho\Lib\Graph\EntityInterface
     {
         
-        $class = $this->__findFormativeClass($name, $args);
+        $class = self::findFormativeClass($name, $args);
         if(count($args)>0) {
             $head = new $class($this, $this->where($args), ...$args);
         }
@@ -38,12 +38,15 @@ trait SetterHandlerTrait
         return $edge->return();
     }
 
-    protected function __findFormativeClass(string $name, array $args): string
+    protected static function findFormativeClass(string $name, array $args): string
     {
         $argline = "";
         if(count($args)>0) {
             foreach($args as $arg) {
-                $argline .= sprintf("%s:::", str_replace("\\", ":", gettype($arg)));
+                $argline .= sprintf(
+                    "%s:::", 
+                    str_replace("\\", ":", gettype($arg))
+                );
             }
             $argline = substr($argline, 0, -3);
         }
@@ -51,7 +54,10 @@ trait SetterHandlerTrait
             $argline = ":::";
         }
 
-        foreach($this->edge_out_formative_edge_patterns[$name] as $formable=>$pattern) {
+        foreach(
+            $this->edge_out_formative_edge_patterns[$name] as 
+            $formable=>$pattern
+        ) {
             if(preg_match("/^".$pattern."$/", $argline)) {
                 return $formable;
             }

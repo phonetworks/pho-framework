@@ -37,7 +37,11 @@ class OutgoingEdgeLoader
         $obj = new OutgoingEdgeLoader();
         // !!! we use reflection method so that __DIR__ behaves properly with child classes.
         $self_reflector = new \ReflectionObject($particle);
-        $edge_dir = dirname($self_reflector->getFileName()) . DIRECTORY_SEPARATOR . $self_reflector->getShortName() . "Out";  
+        $edge_dir = 
+            dirname($self_reflector->getFileName()) . 
+            DIRECTORY_SEPARATOR . 
+            $self_reflector->getShortName() 
+            . "Out";  
         // !!! do not replace this with __DIR__
 
         if(!file_exists($edge_dir)) {
@@ -75,8 +79,8 @@ class OutgoingEdgeLoader
                 $_predicate = $class."Predicate";
                 
                 if($_predicate::T_FORMATIVE) {
-                    $obj->formative_labels[] = $_method;
-                    $obj->formative_label_class_pairs[$_method] = $class;
+                    $obj->cargo->formative_labels[] = $_method;
+                    $obj->cargo->formative_label_class_pairs[$_method] = $class;
                     $formation_patterns = [];
                     foreach($reflector->getConstant("FORMABLES") as $formable) {
                         $pattern = "";
@@ -119,27 +123,27 @@ class OutgoingEdgeLoader
                         }
                         $formation_patterns[$settable] = substr(str_replace("\\", ":", $pattern),0 ,-3);
                     }
-                    $obj->formative_patterns[$_method] = $formation_patterns;
+                    $obj->cargo->formative_patterns[$_method] = $formation_patterns;
                 }
                 else {
-                    $obj->setter_labels[] = $_method;
-                    $obj->setter_classes[$_method] = $class;
+                    $obj->cargo->setter_labels[] = $_method;
+                    $obj->cargo->setter_classes[$_method] = $class;
                     if($reflector->getConstant("SETTABLES_EXTRA")!==false)
-                        $obj->setter_label_settable_pairs[$_method] = 
+                        $obj->cargo->setter_label_settable_pairs[$_method] = 
                             array_merge(
                                 $reflector->getConstant("SETTABLES"),
                                 $reflector->getConstant("SETTABLES_EXTRA")
                             ) ;
                     else 
-                        $obj->setter_label_settable_pairs[$_method] = 
+                        $obj->cargo->setter_label_settable_pairs[$_method] = 
                             $reflector->getConstant("SETTABLES") ;
                 }
 
                 $_method = $reflector->getConstant("HEAD_LABELS");
-                $obj->labels[] = $_method;
-                $obj->label_class_pairs[$_method] = $class;
+                $obj->cargo->labels[] = $_method;
+                $obj->cargo->label_class_pairs[$_method] = $class;
                 $_method = $reflector->getConstant("HEAD_LABEL");
-                $obj->singularLabels[] = $_method;
-                $obj->singularLabel_class_pairs[$_method] = $class;
+                $obj->cargo->singularLabels[] = $_method;
+                $obj->cargo->singularLabel_class_pairs[$_method] = $class;
     }
 }

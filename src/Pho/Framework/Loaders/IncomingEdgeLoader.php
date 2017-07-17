@@ -35,7 +35,7 @@ class IncomingEdgeLoader
     public static function pack(ParticleInterface $particle): AbstractLoader 
     {
         $obj = new IncomingEdgeLoader($particle->getRegisteredIncomingEdges());
-        foreach($obj->classes as $class) {
+        foreach($obj->cargo->classes as $class) {
             $class_ref = new \ReflectionClass($class);
             $check = false;
             foreach($class_ref->getConstant("SETTABLES") as $head_node_type) {
@@ -48,12 +48,12 @@ class IncomingEdgeLoader
             }
             if($check) {
                 $method = $class_ref->getConstant("TAIL_LABELS");
-                $obj->labels[] = $method;
-                $obj->label_class_pairs[$method] = $class;
+                $obj->cargo->labels[] = $method;
+                $obj->cargo->label_class_pairs[$method] = $class;
                 
                 $method = $class_ref->getConstant("TAIL_LABEL");
-                $obj->singularLabels[] = $method;
-                $obj->singularLabel_class_pairs[$method] = $class;
+                $obj->cargo->singularLabels[] = $method;
+                $obj->cargo->singularLabel_class_pairs[$method] = $class;
             }
         }
         return $obj;

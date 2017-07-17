@@ -62,6 +62,6 @@ abstract class AbstractLoader
      */
     public static function deploy(AbstractCargo &$cargo): void
     {
-        $cargo = self::$cargo;
+        $cargo = $this->$cargo;
     }
 }

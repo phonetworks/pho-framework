@@ -25,14 +25,14 @@ class Get
      * 
      * @throws Exceptions\InvalidParticleMethodException when no matching method found.
      */
-    protected function _callGetter(string $name, array $args): array
+    public static function handle(string $name, array $args, IncomingEdgeCargo $cargo): array
     {
         $name = strtolower(substr($name, 3));
-        if(in_array($name, $this->edge_out_getter_methods)) {
-            return $this->__callGetterEdgeOut($name);
+        if(in_array($name, $cargo->edge_out_getter_methods)) {
+            return self::handleEdgeOut($name);
         }   
         else if(in_array($name, $this->edge_in_getter_methods)) {
-            return $this->__callGetterEdgeIn($name);
+            return self::handleEdgeIn($name);
         }
         throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
