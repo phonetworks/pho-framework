@@ -125,10 +125,9 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
     {
         if($subject instanceof NotificationList) {
             $this->observeNotificationListUpdate($subject);
+            return;
         }
-        else {
-            parent::update($subject);
-        }
+        parent::update($subject);
     }
 
     protected function observeNotificationListUpdate(AbstractNotification $notification): void

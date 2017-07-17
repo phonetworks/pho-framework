@@ -58,9 +58,11 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Object::class, $actor->getWrites()[0]);
     }
 
+
     public function testObjectHaser() {
         $actor = new Actor($this->space);
         $object = new Object($actor, $this->space);
+        $GLOBALS["dur"] = true;
         $edge = $actor->write($object);
         $this->assertTrue($object->hasWriter($actor->id()));
         $this->assertTrue($actor->hasWrite($object->id()));
