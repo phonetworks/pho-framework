@@ -45,21 +45,6 @@ trait ParticleTrait
      */
     protected $creator_id;
 
-    /**
-     * Holds handler info for incoming edges
-     *
-     * @var Cargo\IncomingEdgeCargo
-     */
-    protected $cargo_in;
-
-    /**
-     * Holds handler info for outgoing edges
-     *
-     * @var Cargo\OutgoingEdgeCargo
-     */
-    protected $cargo_out;
-
-
     protected $handler;
 
     /**
@@ -82,7 +67,7 @@ trait ParticleTrait
         
         $this->onConstruction();
         
-        $this->handler = new Handlers\Factory; 
+        $this->handler = new Handlers\Gateway; 
 
         Loaders\IncomingEdgeLoader::pack($this)
             ->deploy($this->handler->cargo_in); 
@@ -102,7 +87,7 @@ trait ParticleTrait
      * 
      * @return void
      */
-    protected function registerIncomingEdges(...$classes): void
+    public function registerIncomingEdges(...$classes): void
     {
         foreach($classes as $class) {
             $this->incoming_edges[] = $class;
@@ -126,27 +111,7 @@ trait ParticleTrait
      */
     public function __call(string $name, array $args) 
     {
-        if(in_array($name, $this->cargo_out->setter_labels)) {
-            return $this->handler->set($name, $args);
-        }
-        else if(in_array($name, $this->cargo_out->formative_labels)) {
-            return $this->handler->form($name, $args);
-        }
-        else if(strlen($name) > 3) {
-            $func_prefix = substr($name, 0, 3);
-            $funcs = [
-                "get"=>"Handlers\Get::handle", 
-                "has"=>"Handlers\Has::handle"
-            ];
-            if (array_key_exists($func_prefix, $funcs) ) {
-                try {
-                    return $funcs[$func_prefix]($name, $args);
-                }
-                catch(Exceptions\InvalidParticleMethodException $e) {
-                    throw $e;
-                }
-            }
-        }
+        return $this->handler->handle($name, $args);
         //throw new Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
 

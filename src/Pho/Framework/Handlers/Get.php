@@ -25,10 +25,10 @@ class Get
      * 
      * @throws Exceptions\InvalidParticleMethodException when no matching method found.
      */
-    public static function handle(string $name, array $args, IncomingEdgeCargo $cargo): array
+    public static function handle(string $name, array $args, Gateway $carrier): array
     {
         $name = strtolower(substr($name, 3));
-        if(in_array($name, $cargo->edge_out_getter_methods)) {
+        if(in_array($name, $carrier->cargo_out->labels)) {
             return self::handleEdgeOut($name);
         }   
         else if(in_array($name, $this->edge_in_getter_methods)) {

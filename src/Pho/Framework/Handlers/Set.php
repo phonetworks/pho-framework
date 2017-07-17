@@ -23,10 +23,10 @@ class Set
      * 
      * @return \Pho\Lib\Graph\EntityInterface Returns \Pho\Lib\Graph\EdgeInterface by default, but in order to provide flexibility for higher-level components to return node (in need) the official return value is \Pho\Lib\Graph\EntityInterface which is the parent of both NodeInterface and EdgeInterface.
      */
-    public static function handle(string $name, array $args): \Pho\Lib\Graph\EntityInterface
+    public static function handle(string $name, array $args, array $pack): \Pho\Lib\Graph\EntityInterface
     {
         
-        $class = self::findFormativeClass($name, $args);
+        $class = self::findFormativeClass($name, $args, $pack);
         if(count($args)>0) {
             $head = new $class($this, $this->where($args), ...$args);
         }
@@ -38,7 +38,7 @@ class Set
         return $edge->return();
     }
 
-    protected static function findFormativeClass(string $name, array $args): string
+    protected static function findFormativeClass(string $name, array $args, array $pack): string
     {
         $argline = "";
         if(count($args)>0) {
