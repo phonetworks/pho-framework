@@ -57,10 +57,28 @@ class OutgoingEdgeLoader extends AbstractLoader
         foreach ($locator as $file) {
             $filename = str_replace($edge_dir . DIRECTORY_SEPARATOR, '', $file->getRealPath());
             foreach ($file->getClasses() as $class) {
-                self::registerOutgoingEdgeClass($obj->cargo, $class);
+                self::registerOutgoingEdgeClass($particle, $obj->cargo, $class);
             }
         }
         return $obj;
+    }
+
+    /**
+     * Calculates how many arguments in constructor to skip
+     *
+     * Used with formative predicates.
+     * The default value is 2 for framework, 3 for microkernel.
+     * 
+     * @param Framework\ParticleInterface $particle
+     * 
+     * @return int
+     */
+    protected static function getFormativeTrim(Framework\ParticleInterface $particle): int
+    {
+        $trim = 2;
+        if(defined(get_class($particle)."::FORMATIVE_TRIM_CUT"))
+            $trim = $particle::FORMATIVE_TRIM_CUT;
+        return $trim;
     }
 
     /**
@@ -73,11 +91,11 @@ class OutgoingEdgeLoader extends AbstractLoader
      * @return void
      */
     public static function registerOutgoingEdgeClass(
+        ParticleInterface $particle,
         OutgoingEdgeCargo & $cargo, 
-        string $class, 
-        int $formative_trim = 2
+        string $class
         ): void
-    {
+    {   
                 $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(Framework\AbstractEdge::class)) { 
                     return;
@@ -109,6 +127,7 @@ class OutgoingEdgeLoader extends AbstractLoader
                                     )
                                 )->getParameters();
                         }
+                        $formative_trim = self::getFormativeTrim($particle);
                         for($i=0;$i<$formative_trim;$i++) {
                             @array_shift($formable_params);
                         }

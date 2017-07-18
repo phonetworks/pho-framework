@@ -132,13 +132,10 @@ trait ParticleTrait
      */
     public function registerOutgoingEdgeClass(string $class): void
     {
-        $trim = 2;
-        if(defined("static::FORMATIVE_TRIM_CUT"))
-            $trim = static::FORMATIVE_TRIM_CUT;
         Loaders\OutgoingEdgeLoader::registerOutgoingEdgeClass(
+            $this,
             $this->handler->cargo_out,
-            $class,
-            $trim
+            $class
         );
     }
 
