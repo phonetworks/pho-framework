@@ -15,6 +15,11 @@ use Pho\Framework\ParticleInterface;
 use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 use Webmozart\Assert\Assert;
 
+/**
+ * Setter Handler
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Set implements HandlerInterface
 {
 

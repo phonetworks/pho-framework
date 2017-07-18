@@ -15,6 +15,11 @@ use Pho\Framework\ParticleInterface;
 use Pho\Lib\Graph\ID;
 use Pho\Lib\Graph\Direction;
 
+/**
+ * "Has" Handler
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Has implements HandlerInterface
 {
 

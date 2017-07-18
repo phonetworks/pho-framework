@@ -19,7 +19,6 @@ use Pho\Framework\ParticleInterface;
  * Handler gateways are connected to particles and decide
  * what static class to call for each catch-all method request. 
  * 
- * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 class Gateway

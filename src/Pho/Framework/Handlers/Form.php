@@ -14,6 +14,14 @@ namespace Pho\Framework\Handlers;
 use Pho\Framework\ParticleInterface;
 use Pho\Framework\Exceptions\UnrecognizedSetOfParametersForFormativeEdgeException;
 
+/**
+ * Particle Former Handler
+ * 
+ * This is similar to setters, except that this also forms an actual
+ * particle (aka node)
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Form implements HandlerInterface
 {
     /**

@@ -16,6 +16,11 @@ use Pho\Lib\Graph\ID;
 use Pho\Lib\Graph\Direction;
 
 
+/**
+ * Getter Handler
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Get implements HandlerInterface
 {
 
