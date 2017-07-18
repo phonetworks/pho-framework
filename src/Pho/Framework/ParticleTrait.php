@@ -68,7 +68,22 @@ trait ParticleTrait
             ActorOut\Subscribe::class, 
             ObjectOut\Mention::class
         );
+
+        if(method_exists($this, "hookIncomingEdgeRegistration")) {
+            $this->onIncomingEdgeRegistration();
+        }
         
+        $this->initializeMethodHandler();
+        
+    }
+
+    /**
+     * A helper method to set up edges and fields.
+     *
+     * @return void
+     */
+    public function initializeMethodHandler(): void
+    {
         $this->handler = new Handlers\Gateway($this); 
 
         Loaders\IncomingEdgeLoader::pack($this)
