@@ -14,6 +14,7 @@ namespace Pho\Framework\Handlers;
 use Pho\Framework\ParticleInterface;
 use Pho\Lib\Graph\ID;
 use Pho\Lib\Graph\Direction;
+use Pho\Framework\Cargo\FieldsCargo;
 
 
 /**
@@ -52,8 +53,8 @@ class Get implements HandlerInterface
         elseif(self::methodExists($pack, $name, Direction::in())) {
             return self::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
-        elseif( FieldHelper::fieldExists($particle, $name) ) {
-            return self::getField($particle, $name, $args);
+        elseif( FieldHelper::fieldExists($pack["fields"], $name) ) {
+            return self::getField($particle, $pack["fields"], $name, $args);
         }
         throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
@@ -62,6 +63,7 @@ class Get implements HandlerInterface
      * Returns the field value
      *
      * @param ParticleInterface $particle
+     * @param FieldsCargo $cargo
      * @param string $name Field name
      * @param array $args Any arguments if available
      * 
@@ -69,11 +71,12 @@ class Get implements HandlerInterface
      */
     protected static function getField(
         ParticleInterface $particle,
+        FieldsCargo $cargo,
         string $name,
         array $args = []
     )/*: mixed*/
     {
-        $name = FieldHelper::findFieldName($particle, $name);
+        $name = FieldHelper::findFieldName($cargo, $name);
         return $particle->attributes()->$name; // test with null.
     }
 

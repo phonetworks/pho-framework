@@ -62,10 +62,11 @@ abstract class AbstractLoader
      *
      * @param mixed $cargo The particle's own cargo variable. It's actually a nullable AbstractCargo (?AbstractCargo)
      * 
-     * @return void
+     * @return AbstractLoader self
      */
-    public function deploy(/*AbstractCargo*/ &$cargo): void
+    public function deploy(/*AbstractCargo*/ &$cargo): AbstractLoader
     {
         $cargo = $this->cargo;
+        return $this;
     }
 }

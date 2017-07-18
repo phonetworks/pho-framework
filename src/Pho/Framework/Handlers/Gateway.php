@@ -46,6 +46,13 @@ class Gateway
     public $cargo_out;
 
     /**
+     * Holds handler info for fields
+     *
+     * @var Cargo\FieldsCargo
+     */
+    public $cargo_fields;
+
+    /**
      * Constructor.
      *
      * @param ParticleInterface $particle  The particle that this handler is associated with.
@@ -65,8 +72,9 @@ class Gateway
     protected function pack(): array
     {
         return [
-            "in"  => $this->cargo_in,
-            "out" => $this->cargo_out
+            "in"     => $this->cargo_in,
+            "out"    => $this->cargo_out,
+            "fields" => $this->cargo_fields
         ];
     }
 

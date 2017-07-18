@@ -145,4 +145,13 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         $obj->setMyField("will_not_match_regexp");
     }
 
+    public function testJsonFields() {
+        $obj = new class($this->actor, $this->space)  extends Object {
+            const FIELDS = '{"MyField":{"constraints":{"regex":"^A[0-9]+1$"}}}';
+        };
+        $field_val = "A883841";
+        $obj->setMyField($field_val);
+        $this->assertEquals($field_val, $obj->getMyField());
+    }
+
 }

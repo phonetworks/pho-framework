@@ -14,7 +14,7 @@ namespace Pho\Framework\Cargo;
 /**
  * {@inheritDoc}
  */
-abstract class AbstractOutgoingEdgeCargo extends AbstractCargo
+abstract class AbstractOutgoingEdgeCargo extends AbstractEdgeCargo
 {
     /**
      * Getter Classes of Outgoing Edges

@@ -12,6 +12,7 @@
 namespace Pho\Framework\Handlers;
 
 use Pho\Framework\ParticleInterface;
+use Pho\Framework\Cargo\FieldsCargo;
 use Pho\Framework\Exceptions\InvalidEdgeHeadTypeException;
 use Webmozart\Assert\Assert;
 
@@ -35,8 +36,8 @@ class Set implements HandlerInterface
         array $args
         ) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
-        if( FieldHelper::fieldExists($particle, substr($name, 3)) ) {
-            return self::field($particle, substr($name, 3), $args[0]);
+        if( FieldHelper::fieldExists($pack["fields"], substr($name, 3)) ) {
+            return self::field($particle, $pack["fields"], substr($name, 3), $args[0]);
         }
         $check = false;
         foreach($pack["out"]->setter_label_settable_pairs[$name] as $settable) {
@@ -53,6 +54,7 @@ class Set implements HandlerInterface
      * Sets the field value
      *
      * @param ParticleInterface $particle
+     * @param FieldsCargo $cargo
      * @param string $name Field name
      * @param array $args Field argument
      * 
@@ -62,15 +64,16 @@ class Set implements HandlerInterface
      */
     protected static function field(
         ParticleInterface $particle,
+        FieldsCargo $cargo,
         string $name,
         /*mixed*/ $value
         ): void
     {
-        $name = FieldHelper::findFieldName($particle, $name);
-        if(isset($particle::FIELDS[$name]["constraints"])) {
-                self::probeField($particle::FIELDS[$name]["constraints"], $value);
+        $name = FieldHelper::findFieldName($cargo, $name);
+        if(isset($cargo->fields[$name]["constraints"])) {
+                self::probeField($cargo->fields[$name]["constraints"], $value);
         }
-        $particle->attributes()->$name = self::applyDirectives($value, $particle::FIELDS[$name]);
+        $particle->attributes()->$name = self::applyDirectives($value, $cargo->fields[$name]);
     }
 
     /**

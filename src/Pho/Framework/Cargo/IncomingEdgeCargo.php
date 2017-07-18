@@ -16,7 +16,7 @@ namespace Pho\Framework\Cargo;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class IncomingEdgeCargo extends AbstractCargo
+class IncomingEdgeCargo extends AbstractEdgeCargo
 {
     /**
      * Incoming Edges

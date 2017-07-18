@@ -12,7 +12,7 @@
 namespace Pho\Framework\Handlers;
 
 use Pho\Framework\ParticleInterface;
-use Stringy\StaticStringy as Stringy;
+use Pho\Framework\Cargo\FieldsCargo;
 
 /**
  * Field related helper methods for Handler classes
@@ -26,42 +26,28 @@ class FieldHelper
     /**
      * Checks if there is such a field in the given particle.
      *
-     * @param ParticleInterface $particle Particle where we seek.
+     * @param FieldsCargo $cargo Fields cargo where we seek.
      * @param string $name Field name in question.
      * 
      * @return bool
      */
-    public static function fieldExists(ParticleInterface $particle, string $name): bool
+    public static function fieldExists(FieldsCargo $cargo, string $name): bool
     {
-        return (
-            defined(get_class($particle)."::FIELDS") && 
-            in_array(
-                $name, 
-                array_map(
-                    "\Stringy\StaticStringy::upperCamelize", 
-                    array_keys($particle::FIELDS)
-                )
-            )
-        );
+        return array_key_exists($name, $cargo->fields);
     }
 
     /**
      * Given the uppercamelized field name, find its normalized version in the fields section.
      *
-     * @param ParticleInterface $particle Particle where we seek.
+     * @param FieldsCargo $cargo Fields cargo where we seek.
      * @param string $name Field name in question.
      * 
      * @return bool
      */
-    public static function findFieldName(ParticleInterface $particle, string $name): string
+    public static function findFieldName(FieldsCargo $cargo, string $name): string
         {
-            $isset = function(string $name) use ($particle): bool
-            {
-                return isset($particle::FIELDS[$name]);
-            };
-            if($isset($name)) return $name; // upperCamelize
-            elseif($isset(Stringy::camelize($name))) return Stringy::camelize($name);
-            elseif($isset(Stringy::underscored($name))) return Stringy::underscored($name);
+            if(isset($cargo->fields[$name]))
+                return $name;
             throw new \Exception("Cannot resolve field name.");
         }
 

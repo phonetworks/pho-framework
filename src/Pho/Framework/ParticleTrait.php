@@ -75,6 +75,8 @@ trait ParticleTrait
             ->deploy($this->handler->cargo_in); 
         Loaders\OutgoingEdgeLoader::pack($this)
             ->deploy($this->handler->cargo_out);
+        Loaders\FieldsLoader::pack($this)
+            ->deploy($this->handler->cargo_fields);
     }
 
     /**

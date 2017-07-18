@@ -12,7 +12,7 @@
 namespace Pho\Framework\Cargo;
 
 /**
- * A cargo class holds variables in regards to particle edges.
+ * An edge cargo class holds variables in regards to particle edges.
  * 
  * This helper class' variables are set at construction of a particle,
  * then accessed by handlers.
@@ -22,7 +22,7 @@ namespace Pho\Framework\Cargo;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-abstract class AbstractCargo
+abstract class AbstractEdgeCargo implements CargoInterface
 {
     /**
      * @var array An array of class names (with their namespaces)
