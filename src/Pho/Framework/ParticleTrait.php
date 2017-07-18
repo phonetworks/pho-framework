@@ -28,6 +28,16 @@ trait ParticleTrait
 {
 
     /**
+     * The number of arguments to cut off.
+     * 
+     * With formative methods, there are a number of constructor arguments
+     * that needs to be skipped, in order to find the arguments that 
+     * actually change how the particle is set up.
+     * 
+     */
+    //const FORMATIVE_TRIM_CUT = 2;
+
+    /**
      * Who created this node. Must point to an Actor.
      * 
      * Points to self by Actor particles.
@@ -131,8 +141,11 @@ trait ParticleTrait
      * 
      * @return void
      */
-    public function registerOutgoingEdgeClass(string $class, int $trim = 2): void
+    public function registerOutgoingEdgeClass(string $class): void
     {
+        $trim = 2;
+        if(defined("static::FORMATIVE_TRIM_CUT"))
+            $trim = static::FORMATIVE_TRIM_CUT;
         Loaders\OutgoingEdgeLoader::registerOutgoingEdgeClass(
             $this->handler->cargo_out,
             $class,

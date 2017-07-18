@@ -75,7 +75,7 @@ class OutgoingEdgeLoader extends AbstractLoader
     public static function registerOutgoingEdgeClass(
         OutgoingEdgeCargo & $cargo, 
         string $class, 
-        int $trim = 2
+        int $formative_trim = 2
         ): void
     {
                 $reflector = new \ReflectionClass($class);
