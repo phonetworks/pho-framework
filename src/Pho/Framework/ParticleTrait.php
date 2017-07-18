@@ -26,17 +26,6 @@ use Pho\Framework\Loaders;
  */
 trait ParticleTrait
 {
-
-    /**
-     * The number of arguments to cut off.
-     * 
-     * With formative methods, there are a number of constructor arguments
-     * that needs to be skipped, in order to find the arguments that 
-     * actually change how the particle is set up.
-     * 
-     */
-    //const FORMATIVE_TRIM_CUT = 2;
-
     /**
      * Who created this node. Must point to an Actor.
      * 
