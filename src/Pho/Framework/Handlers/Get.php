@@ -15,6 +15,12 @@ use Pho\Framework\ParticleInterface;
 use Pho\Lib\Graph\ID;
 use Pho\Lib\Graph\Direction;
 
+
+/**
+ * Getter Handler
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
 class Get implements HandlerInterface
 {
 
@@ -39,14 +45,36 @@ class Get implements HandlerInterface
         array $args // no use -yet-
         ) /*:  array*/
     {
-        $name = strtolower(substr($name, 3));
-        if(self::checkDirection($pack, $name, Direction::out())) {
+        $name = substr($name, 3);
+        if(self::methodExists($pack, $name, Direction::out())) {
             return self::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
-        else if(self::checkDirection($pack, $name, Direction::in())) {
+        elseif(self::methodExists($pack, $name, Direction::in())) {
             return self::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
+        elseif( FieldHelper::fieldExists($particle, $name) ) {
+            return self::getField($particle, $name, $args);
+        }
         throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $name);
+    }
+
+    /**
+     * Returns the field value
+     *
+     * @param ParticleInterface $particle
+     * @param string $name Field name
+     * @param array $args Any arguments if available
+     * 
+     * @return mixed Field value
+     */
+    protected static function getField(
+        ParticleInterface $particle,
+        string $name,
+        array $args = []
+    )/*: mixed*/
+    {
+        $name = FieldHelper::findFieldName($particle, $name);
+        return $particle->attributes()->$name; // test with null.
     }
 
     /**
@@ -58,13 +86,13 @@ class Get implements HandlerInterface
      * 
      * @return bool
      */
-    protected static function checkDirection(
+    protected static function methodExists(
         array $pack,
         string $name,
         Direction $direction 
         ): bool
     {
-        return in_array($name, $pack[(string) $direction]->labels);
+        return in_array(strtolower($name), $pack[(string) $direction]->labels);
     }
 
 
@@ -85,6 +113,7 @@ class Get implements HandlerInterface
         Direction $direction 
         ): array
     {
+        $name = strtolower($name);
         $direction = (string) $direction;
         $node_adj = self::ADJACENCY_EQUIVALENT[$direction];
         $cargo = $pack[$direction];

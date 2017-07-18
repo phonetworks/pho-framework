@@ -19,7 +19,6 @@ use Pho\Framework\ParticleInterface;
  * Handler gateways are connected to particles and decide
  * what static class to call for each catch-all method request. 
  * 
- * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 class Gateway
@@ -80,6 +79,7 @@ class Gateway
      * @param array $args Catch-all method arguments.
      * 
      * @throws \Pho\Framework\Exceptions\InvalidParticleMethodException when the given method does not match with anything.
+     * @throws \InvalidArgumentException thrown when there argument does not meet the constraints.
      */
     public function switch(string $name, array $args) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
@@ -93,7 +93,8 @@ class Gateway
             $func_prefix = substr($name, 0, 3);
             $funcs = [
                 "get"=> __NAMESPACE__ . "\\Get::handle", 
-                "has"=> __NAMESPACE__ . "\\Has::handle"
+                "has"=> __NAMESPACE__ . "\\Has::handle",
+                "set"=> __NAMESPACE__ . "\\Set::handle",
             ];
             if (array_key_exists($func_prefix, $funcs) ) {
                 try {

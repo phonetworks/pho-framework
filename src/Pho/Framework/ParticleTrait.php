@@ -131,6 +131,7 @@ trait ParticleTrait
      * @return void
      * 
      * @throws Exceptions\InvalidParticleMethodException when no matching method found.
+     * @throws \InvalidArgumentException $e thrown when there argument does not meet the constraints.
      */
     public function __call(string $name, array $args) 
     {

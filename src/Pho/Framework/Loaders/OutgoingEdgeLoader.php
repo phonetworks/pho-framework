@@ -37,6 +37,10 @@ class OutgoingEdgeLoader extends AbstractLoader
         $obj = new OutgoingEdgeLoader;
         // !!! we use reflection method so that __DIR__ behaves properly with child classes.
         $self_reflector = new \ReflectionObject($particle);
+        if($self_reflector->isAnonymous()) {
+            return $obj;
+        }
+
         $edge_dir = 
             dirname($self_reflector->getFileName()) . 
             DIRECTORY_SEPARATOR . 
