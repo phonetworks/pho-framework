@@ -1,4 +1,4 @@
-# Pho-Framework
+# Pho-Framework [![Build Status](https://travis-ci.org/phonetworks/pho-framework.svg?branch=master)](https://travis-ci.org/phonetworks/pho-framework) [![Code Climate](https://img.shields.io/codeclimate/github/phonetworks/pho-framework.svg)](https://codeclimate.com/github/phonetworks/pho-framework)
 
 Pho-Framework is the foundational component of Pho Stack. It establishes
 the object-centered actor/graph framework that all Pho components are built upon. It is stateless, which means, it doesn't provide persistence of its objects in any way, but it is designed for such extensibility via hydrator functions.
