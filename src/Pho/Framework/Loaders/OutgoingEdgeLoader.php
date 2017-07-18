@@ -68,7 +68,7 @@ class OutgoingEdgeLoader extends AbstractLoader
      *
      * @param OutgoingEdgeCargo $cargo The cago to fill data with
      * @param string $class
-     * @param int $trim how many arguments in constructor to skip
+     * @param int $formative_trim how many arguments in constructor to skip
      * 
      * @return void
      */
@@ -109,7 +109,7 @@ class OutgoingEdgeLoader extends AbstractLoader
                                     )
                                 )->getParameters();
                         }
-                        for($i=0;$i<$trim;$i++) {
+                        for($i=0;$i<$formative_trim;$i++) {
                             @array_shift($formable_params);
                         }
                         if(count($formable_params)==0) {
