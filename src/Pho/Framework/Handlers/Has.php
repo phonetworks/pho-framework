@@ -51,10 +51,10 @@ class Has implements HandlerInterface
         $name = strtolower(substr($name, 3));
 
 
-        if(self::checkDirection($pack, $name, $id, Direction::out())) {
+        if(self::methodExists($pack, $name, $id, Direction::out())) {
             return self::checkEdgeNode($particle, $pack, $name, $id, Direction::out());
         }   
-        else if(self::checkDirection($pack, $name, $id, Direction::in())) {
+        elseif(self::methodExists($pack, $name, $id, Direction::in())) {
             return self::checkEdgeNode($particle, $pack, $name, $id, Direction::in());
         }
 
@@ -70,7 +70,7 @@ class Has implements HandlerInterface
      * 
      * @return bool
      */
-    protected static function checkDirection(
+    protected static function methodExists(
         array $pack,
         string $name,
         ID $id,

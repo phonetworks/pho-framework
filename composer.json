@@ -21,7 +21,9 @@
         "zendframework/zend-file": "*",
         "phonetworks/pho-lib-graph": "^4.0",
         "psr/log": "^1.0",
-        "sabre/event": "^5.0"
+        "sabre/event": "^5.0",
+        "webmozart/assert": "^1.2",
+        "danielstjules/stringy": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
