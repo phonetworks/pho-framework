@@ -56,7 +56,7 @@ trait ParticleTrait
      *
      * @var array
      */
-    protected $incoming_edges;
+    protected $incoming_edges = [];
 
     /**
      * Constructor.

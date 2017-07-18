@@ -76,7 +76,7 @@ class IncomingEdgeCargo extends AbstractEdgeCargo
      *
      * @param array $incoming_edges
      */
-    public function __construct(array $incoming_edges) 
+    public function __construct(array $incoming_edges = []) 
     {
         $this->classes = $incoming_edges;
     }
