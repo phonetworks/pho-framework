@@ -140,6 +140,21 @@ trait ParticleTrait
     }
 
     /**
+     * Registers a new handler adapter.
+     *
+     * Default handlers may be overriden.
+     * 
+     * @param string $key Adapter key; e.g. "get", "set", "form" etc.
+     * @param string $class Handler class to register. A handler class shall implement HandlerInterface
+     * 
+     * @return void
+     */
+    public function registerHandlerAdapter(string $key, string $class): void
+    {
+        $this->handler->adapters[$key] = $class;
+    }
+
+    /**
      * @internal
      *
      * @param string $name

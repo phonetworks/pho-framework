@@ -37,7 +37,7 @@ class Set implements HandlerInterface
         ) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
         if( FieldHelper::fieldExists($pack["fields"], substr($name, 3)) ) {
-            return self::field($particle, $pack["fields"], substr($name, 3), $args[0]);
+            return static::field($particle, $pack["fields"], substr($name, 3), $args[0]);
         }
         $check = false;
         foreach($pack["out"]->setter_label_settable_pairs[$name] as $settable) {
@@ -71,9 +71,9 @@ class Set implements HandlerInterface
     {
         $name = FieldHelper::findFieldName($cargo, $name);
         if(isset($cargo->fields[$name]["constraints"])) {
-                self::probeField($cargo->fields[$name]["constraints"], $value);
+                static::probeField($cargo->fields[$name]["constraints"], $value);
         }
-        $particle->attributes()->$name = self::applyDirectives($value, $cargo->fields[$name]);
+        $particle->attributes()->$name = static::applyDirectives($value, $cargo->fields[$name]);
     }
 
     /**

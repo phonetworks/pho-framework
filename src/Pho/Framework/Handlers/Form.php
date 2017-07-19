@@ -34,16 +34,31 @@ class Form implements HandlerInterface
         array $args
         ):  \Pho\Lib\Graph\EntityInterface
     {    
-        $class = self::findFormativeClass($name, $args, $pack);
+        $class = static::findFormativeClass($name, $args, $pack);
+        $head = static::formHead($particle, $args);
+        $edge_class = $pack["out"]->formative_label_class_pairs[$name];
+        $edge = new $edge_class($particle, $head);
+        return $edge->return();
+    }
+
+    /**
+     * Forms the head particle.
+     *
+     * @param ParticleInterface $particle
+     * @param array $args
+     * 
+     * @return void
+     */
+    protected static function formHead(
+        ParticleInterface $particle, 
+        array $args): void
+    {
         if(count($args)>0) {
             $head = new $class($particle, $particle->where(), ...$args);
         }
         else {
             $head = new $class($particle, $particle->where());
         }
-        $edge_class = $pack["out"]->formative_label_class_pairs[$name];
-        $edge = new $edge_class($particle, $head);
-        return $edge->return();
     }
 
     /**

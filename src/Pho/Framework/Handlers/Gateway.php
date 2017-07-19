@@ -12,6 +12,7 @@
 namespace Pho\Framework\Handlers;
 
 use Pho\Framework\ParticleInterface;
+use Pho\Framework\Exceptions\InvalidParticleMethodException;
 
 /**
  * Handler Gateway
@@ -23,6 +24,18 @@ use Pho\Framework\ParticleInterface;
  */
 class Gateway
 {
+
+    /**
+     * Default Handler adapters
+     *
+     * @var array
+     */
+    protected $adapters = [
+        "form" => __NAMESPACE__ . "\\Form::handle", 
+        "get"  => __NAMESPACE__ . "\\Get::handle", 
+        "has"  => __NAMESPACE__ . "\\Has::handle",
+        "set"  => __NAMESPACE__ . "\\Set::handle"
+    ];
 
     /**
      * The particle that this handler is associated with.
@@ -62,6 +75,21 @@ class Gateway
     }
 
     /**
+     * Registers a new handler adapter.
+     *
+     * Default handlers may be overriden.
+     * 
+     * @param string $key Adapter key; e.g. "get", "set", "form" etc.
+     * @param string $class Handler class to register. A handler class shall implement HandlerInterface
+     * 
+     * @return void
+     */
+    public function registerHandlerAdapter(string $key, string $class): void
+    {
+        $this->adapters[$key] = $class;
+    }
+
+    /**
      * Packs cargo variables
      *
      * Cargo variables are then transported to relevant static
@@ -91,27 +119,28 @@ class Gateway
      */
     public function switch(string $name, array $args) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
+        $deliver = function(string $key) use ($name, $args) {
+            $class = $this->adapters[$key];
+            return $class($this->particle, $this->pack(), $name, $args);
+        };
+
         if(in_array($name, $this->cargo_out->setter_labels)) {
-            return Set::handle($this->particle, $this->pack(), $name, $args);
+            return $deliver("set");
         }
         else if(in_array($name, $this->cargo_out->formative_labels)) {
-            return Form::handle($this->particle, $this->pack(), $name, $args);
+            return $deliver("form");
         }
         else if(strlen($name) > 3) {
             $func_prefix = substr($name, 0, 3);
-            $funcs = [
-                "get"=> __NAMESPACE__ . "\\Get::handle", 
-                "has"=> __NAMESPACE__ . "\\Has::handle",
-                "set"=> __NAMESPACE__ . "\\Set::handle",
-            ];
-            if (array_key_exists($func_prefix, $funcs) ) {
+            if (array_key_exists($func_prefix, $this->adapters) ) {
                 try {
-                    return $funcs[$func_prefix]($this->particle, $this->pack(), $name, $args);
+                    return $deliver($func_prefix);
                 }
-                catch(\Pho\Framework\Exceptions\InvalidParticleMethodException $e) {
+                catch(\Exception $e) {
                     throw $e;
                 }
             }
         }
+        throw new InvalidParticleMethodException(__CLASS__, $name);
     }
 }

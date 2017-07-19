@@ -56,11 +56,11 @@ class Has implements HandlerInterface
         $name = strtolower(substr($name, 3));
 
 
-        if(self::methodExists($pack, $name, $id, Direction::out())) {
-            return self::checkEdgeNode($particle, $pack, $name, $id, Direction::out());
+        if(static::methodExists($pack, $name, $id, Direction::out())) {
+            return static::checkEdgeNode($particle, $pack, $name, $id, Direction::out());
         }   
-        elseif(self::methodExists($pack, $name, $id, Direction::in())) {
-            return self::checkEdgeNode($particle, $pack, $name, $id, Direction::in());
+        elseif(static::methodExists($pack, $name, $id, Direction::in())) {
+            return static::checkEdgeNode($particle, $pack, $name, $id, Direction::in());
         }
 
         throw new \Pho\Framework\InvalidParticleMethodException(__CLASS__, $original_name);
@@ -106,7 +106,7 @@ class Has implements HandlerInterface
         ): bool
     {
         $direction = (string) $direction;
-        $node_adj = self::ADJACENCY_EQUIVALENT[$direction];
+        $node_adj = static::ADJACENCY_EQUIVALENT[$direction];
         $cargo = $pack[$direction];
         $edges = $particle->edges()->$direction();
         foreach($edges as $edge) {

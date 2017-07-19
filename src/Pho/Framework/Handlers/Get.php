@@ -47,14 +47,14 @@ class Get implements HandlerInterface
         ) /*:  array*/
     {
         $name = substr($name, 3);
-        if(self::methodExists($pack, $name, Direction::out())) {
-            return self::getEdgeNodes($particle, $pack, $name, Direction::out());
+        if(static::methodExists($pack, $name, Direction::out())) {
+            return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
-        elseif(self::methodExists($pack, $name, Direction::in())) {
-            return self::getEdgeNodes($particle, $pack, $name, Direction::in());
+        elseif(static::methodExists($pack, $name, Direction::in())) {
+            return static::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
         elseif( FieldHelper::fieldExists($pack["fields"], $name) ) {
-            return self::getField($particle, $pack["fields"], $name, $args);
+            return static::getField($particle, $pack["fields"], $name, $args);
         }
         throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
@@ -118,7 +118,7 @@ class Get implements HandlerInterface
     {
         $name = strtolower($name);
         $direction = (string) $direction;
-        $node_adj = self::ADJACENCY_EQUIVALENT[$direction];
+        $node_adj = static::ADJACENCY_EQUIVALENT[$direction];
         $cargo = $pack[$direction];
         $edges = $particle->edges()->$direction();
         $return = [];
