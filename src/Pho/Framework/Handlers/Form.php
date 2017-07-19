@@ -33,9 +33,8 @@ class Form implements HandlerInterface
         string $name, 
         array $args
         ):  \Pho\Lib\Graph\EntityInterface
-    {    
-        $class = static::findFormativeClass($name, $args, $pack);
-        $head = static::formHead($particle, $args);
+    {   
+        $head = static::formHead(...func_get_args());
         $edge_class = $pack["out"]->formative_label_class_pairs[$name];
         $edge = new $edge_class($particle, $head);
         return $edge->return();
@@ -44,21 +43,24 @@ class Form implements HandlerInterface
     /**
      * Forms the head particle.
      *
-     * @param ParticleInterface $particle
-     * @param array $args
+     * @param ParticleInterface $particle The particle that this handler is working on.
+     * @param array  $pack Holds cargo variables extracted by loaders.
+     * @param string $name Catch-all method name
+     * @param array  $args Catch-all method arguments
      * 
-     * @return void
+     * @return \Pho\Lib\Graph\NodeInterface
      */
     protected static function formHead(
-        ParticleInterface $particle, 
-        array $args): void
+        ParticleInterface $particle,
+        array $pack,
+        string $name, 
+        array $args): \Pho\Lib\Graph\NodeInterface
     {
+        $class = static::findFormativeClass($name, $args, $pack);
         if(count($args)>0) {
-            $head = new $class($particle, $particle->where(), ...$args);
+            return new $class($particle, $particle->where(), ...$args);
         }
-        else {
-            $head = new $class($particle, $particle->where());
-        }
+        return new $class($particle, $particle->where());
     }
 
     /**
