@@ -151,7 +151,7 @@ trait ParticleTrait
      */
     public function registerHandlerAdapter(string $key, string $class): void
     {
-        $this->handler->adapters[$key] = $class;
+        $this->handler->registerHandlerAdapter($key, $class);
     }
 
     /**
