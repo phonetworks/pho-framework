@@ -25,7 +25,7 @@ use Pho\Lib\Graph\HookableInterface;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-abstract class AbstractNotification implements \Serializable, HookableTrait
+abstract class AbstractNotification implements \Serializable, HookableInterface
 {
 
     use SerializableTrait;
