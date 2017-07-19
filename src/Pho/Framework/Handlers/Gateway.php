@@ -120,7 +120,7 @@ class Gateway
     public function switch(string $name, array $args) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
         $method = function(string $key) {
-            $method = $this->adapters[$key] . "::handle";
+            return $this->adapters[$key] . "::handle";
         };
 
         if(in_array($name, $this->cargo_out->setter_labels)) {
