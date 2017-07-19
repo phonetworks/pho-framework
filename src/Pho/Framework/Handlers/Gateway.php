@@ -31,10 +31,10 @@ class Gateway
      * @var array
      */
     protected $adapters = [
-        "form" => "\\" . __NAMESPACE__ . "\\Form::handle", 
-        "get"  => "\\" . __NAMESPACE__ . "\\Get::handle", 
-        "has"  => "\\" . __NAMESPACE__ . "\\Has::handle",
-        "set"  => "\\" . __NAMESPACE__ . "\\Set::handle"
+        "form" => "\\" . __NAMESPACE__ . "\\Form", 
+        "get"  => "\\" . __NAMESPACE__ . "\\Get", 
+        "has"  => "\\" . __NAMESPACE__ . "\\Has",
+        "set"  => "\\" . __NAMESPACE__ . "\\Set"
     ];
 
     /**
@@ -120,8 +120,8 @@ class Gateway
     public function switch(string $name, array $args) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
         $deliver = function(string $key) use ($name, $args) {
-            $class = $this->adapters[$key];
-            return $class::handle($this->particle, $this->pack(), $name, $args);
+            $method = $this->adapters[$key] . "::handle";
+            return call_user_func($method, $this->particle, $this->pack(), $name, $args);
         };
 
         if(in_array($name, $this->cargo_out->setter_labels)) {
