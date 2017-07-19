@@ -121,7 +121,7 @@ class Gateway
     {
         $deliver = function(string $key) use ($name, $args) {
             $class = $this->adapters[$key];
-            return $class($this->particle, $this->pack(), $name, $args);
+            return $class::handle($this->particle, $this->pack(), $name, $args);
         };
 
         if(in_array($name, $this->cargo_out->setter_labels)) {
