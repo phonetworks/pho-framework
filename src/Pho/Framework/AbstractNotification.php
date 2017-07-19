@@ -13,6 +13,8 @@ namespace Pho\Framework;
 
 use Pho\Lib\Graph\EdgeInterface;
 use Pho\Lib\Graph\SerializableTrait;
+use Pho\Lib\Graph\HookableTrait;
+use Pho\Lib\Graph\HookableInterface;
 
 /**
  * An abstract Notification class.
@@ -23,10 +25,11 @@ use Pho\Lib\Graph\SerializableTrait;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-abstract class AbstractNotification implements \Serializable 
+abstract class AbstractNotification implements \Serializable, HookableTrait
 {
 
     use SerializableTrait;
+    use HookableTrait;
 
     const MSG = "";
 
@@ -80,22 +83,7 @@ abstract class AbstractNotification implements \Serializable
     {
         if(isset($this->edge)) 
             return $this->edge;
-        else
-            return $this->hyEdge();
-    }
-
-    /**
-     * Used to retrieve edge after serialization/deserialization.
-     * 
-     * As of this layer, this method is not implemented, but declared to 
-     * be implemented by higher levels that may require persistence 
-     * features.
-     *
-     * @return EdgeInterface
-     */
-    protected function hyEdge(): EdgeInterface
-    {
-
+        $this->hookable();
     }
 
     /**
@@ -138,16 +126,4 @@ abstract class AbstractNotification implements \Serializable
    {
        return (new \ReflectionObject($this))->getShortName();
    }
-
-/*
-   public function serialize(): string
-   {
-       return serialize($this->toArray());
-   }
-
-   public function unserialize(string $data) //: mixed
-   {
-        $this->edge =
-   }
-   */
 }
