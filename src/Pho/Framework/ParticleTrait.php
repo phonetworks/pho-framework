@@ -208,21 +208,8 @@ trait ParticleTrait
     {
         if(isset($this->creator))
             return $this->creator;
-        return $this->hyCreator();
+        return $this->hookable();
     }
-
-    /**
-     * A protected hydrating method for persistence
-     *
-     * @see creator() to see where this is called from.
-     * 
-     * @return Actor
-     */
-    protected function hyCreator(): Actor
-    {
-
-    }
-
 
     /**************************************************
      * The rest are Subscription/Publisher related 
