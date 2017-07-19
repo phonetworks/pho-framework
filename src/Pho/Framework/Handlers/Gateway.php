@@ -31,10 +31,10 @@ class Gateway
      * @var array
      */
     protected $adapters = [
-        "form" => __NAMESPACE__ . "\\Form::handle", 
-        "get"  => __NAMESPACE__ . "\\Get::handle", 
-        "has"  => __NAMESPACE__ . "\\Has::handle",
-        "set"  => __NAMESPACE__ . "\\Set::handle"
+        "form" => "\\" . __NAMESPACE__ . "\\Form::handle", 
+        "get"  => "\\" . __NAMESPACE__ . "\\Get::handle", 
+        "has"  => "\\" . __NAMESPACE__ . "\\Has::handle",
+        "set"  => "\\" . __NAMESPACE__ . "\\Set::handle"
     ];
 
     /**
