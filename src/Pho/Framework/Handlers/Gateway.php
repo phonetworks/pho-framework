@@ -119,22 +119,24 @@ class Gateway
      */
     public function switch(string $name, array $args) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
-        $deliver = function(string $key) use ($name, $args) {
+        $method = function(string $key) {
             $method = $this->adapters[$key] . "::handle";
-            return call_user_func($method, $this->particle, $this->pack(), $name, $args);
         };
 
         if(in_array($name, $this->cargo_out->setter_labels)) {
-            return $deliver("set");
+            $method = $method("set");
+            return call_user_func($method, $this->particle, $this->pack(), $name, $args);
         }
-        else if(in_array($name, $this->cargo_out->formative_labels)) {
-            return $deliver("form");
+        elseif(in_array($name, $this->cargo_out->formative_labels)) {
+            $method = $method("form");
+            return call_user_func($method, $this->particle, $this->pack(), $name, $args);
         }
-        else if(strlen($name) > 3) {
+        elseif(strlen($name) > 3) {
             $func_prefix = substr($name, 0, 3);
             if (array_key_exists($func_prefix, $this->adapters) ) {
                 try {
-                    return $deliver($func_prefix);
+                    $method = $method($func_prefix);
+                    return call_user_func($method, $this->particle, $this->pack(), $name, $args);
                 }
                 catch(\Exception $e) {
                     throw $e;
