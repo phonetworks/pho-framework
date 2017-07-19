@@ -74,7 +74,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $actor = new Actor($this->space);
         $object = new Object($actor, $this->space);
         $edge = $actor->write($object);
-        $edge = $actor->reads($object);
+        $edge = $actor->read($object);
         $this->assertCount(1, $actor->getWrites());
     }
 
