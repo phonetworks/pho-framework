@@ -124,19 +124,16 @@ class Gateway
         };
 
         if(in_array($name, $this->cargo_out->setter_labels)) {
-            $method = $method("set");
-            return call_user_func($method, $this->particle, $this->pack(), $name, $args);
+            return call_user_func($method("set"), $this->particle, $this->pack(), $name, $args);
         }
         elseif(in_array($name, $this->cargo_out->formative_labels)) {
-            $method = $method("form");
-            return call_user_func($method, $this->particle, $this->pack(), $name, $args);
+            return call_user_func($method("form"), $this->particle, $this->pack(), $name, $args);
         }
         elseif(strlen($name) > 3) {
             $func_prefix = substr($name, 0, 3);
             if (array_key_exists($func_prefix, $this->adapters) ) {
                 try {
-                    $method = $method($func_prefix);
-                    return call_user_func($method, $this->particle, $this->pack(), $name, $args);
+                    return call_user_func($method($func_prefix), $this->particle, $this->pack(), $name, $args);
                 }
                 catch(\Exception $e) {
                     throw $e;
