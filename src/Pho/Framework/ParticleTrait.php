@@ -73,7 +73,6 @@ trait ParticleTrait
         }
         
         $this->initializeMethodHandler();
-        
     }
 
     /**
