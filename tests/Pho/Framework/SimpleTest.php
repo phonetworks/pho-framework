@@ -153,4 +153,33 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->space, $graph->existentials()["context"]);
     }
 
+    public function testInjectableFail() {
+        $mock_kernel = \Mockery::mock('StdClass');
+        $mock_kernel->shouldReceive('graph')->andReturn($this->space);
+        $actor = new Actor($this->space);
+        $object = new Object($actor, $this->space);
+        $edge = new class($actor, $object) extends ActorOut\Write {
+            public function graph() {
+                return $this->injection("kernel")->graph();
+            }
+        };
+        //$edge->inject("kernel", $mock_kernel);
+        $this->expectException("\Pho\Framework\Exceptions\InjectionUnavailableException");
+        $edge->graph()->id();
+    }
+
+    public function testInjectableSuccess() {
+        $mock_kernel = \Mockery::mock('StdClass');
+        $mock_kernel->shouldReceive('graph')->andReturn($this->space);
+        $actor = new Actor($this->space);
+        $object = new Object($actor, $this->space);
+        $edge = new class($actor, $object) extends ActorOut\Write {
+            public function graph() {
+                return $this->injection("kernel")->graph();
+            }
+        };
+        $edge->inject("kernel", $mock_kernel);
+        $this->assertEquals($this->space->id(), $edge->graph()->id());
+    }
+
 }

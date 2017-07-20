@@ -23,8 +23,12 @@ use Pho\Lib\Graph;
  *
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
+abstract class AbstractEdge 
+    extends \Pho\Lib\Graph\Edge 
+    implements InjectableInterface
 {
+
+    use InjectableTrait;
 
     /**
      * Head Node Label in Singular Form

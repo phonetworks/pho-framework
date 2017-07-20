@@ -15,16 +15,18 @@ use Pho\Framework\ParticleInterface;
 use Pho\Framework\Cargo\FieldsCargo;
 
 /**
- * Field related helper methods for Handler classes
+ * Handler related static helper methods.
  * 
  * Used by Get and Set.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class FieldHelper
+class Utils
 {
     /**
      * Checks if there is such a field in the given particle.
+     * 
+     * Used by Get and Set.
      *
      * @param FieldsCargo $cargo Fields cargo where we seek.
      * @param string $name Field name in question.
@@ -37,7 +39,10 @@ class FieldHelper
     }
 
     /**
-     * Given the uppercamelized field name, find its normalized version in the fields section.
+     * Given the uppercamelized field name, find its normalized version 
+     * in the fields section.
+     * 
+     * Used by Get and Set.
      *
      * @param FieldsCargo $cargo Fields cargo where we seek.
      * @param string $name Field name in question.
