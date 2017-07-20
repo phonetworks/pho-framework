@@ -36,7 +36,7 @@ class Set implements HandlerInterface
         array $args
         ) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
-        if( FieldHelper::fieldExists($pack["fields"], substr($name, 3)) ) {
+        if( Utils::fieldExists($pack["fields"], substr($name, 3)) ) {
             return static::field($particle, $pack["fields"], substr($name, 3), $args[0]);
         }
         $check = false;
@@ -69,7 +69,7 @@ class Set implements HandlerInterface
         /*mixed*/ $value
         ): void
     {
-        $name = FieldHelper::findFieldName($cargo, $name);
+        $name = Utils::findFieldName($cargo, $name);
         if(isset($cargo->fields[$name]["constraints"])) {
                 static::probeField($cargo->fields[$name]["constraints"], $value);
         }

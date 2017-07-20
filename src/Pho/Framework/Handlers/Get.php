@@ -53,7 +53,7 @@ class Get implements HandlerInterface
         elseif(static::methodExists($pack, $name, Direction::in())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
-        elseif( FieldHelper::fieldExists($pack["fields"], $name) ) {
+        elseif( Utils::fieldExists($pack["fields"], $name) ) {
             return static::getField($particle, $pack["fields"], $name, $args);
         }
         throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $name);
@@ -76,7 +76,7 @@ class Get implements HandlerInterface
         array $args = []
     )/*: mixed*/
     {
-        $name = FieldHelper::findFieldName($cargo, $name);
+        $name = Utils::findFieldName($cargo, $name);
         return $particle->attributes()->$name; // test with null.
     }
 
