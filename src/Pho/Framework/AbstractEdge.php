@@ -79,7 +79,7 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
         parent::__construct(
             $tail, 
             $head, 
-            $this->_resolvePredicate($predicate, Predicate::class)
+            $this->resolvePredicate($predicate, Predicate::class)
         );
         $this->_setNotification()->execute();
     }
