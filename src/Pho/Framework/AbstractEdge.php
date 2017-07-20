@@ -157,7 +157,7 @@ abstract class AbstractEdge extends \Pho\Lib\Graph\Edge
         if (class_exists($data["predicate"])) {
             $this->predicate_label = new $data["predicate"];
         } else {
-            throw new PredicateClassDoesNotExistException((string)$this->id(), $data["predicate"]);
+            throw new Exceptions\PredicateClassDoesNotExistException((string)$this->id(), $data["predicate"]);
         }
         $this->attributes = new Graph\AttributeBag($this, $data["attributes"]);
     }
