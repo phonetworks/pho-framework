@@ -1,12 +1,8 @@
 # Particles
 
-The function below defines the edges that this particle accepts:
+Edges must be defined at object construction via ```registerIncomingEdges(...string $class)``` and ```registerOutgoingEdges(...string $class)```. Here is an example from [Object.php]()
 
-```php
-$this->registerIncomingEdges(ActorOut\Write::class);
-```
-
-This must be called in the constructor, before calling the parent particle's constructor. Any edge that claims that this particle is its tail, and that has not been already registered by the particle's parent, must be defined here, otherwise an exception will be thrown.
+Any edge that claims that this particle is its tail, and that has not been already registered by the particle's parent, must be defined here, otherwise an exception will be thrown.
 
 Secondly, you can define field constraints and directives for particles by setting up a **FIELDS** constant in the particle head.
 
