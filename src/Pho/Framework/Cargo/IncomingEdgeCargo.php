@@ -56,7 +56,7 @@ class IncomingEdgeCargo extends AbstractEdgeCargo
      * A simple array of tail labels of incoming edges in singular.
      * Tail labels in string format.
      *
-     * @var array An array of labels in string format.
+     * {@inheritDoc}
      */
     public $singularLabels = [];
 
@@ -67,17 +67,8 @@ class IncomingEdgeCargo extends AbstractEdgeCargo
      * and associated class name as value.
      * Both in string format.
      *
-     * @var array An array of labels as key, and class names as value.
+     * {@inheritDoc}
      */
     public $singularLabel_class_pairs = [];
 
-    /**
-     * Constrcutor
-     *
-     * @param array $incoming_edges
-     */
-    public function __construct(array $incoming_edges = []) 
-    {
-        $this->classes = $incoming_edges;
-    }
 }

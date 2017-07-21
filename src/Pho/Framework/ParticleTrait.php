@@ -58,21 +58,28 @@ trait ParticleTrait
     protected $incoming_edges = [];
 
     /**
+     * An array of outgoing edge classes
+     *
+     * @var array
+     */
+    protected $outgoing_edges = [];
+
+    /**
      * Constructor.
      */
-    public function __construct() 
+    public function initializeParticle() 
     {
-        $this->registerIncomingEdges(
+        $this->addEdges("incoming",
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
             ObjectOut\Mention::class
         );
 
-        if(method_exists($this, "hookIncomingEdgeRegistration")) {
+        if(method_exists($this, "onIncomingEdgeRegistration")) {
             $this->onIncomingEdgeRegistration();
         }
         
-        $this->initializeMethodHandler();
+        $this->initializeHandler();
     }
 
     /**
@@ -80,10 +87,9 @@ trait ParticleTrait
      *
      * @return void
      */
-    public function initializeMethodHandler(): void
+    protected function initializeHandler(): void
     {
         $this->handler = new Handlers\Gateway($this); 
-
         Loaders\IncomingEdgeLoader::pack($this)
             ->deploy($this->handler->cargo_in); 
         Loaders\OutgoingEdgeLoader::pack($this)
@@ -106,10 +112,46 @@ trait ParticleTrait
      */
     public function registerIncomingEdges(...$classes): void
     {
-        foreach($classes as $class) {
-            $this->incoming_edges[] = $class;
-            $this->emit("incoming_edge.registered", [$class]);
+        $this
+            ->addEdges("incoming", ...$classes)
+            ->initializeHandler();
+    }
+
+    /**
+     * Registers the outgoing edges.
+     * 
+     * @param ...$classes 
+     * 
+     * @return void
+     */
+    public function registerOutgoingEdges(...$classes): void
+    {
+        $this
+            ->addEdges("outgoing", ...$classes)
+            ->initializeHandler();
+    }
+
+    /**
+     * A helper method to register edges
+     *
+     * @param string $direction Either incoming or outgoing
+     * @param  ...$classes 
+     * 
+     * @return self
+     */
+    protected function addEdges(string $direction, ...$classes): self
+    {
+        if(!in_array($direction, ["incoming", "outgoing"])) {
+            // log meaningless direction
+            return $this;
         }
+        $var = sprintf("%s_edges", $direction);
+        foreach($classes as $class) {
+            $this->$var[] = $class;
+            $this->emit("edge.registered", [$direction, $class]);
+            $this->emit($direction."_edge.registered", [$class]);
+        }
+        return $this;
     }
 
     public function getRegisteredIncomingEdges(): array
@@ -117,25 +159,9 @@ trait ParticleTrait
         return $this->incoming_edges;
     }
 
-    /**
-     * Registers an outgoing edge class
-     * 
-     * As long as it meets the requirements.
-     * 
-     * Please use this function with caution. An erroneous class may
-     * cause irrevocable and unpredictable system-wide problems.
-     *
-     * @param string $class The outgoing edge class to register.
-     * 
-     * @return void
-     */
-    public function registerOutgoingEdgeClass(string $class): void
+    public function getRegisteredOutgoingEdges(): array
     {
-        Loaders\OutgoingEdgeLoader::registerOutgoingEdgeClass(
-            $this,
-            $this->handler->cargo_out,
-            $class
-        );
+        return $this->outgoing_edges;
     }
 
     /**
@@ -148,9 +174,9 @@ trait ParticleTrait
      * 
      * @return void
      */
-    public function registerHandlerAdapter(string $key, string $class): void
+    public function registerHandler(string $key, string $class): void
     {
-        $this->handler->registerHandlerAdapter($key, $class);
+        $this->handler->register($key, $class);
     }
 
     /**
