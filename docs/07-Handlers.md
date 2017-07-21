@@ -10,7 +10,7 @@ Handlers are virtual methods in use by particles. Virtual methods are created to
 These adapters can be replaced, or more can be added using handler adapters via ```registerHandlerAdapter(string $handler_key, string $handler_class)``` function. For example:
 
 ```php
-$this->registerHandlerAdapter(
+$this->registerHandler(
             "form",
             \Pho\Kernel\Foundation\Handlers\Form::class);
 ```
