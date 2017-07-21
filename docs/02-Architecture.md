@@ -22,7 +22,9 @@ the edge, its predicate, and notification, all in separate files. Alternatively,
 
 To reiterate, the predicate and notification classes are optional.
 
-> There is an alternative way of adding outgoig edge classes to the particles. You can do so by using the particle's
-> ```registerOutgoingEdgeClass(string $edge_class_name, int $trim = 2)``` method if the edge class is already included. 
-> Although  please note, the predicate and notification classes, if they are available, must be renamed in conformance to 
-> afore-mentioned requirements, and must reside in the same namespace with the edge class.
+Once you define an edge class (with the recommended directory structure above) you must register it via:
+
+```registerOutgoingEdge(...string $class)```
+
+Although  please note, the predicate and notification classes, if they are available, must be renamed in conformance to 
+afore-mentioned requirements, and must reside in the same namespace with the edge class.
