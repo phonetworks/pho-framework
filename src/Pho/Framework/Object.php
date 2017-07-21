@@ -35,6 +35,9 @@ class Object extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObser
         $this->creator_id = (string) $creator->id();
         $this->registerIncomingEdges(ActorOut\Write::class);
         $this->particleConstructor();
+        $this->registerOutgoingEdges(
+            ObjectOut\Mention::class
+        );
     }
 
 }

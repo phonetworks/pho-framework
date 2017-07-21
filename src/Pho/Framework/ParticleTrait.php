@@ -58,6 +58,13 @@ trait ParticleTrait
     protected $incoming_edges = [];
 
     /**
+     * An array of outgoing edge classes
+     *
+     * @var array
+     */
+    protected $outgoing_edges = [];
+
+    /**
      * Constructor.
      */
     public function __construct() 
@@ -68,7 +75,7 @@ trait ParticleTrait
             ObjectOut\Mention::class
         );
 
-        if(method_exists($this, "hookIncomingEdgeRegistration")) {
+        if(method_exists($this, "onIncomingEdgeRegistration")) {
             $this->onIncomingEdgeRegistration();
         }
         
@@ -106,9 +113,40 @@ trait ParticleTrait
      */
     public function registerIncomingEdges(...$classes): void
     {
+        $this->registerEdges("incoming", ...$classes);
+    }
+
+    /**
+     * Registers the outgoing edges.
+     * 
+     * @param ...$classes 
+     * 
+     * @return void
+     */
+    public function registerOutgoingEdges(...$classes): void
+    {
+        $this->registerEdges("outgoing", ...$classes);
+    }
+
+    /**
+     * A helper method to register edges
+     *
+     * @param string $direction Either incoming or outgoing
+     * @param  ...$classes 
+     * 
+     * @return void
+     */
+    protected function registerEdges(string $direction, ...$classes): void
+    {
+        if(!in_array($direction, ["incoming", "outgoing"])) {
+            // log meaningless direction
+            return;
+        }
+        $var = sprintf("%s_edges", $direction);
         foreach($classes as $class) {
-            $this->incoming_edges[] = $class;
-            $this->emit("incoming_edge.registered", [$class]);
+            $this->$var[] = $class;
+            $this->emit("edge.registered", [$class]);
+            $this->emit($direction."_edge.registered", [$class]);
         }
     }
 
@@ -117,25 +155,9 @@ trait ParticleTrait
         return $this->incoming_edges;
     }
 
-    /**
-     * Registers an outgoing edge class
-     * 
-     * As long as it meets the requirements.
-     * 
-     * Please use this function with caution. An erroneous class may
-     * cause irrevocable and unpredictable system-wide problems.
-     *
-     * @param string $class The outgoing edge class to register.
-     * 
-     * @return void
-     */
-    public function registerOutgoingEdgeClass(string $class): void
+    public function getRegisteredOutgoingEdges(): array
     {
-        Loaders\OutgoingEdgeLoader::registerOutgoingEdgeClass(
-            $this,
-            $this->handler->cargo_out,
-            $class
-        );
+        return $this->outgoing_edges;
     }
 
     /**

@@ -34,76 +34,15 @@ class OutgoingEdgeLoader extends AbstractLoader
      */
     public static function pack(Framework\ParticleInterface $particle): AbstractLoader
     {
-        $obj = new OutgoingEdgeLoader;
-        // !!! we use reflection method so that __DIR__ behaves properly with child classes.
-        $self_reflector = new \ReflectionObject($particle);
-        if($self_reflector->isAnonymous()) {
-            return $obj;
-        }
-
-        $edge_dir = 
-            dirname($self_reflector->getFileName()) . 
-            DIRECTORY_SEPARATOR . 
-            $self_reflector->getShortName() 
-            . "Out";  
-        // !!! do not replace this with __DIR__
-
-        if(!file_exists($edge_dir)) {
-            Framework\Logger::warning("Edge directory %s does not exist", $edge_dir);
-            return $obj;
-        }
-
-        $locator = new \Zend\File\ClassFileLocator($edge_dir);
-        foreach ($locator as $file) {
-            $filename = str_replace($edge_dir . DIRECTORY_SEPARATOR, '', $file->getRealPath());
-            foreach ($file->getClasses() as $class) {
-                self::registerOutgoingEdgeClass($particle, $obj->cargo, $class);
-            }
-        }
-        return $obj;
-    }
-
-    /**
-     * Calculates how many arguments in constructor to skip
-     *
-     * Used with formative predicates.
-     * The default value is 2 for framework, 3 for microkernel.
-     * 
-     * @param Framework\ParticleInterface $particle
-     * 
-     * @return int
-     */
-    protected static function getFormativeTrim(Framework\ParticleInterface $particle): int
-    {
-        $trim = 2;
-        if(defined(get_class($particle)."::FORMATIVE_TRIM_CUT"))
-            $trim = $particle::FORMATIVE_TRIM_CUT;
-        return $trim;
-    }
-
-    /**
-     * Registers an Edge Out class that meets the requirements.
-     *
-     * @param OutgoingEdgeCargo $cargo The cago to fill data with
-     * @param string $class
-     * @param int $formative_trim how many arguments in constructor to skip
-     * 
-     * @return void
-     */
-    public static function registerOutgoingEdgeClass(
-        ParticleInterface $particle,
-        OutgoingEdgeCargo & $cargo, 
-        string $class
-        ): void
-    {   
-                $reflector = new \ReflectionClass($class);
+        $obj = new OutgoingEdgeLoader($particle->getRegisteredOutgoingEdges());
+        foreach ($obj->cargo->classes as $class) {
+            $cargo = &$obj->cargo;
+            $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(Framework\AbstractEdge::class)) { 
-                    return;
+                    continue;
                 }
-
                 $_method = (string) strtolower($reflector->getShortName());
                 $_predicate = $class."Predicate";
-                
                 if($_predicate::T_FORMATIVE) {
                     $cargo->formative_labels[] = $_method;
                     $cargo->formative_label_class_pairs[$_method] = $class;
@@ -165,12 +104,32 @@ class OutgoingEdgeLoader extends AbstractLoader
                         $cargo->setter_label_settable_pairs[$_method] = 
                             $reflector->getConstant("SETTABLES") ;
                 }
-
                 $_method = $reflector->getConstant("HEAD_LABELS");
                 $cargo->labels[] = $_method;
                 $cargo->label_class_pairs[$_method] = $class;
                 $_method = $reflector->getConstant("HEAD_LABEL");
                 $cargo->singularLabels[] = $_method;
                 $cargo->singularLabel_class_pairs[$_method] = $class;
+        }
+        return $obj;
     }
+
+    /**
+     * Calculates how many arguments in constructor to skip
+     *
+     * Used with formative predicates.
+     * The default value is 2 for framework, 3 for microkernel.
+     * 
+     * @param Framework\ParticleInterface $particle
+     * 
+     * @return int
+     */
+    protected static function getFormativeTrim(Framework\ParticleInterface $particle): int
+    {
+        $trim = 2;
+        if(defined(get_class($particle)."::FORMATIVE_TRIM_CUT"))
+            $trim = $particle::FORMATIVE_TRIM_CUT;
+        return $trim;
+    }
+    
 }

@@ -49,4 +49,14 @@ abstract class AbstractEdgeCargo implements CargoInterface
      */
     public $singularLabel_class_pairs = [];
 
+    /**
+     * Constructor
+     *
+     * @param array $edges
+     */
+    public function __construct(array $edges = []) 
+    {
+        $this->classes = $edges;
+    }
+
 }
