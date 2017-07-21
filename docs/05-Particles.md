@@ -1,8 +1,10 @@
 # Particles
 
-Edges must be defined at object construction via ```registerIncomingEdges(...string $class)``` and ```registerOutgoingEdges(...string $class)```. Here is an example from [Object.php]()
+Edges must be defined at object construction via 
+* ```registerIncomingEdges(...string $class)``` 
+* and ```registerOutgoingEdges(...string $class)```
 
-Any edge that claims that this particle is its tail, and that has not been already registered by the particle's parent, must be defined here, otherwise an exception will be thrown.
+Any edge that claims that this particle is its tail, and that has not been already registered by the particle's parent, must be defined, otherwise an exception will be thrown when trying to access edge methods.
 
 Secondly, you can define field constraints and directives for particles by setting up a **FIELDS** constant in the particle head.
 
