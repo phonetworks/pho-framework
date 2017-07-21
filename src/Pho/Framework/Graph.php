@@ -39,7 +39,7 @@ class Graph extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
         parent::__construct($context);
         $this->creator = $creator;
         $this->creator_id = (string) $creator->id();
-        $this->registerIncomingEdges(ActorOut\Write::class);
+        $this->addEdges("incoming", ActorOut\Write::class);
         $this->particleConstructor();
     }
 

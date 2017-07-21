@@ -51,12 +51,11 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
         $this->creator_id = (string) $this->id();
         $this->notifications = new NotificationList($this);
         $this->enter($context);
-        $this->particleConstructor();
-        $this->registerOutgoingEdges(
+        $this->addEdges("outgoing",
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
             ActorOut\Write::class
-        );
+        )->particleConstructor();
     }
 
     /**

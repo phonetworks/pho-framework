@@ -33,11 +33,10 @@ class Object extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObser
         parent::__construct($context);
         $this->creator = $creator;
         $this->creator_id = (string) $creator->id();
-        $this->registerIncomingEdges(ActorOut\Write::class);
-        $this->particleConstructor();
-        $this->registerOutgoingEdges(
-            ObjectOut\Mention::class
-        );
+        $this
+            ->addEdges("incoming", ActorOut\Write::class)
+            ->addEdges("outgoing", ObjectOut\Mention::class)
+            ->particleConstructor();
     }
 
 }

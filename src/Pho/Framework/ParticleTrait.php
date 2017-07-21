@@ -69,7 +69,7 @@ trait ParticleTrait
      */
     public function __construct() 
     {
-        $this->registerIncomingEdges(
+        $this->addEdges("incoming",
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
             ObjectOut\Mention::class
@@ -79,7 +79,7 @@ trait ParticleTrait
             $this->onIncomingEdgeRegistration();
         }
         
-        $this->initializeMethodHandler();
+        $this->initializeHandler();
     }
 
     /**
@@ -87,10 +87,9 @@ trait ParticleTrait
      *
      * @return void
      */
-    public function initializeMethodHandler(): void
+    public function initializeHandler(): void
     {
         $this->handler = new Handlers\Gateway($this); 
-
         Loaders\IncomingEdgeLoader::pack($this)
             ->deploy($this->handler->cargo_in); 
         Loaders\OutgoingEdgeLoader::pack($this)
@@ -113,7 +112,9 @@ trait ParticleTrait
      */
     public function registerIncomingEdges(...$classes): void
     {
-        $this->registerEdges("incoming", ...$classes);
+        $this
+            ->addEdges("incoming", ...$classes)
+            ->initializeHandler();
     }
 
     /**
@@ -125,7 +126,9 @@ trait ParticleTrait
      */
     public function registerOutgoingEdges(...$classes): void
     {
-        $this->registerEdges("outgoing", ...$classes);
+        $this
+            ->addEdges("outgoing", ...$classes)
+            ->initializeHandler();
     }
 
     /**
@@ -134,20 +137,21 @@ trait ParticleTrait
      * @param string $direction Either incoming or outgoing
      * @param  ...$classes 
      * 
-     * @return void
+     * @return self
      */
-    protected function registerEdges(string $direction, ...$classes): void
+    protected function addEdges(string $direction, ...$classes): self
     {
         if(!in_array($direction, ["incoming", "outgoing"])) {
             // log meaningless direction
-            return;
+            return $this;
         }
         $var = sprintf("%s_edges", $direction);
         foreach($classes as $class) {
             $this->$var[] = $class;
-            $this->emit("edge.registered", [$class]);
+            $this->emit("edge.registered", [$direction, $class]);
             $this->emit($direction."_edge.registered", [$class]);
         }
+        return $this;
     }
 
     public function getRegisteredIncomingEdges(): array
