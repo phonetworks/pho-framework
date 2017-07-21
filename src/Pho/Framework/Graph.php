@@ -30,17 +30,16 @@ namespace Pho\Framework;
 class Graph extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, ContextInterface, \SplObserver, \SplSubject
 {
 
-    use ParticleTrait  {
-        ParticleTrait::__construct as particleConstructor;
-    }
+    use ParticleTrait;
 
     public function __construct(Actor $creator, ContextInterface $context) 
     {
         parent::__construct($context);
         $this->creator = $creator;
         $this->creator_id = (string) $creator->id();
-        $this->addEdges("incoming", ActorOut\Write::class);
-        $this->particleConstructor();
+        $this
+            ->addEdges("incoming", ActorOut\Write::class)
+            ->initializeParticle();
     }
 
      /**

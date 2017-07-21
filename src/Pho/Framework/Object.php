@@ -24,9 +24,7 @@ namespace Pho\Framework;
 class Object extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserver, \SplSubject
 {
 
-    use ParticleTrait {
-        ParticleTrait::__construct as particleConstructor;
-    }
+    use ParticleTrait;
 
     public function __construct(Actor $creator, ContextInterface $context) 
     {
@@ -36,7 +34,7 @@ class Object extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObser
         $this
             ->addEdges("incoming", ActorOut\Write::class)
             ->addEdges("outgoing", ObjectOut\Mention::class)
-            ->particleConstructor();
+            ->initializeParticle();
     }
 
 }

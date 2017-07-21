@@ -67,7 +67,7 @@ trait ParticleTrait
     /**
      * Constructor.
      */
-    public function __construct() 
+    public function initializeParticle() 
     {
         $this->addEdges("incoming",
             ActorOut\Read::class, 
@@ -87,7 +87,7 @@ trait ParticleTrait
      *
      * @return void
      */
-    public function initializeHandler(): void
+    protected function initializeHandler(): void
     {
         $this->handler = new Handlers\Gateway($this); 
         Loaders\IncomingEdgeLoader::pack($this)
@@ -174,9 +174,9 @@ trait ParticleTrait
      * 
      * @return void
      */
-    public function registerHandlerAdapter(string $key, string $class): void
+    public function registerHandler(string $key, string $class): void
     {
-        $this->handler->registerHandlerAdapter($key, $class);
+        $this->handler->register($key, $class);
     }
 
     /**

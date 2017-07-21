@@ -84,7 +84,7 @@ class Gateway
      * 
      * @return void
      */
-    public function registerHandlerAdapter(string $key, string $class): void
+    public function register(string $key, string $class): void
     {
         $this->adapters[$key] = $class;
     }

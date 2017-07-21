@@ -26,9 +26,7 @@ namespace Pho\Framework;
 class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserver, \SplSubject
 {
 
-    use ParticleTrait {
-        ParticleTrait::__construct as particleConstructor;
-    }
+    use ParticleTrait;
 
     /**
      * Current context that this actor is in.
@@ -55,7 +53,7 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
             ActorOut\Write::class
-        )->particleConstructor();
+        )->initializeParticle();
     }
 
     /**
