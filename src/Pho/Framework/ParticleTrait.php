@@ -65,9 +65,16 @@ trait ParticleTrait
     protected $outgoing_edges = [];
 
     /**
-     * Constructor.
+     * Initializes the particle.
+     * 
+     * Its functions include:
+     * * adding default incoming edges.
+     * * discovering outgoing edges based on directory structure
+     * * passing the ball to Handler initializer.
+     * 
+     * @return void
      */
-    public function initializeParticle() 
+    public function initializeParticle(): void
     {
         $this->addEdges("incoming",
             ActorOut\Read::class, 
@@ -86,6 +93,16 @@ trait ParticleTrait
 
     /**
      * A helper method to set up edges and fields.
+     * 
+     * Its inner functions can be summarized as:
+     * 
+     * 1) Uses the Loaders to 
+     * * examine the class structures (the constants, registered 
+     * edges etc) and find out incoming and outgoing edges as well as 
+     * fields.
+     * 2) Load the results into Cargo objects
+     * 3) Deploy the cargo objects back into this object so that
+     * the handler can serve method calls.
      *
      * @return void
      */
