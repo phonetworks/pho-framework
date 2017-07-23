@@ -12,7 +12,11 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 * The {ParticleName}/{EdgeName}Out folder structure to define edges is now replaced with the explicit "registerOutgoingEdge" method only.
 * Particle's ```registerHandlerAdapter(string $class)``` method is replaced with ```registerHandler(string $class)```.
 * Two new signals; outgoing_edge.registered and edge.registered
-* ParticleTrait __construct (which was imported by particles via "particleConstructor" name) is now named as: "initializeParticle".
+* ParticleTrait \_\_construct (which was imported by particles via "particleConstructor" name) is now named as: "initializeParticle".
 * The internals of OutgoingEdgeLoader simplified.
 * Documentation (under docs/) updated to reflect the latest API changes.
 * Unit tests updated to reflect the latest changes in the API.
+
+## 8.0 to 8.1
+
+* Support for autoRegisterOutgoingEdges back. The directory structure {particle_name}Out/\* would be parsed for outgoing edges.
