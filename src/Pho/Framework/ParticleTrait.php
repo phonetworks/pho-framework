@@ -189,6 +189,8 @@ trait ParticleTrait
         }
         $var = sprintf("%s_edges", $direction);
         foreach($classes as $class) {
+            if(in_array($class, $this->$var))
+                continue;
             $this->$var[] = $class;
             $this->emit("edge.registered", [$direction, $class]);
             $this->emit($direction."_edge.registered", [$class]);
