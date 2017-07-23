@@ -75,6 +75,8 @@ trait ParticleTrait
             ObjectOut\Mention::class
         );
 
+        $this->autoRegisterOutgoingEdges();
+
         if(method_exists($this, "onIncomingEdgeRegistration")) {
             $this->onIncomingEdgeRegistration();
         }
@@ -96,6 +98,46 @@ trait ParticleTrait
             ->deploy($this->handler->cargo_out);
         Loaders\FieldsLoader::pack($this)
             ->deploy($this->handler->cargo_fields);
+    }
+
+
+    /**
+     * Auto-registers outgoing edge classes
+     *
+     * Auto-registration is done by directory structure. Directories that sit 
+     * in this folder, and are named after this class with 
+     * "Out" suffix (such as "MyNodeOut" for a node class named "MyNode")
+     * would be candidate for auto-registration.
+     * 
+     * Please note, this does not check if it's actually an Edge class. 
+     * The check is done by the OutgoingEdgeLoader class.
+     * 
+     * @return void
+     */
+    protected function autoRegisterOutgoingEdges(): void
+    {
+        $self_reflector = new \ReflectionObject($this);
+        if($self_reflector->isAnonymous()) {
+            return;
+        }
+
+        $edge_dir = 
+            dirname($self_reflector->getFileName()) . 
+            DIRECTORY_SEPARATOR . 
+            $self_reflector->getShortName() 
+            . "Out";  
+        // !!! do not replace this with __DIR__
+
+        if(!file_exists($edge_dir)) {
+            Logger::info("Edge directory %s does not exist", $edge_dir);
+            return;
+        }
+
+        $locator = new \Zend\File\ClassFileLocator($edge_dir);
+        foreach ($locator as $file) {
+            $filename = str_replace($edge_dir . DIRECTORY_SEPARATOR, '', $file->getRealPath());
+            $this->addEdges("outgoing", ...$file->getClasses()); 
+        }
     }
 
     /**
