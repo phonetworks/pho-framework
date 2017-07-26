@@ -37,7 +37,7 @@ class Set implements HandlerInterface
         ) /*:  \Pho\Lib\Graph\EntityInterface*/
     {
         if( Utils::fieldExists($pack["fields"], substr($name, 3)) ) {
-            return static::field($particle, $pack["fields"], substr($name, 3), $args[0]);
+            return static::field($particle, $pack["fields"], substr($name, 3), $args);
         }
         $check = false;
         foreach($pack["out"]->setter_label_settable_pairs[$name] as $settable) {
@@ -56,7 +56,7 @@ class Set implements HandlerInterface
      * @param ParticleInterface $particle
      * @param FieldsCargo $cargo
      * @param string $name Field name
-     * @param array $args Field argument
+     * @param array $args Field argument; [0] mixed, the argument. [1] ?bool defer_persist
      * 
      * @return void
      * 
@@ -66,14 +66,22 @@ class Set implements HandlerInterface
         ParticleInterface $particle,
         FieldsCargo $cargo,
         string $name,
-        /*mixed*/ $value
+        array $value 
         ): void
     {
+        $defer_persist = false;
+        if( isset($value[1]) && $value[1] )
+            $defer_persist = true;
+        $value = $value[0];
         $name = Utils::findFieldName($cargo, $name);
         if(isset($cargo->fields[$name]["constraints"])) {
                 static::probeField($cargo->fields[$name]["constraints"], $value);
         }
-        $particle->attributes()->$name = static::applyDirectives($value, $cargo->fields[$name]);
+        $value = static::applyDirectives($value, $cargo->fields[$name]);
+        if($defer_persist) {
+            $particle->attributes()->$name = $value;
+        }
+        $particle->attributes()->quietSet($name, $value);
     }
 
     /**
