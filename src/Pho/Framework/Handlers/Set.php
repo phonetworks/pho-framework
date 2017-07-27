@@ -78,7 +78,7 @@ class Set implements HandlerInterface
                 static::probeField($cargo->fields[$name]["constraints"], $value);
         }
         $value = static::applyDirectives($value, $cargo->fields[$name]);
-        if($defer_persist) {
+        if(!$defer_persist) {
             $particle->attributes()->$name = $value;
         }
         $particle->attributes()->quietSet($name, $value);
