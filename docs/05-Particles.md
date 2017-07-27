@@ -34,9 +34,11 @@ class CustomObject extends Object
 Thus, the CustomObject particle above will by default come with two additional methods (getters and setters):
 
 * **getMyField()**
-* **setMyField(/\*mixed\*/ $value)**
+* **setMyField(/\*mixed\*/ $value, bool $silent = false)**
 
 With Fields, "Directives" help set up a default value, or filter the passed argument. For example, the "md5" field will encrypt all plaintext arguments passed to the setMyField function. As for "Constraints", they make sure the argument values meet certain requirements.
+
+> When ```$silent``` is on, no "modified" signal is emitted with AttributeBag value changes.
 
 > While defining field names (such as my_field in the example above) make sure they are either underscored (my_field_name) or
 > camelcased (myFieldName) in terms of formatting. Pho Framework reorganizes the variable names to match camelcased function
