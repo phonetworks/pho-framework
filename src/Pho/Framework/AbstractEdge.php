@@ -85,10 +85,10 @@ abstract class AbstractEdge
             $head, 
             $this->resolvePredicate($predicate, Predicate::class)
         );
-        $this->_setNotification()->execute();
+        $this->setNotification()->execute();
     }
 
-    protected function _setNotification(): AbstractEdge
+    protected function setNotification(): AbstractEdge
     {
         $is_a_notification = function(string $class_name): bool
         {
