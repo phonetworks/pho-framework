@@ -63,7 +63,7 @@ class Has implements HandlerInterface
             return static::checkEdgeNode($particle, $pack, $name, $id, Direction::in());
         }
 
-        throw new \Pho\Framework\InvalidParticleMethodException(__CLASS__, $original_name);
+        throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $original_name);
     }
 
     /**
