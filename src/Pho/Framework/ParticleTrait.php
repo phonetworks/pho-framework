@@ -250,6 +250,10 @@ trait ParticleTrait
     {
         $array = parent::toArray();
         $array["creator"] = $this->creator_id;
+        $array["registered_edges"] = [
+            "in" => $this->incoming_edges,
+            "out" => $this->outgoing_edges,
+        ];
         if($this instanceof Actor) {
             $array["notifications"] = $this->notifications()->toArray();
         }
