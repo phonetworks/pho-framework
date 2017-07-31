@@ -51,11 +51,11 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $object = new Object($actor, $this->space);
         $edge = $actor->write($object);
         $this->assertInstanceOf(ActorOut\Write::class, $object->edges()->in()->current());
-        $this->assertInstanceOf(Actor::class, $object->getWriters()[0]->node());
+        $this->assertInstanceOf(Actor::class, $object->getWriters()[0]);
         $this->assertCount(1, $object->getWriters());
         $this->assertCount(1, $actor->getWrites());
         $this->assertInstanceOf(ActorOut\Write::class, $actor->edges()->out()->current());
-        $this->assertInstanceOf(Object::class, $actor->getWrites()[0]->node());
+        $this->assertInstanceOf(Object::class, $actor->getWrites()[0]);
     }
 
 
