@@ -147,4 +147,13 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
         return $this->notifications;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function changeContext(\Pho\Lib\Graph\GraphInterface $context): void
+    {
+        parent::changeContext($context);
+        $this->enter($context);
+    }
+
 }
