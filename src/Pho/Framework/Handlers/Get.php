@@ -125,7 +125,7 @@ class Get implements HandlerInterface
         array_walk(
             $edges, function ($item, $key) use (&$return, $name, $cargo, $node_adj) {
                 if($item instanceof $cargo->label_class_pairs[$name]) {
-                    $return[] = $item->$node_adj()->node();
+                    $return[] = $item->$node_adj(); // ->node();
                 }
             }
         );
