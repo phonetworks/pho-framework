@@ -154,4 +154,23 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($field_val, $obj->getMyField());
     }
 
+    public function testEdgeFields() {
+        $ref = 0;
+        $another_actor = new Actor($this->space);
+        $obj = new class($this->actor, $another_actor)  extends AbstractEdge {
+            const FIELDS = '{"my_field":{"constraints":{"regex":"^A[0-9]+1$"}}}';
+        };
+        $obj->on("modified", function() use(&$ref) {
+            $ref++;
+        });
+        $field_val1 = "A883841";
+        $field_val2 = "A4896541";
+        $obj->setMyField($field_val1);
+        $this->assertEquals($field_val1, $obj->getMyField());
+        $this->assertEquals(1, $ref); // signal
+        $obj->setMyField($field_val2, true);
+        $this->assertEquals($field_val2, $obj->getMyField());
+        $this->assertEquals(1, $ref); // no signal
+    }
+
 }
