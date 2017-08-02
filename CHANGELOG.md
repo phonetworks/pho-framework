@@ -20,3 +20,10 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 ## 8.0 to 8.1
 
 * Support for autoRegisterOutgoingEdges back. The directory structure {particle_name}Out/\* would be parsed for outgoing edges.
+
+
+## 8.1 to 8.2 
+* Introduced quietSet to set up node edges at construction without triggering an event each time.
+
+## 8.2 to 8.3
+* Edges now can also have fields.
