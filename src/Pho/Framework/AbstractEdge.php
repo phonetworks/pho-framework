@@ -78,32 +78,86 @@ abstract class AbstractEdge
      */
     protected $notification;
 
-    public function __construct(ParticleInterface $tail, ?ParticleInterface $head = null, ?Predicate $predicate = null) 
+    /**
+     * Edge fields are configured with the FIELDS constant.
+     * $fields holds a processed version of that constant, if it
+     * exists, or an empty array.
+     * 
+     * @var array
+     */
+    protected $fields = [];
+
+    /**
+     * Constructor.
+     *
+     * @param ParticleInterface $tail
+     * @param ParticleInterface|null $head
+     * @param Predicate|null $predicate
+     */
+    public function __construct(
+        ParticleInterface $tail, 
+        ?ParticleInterface $head = null, 
+        ?Predicate $predicate = null) 
     {
         parent::__construct(
             $tail, 
             $head, 
             $this->resolvePredicate($predicate, Predicate::class)
         );
-        $this->setNotification()->execute();
+        $this->setup()->execute();
     }
 
-    protected function setNotification(): AbstractEdge
+    /**
+     * All methods related to setting up this object
+     *
+     * Namely; fields and notification.
+     * "all" stands for executing all available methods.
+     * 
+     * @param string $type
+     * 
+     * @return AbstractEdge
+     */
+    protected function setup(string $type = "all"): AbstractEdge
     {
-        $is_a_notification = function(string $class_name): bool
+        $fields = function(): AbstractEdge
         {
-            if(!class_exists($class_name))
-                return false;
-            $reflector = new \ReflectionClass($class_name);
-            return $reflector->isSubclassOf(AbstractNotification::class);
+            if(!defined("static::FIELDS"))
+                return $this;
+            if(is_array(static::FIELDS))
+                $fields = static::FIELDS;
+            elseif(is_string(static::FIELDS))
+                $fields = json_decode(static::FIELDS, true);
+            foreach($fields as $key=>$val) {
+                $key = (string) \Stringy\StaticStringy::upperCamelize($key);
+                $this->fields[$key] = $val;
+            }
+            return $this;
         };
 
+        $notification = function(): AbstractEdge
+        {
+            $is_a_notification = function(string $class_name): bool
+            {
+                if(!class_exists($class_name))
+                    return false;
+                $reflector = new \ReflectionClass($class_name);
+                return $reflector->isSubclassOf(AbstractNotification::class);
+            };
             $notification_class = get_class($this)."Notification";
             if($is_a_notification($notification_class)) {
                 $this->notification = new $notification_class($this);
             }
-        
-        return $this;
+            return $this;
+        };
+
+        $all = function() use ($fields, $notification): AbstractEdge
+        {
+            $fields();
+            return $notification();
+        };
+
+        if($type!="type" && in_array($type, get_defined_vars()))
+            return $$type();
     }
 
     protected function execute(): void
@@ -180,5 +234,51 @@ abstract class AbstractEdge
             return $this->head()->node();
         }
         return $this;
+    }
+
+    /**
+     * Sets up the edge's foundational fields.
+     *
+     * @param array $args
+     * @return void
+     */
+    public function fill(array $args): AbstractEdge
+    {
+        if( count($this->fields)<=0 ) {
+            return $this;
+        }
+        $methods = array_keys($this->fields);
+        foreach($args as $n => $arg) {
+            $key = sprintf("set%s", $methods[$n]);
+            $this->$key($arg);
+        }
+        return $this;
+    }
+
+    public function __call(string $method, array $args)//: mixed
+    {
+        $field_setter = function(string $field, array $args): void
+        {
+            $value = $args[0];
+            $is_quiet = (count($args) >= 2 && $args[1] == true);
+            $field_helper = new FieldHelper($value, $this->fields[$field]);
+            $field_helper->probe(); // make sure this fits.
+            if($is_quiet) {
+                $this->attributes()->quietSet($field, $field_helper->process($value));
+                return;
+            }
+            $this->attributes()->$field = $field_helper->process($value);
+        };
+
+        if(strlen($method)>4) {
+            $type = substr($method, 0, 3);
+            if( $type == "set" && count($args) >= 1)
+                $field_setter(substr($method, 3), $args);
+            elseif( 
+                $type == "get" 
+                && array_key_exists(($key = substr($method, 3)), $this->fields)
+            )
+                return $this->attributes()->$key;
+        }
     }
 }
