@@ -93,18 +93,23 @@ abstract class AbstractEdge
      * @param ParticleInterface $tail
      * @param ParticleInterface|null $head
      * @param Predicate|null $predicate
+     * @param variate $args
      */
     public function __construct(
         ParticleInterface $tail, 
         ?ParticleInterface $head = null, 
-        ?Predicate $predicate = null) 
+        ?Predicate $predicate = null,
+        ...$args) 
     {
         parent::__construct(
             $tail, 
             $head, 
             $this->resolvePredicate($predicate, Predicate::class)
         );
-        $this->setup()->execute();
+        $this
+            ->setup()
+            ->fill($args)
+            ->execute();
     }
 
     /**
@@ -242,7 +247,7 @@ abstract class AbstractEdge
      * @param array $args
      * @return void
      */
-    public function fill(array $args): AbstractEdge
+    protected function fill(array $args): AbstractEdge
     {
         if( count($this->fields)<=0 ) {
             return $this;

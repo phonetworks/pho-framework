@@ -46,8 +46,8 @@ class Set implements HandlerInterface
         if(!$check) { 
             throw new InvalidEdgeHeadTypeException($args[0], $pack["out"]->setter_label_settable_pairs[$name]);
         }
-        $edge = new $pack["out"]->setter_classes[$name]($particle, array_shift($args));
-        return $edge->fill($args)->return();
+        $edge = new $pack["out"]->setter_classes[$name]($particle, array_shift($args), null, $args);
+        return $edge->return();
     }
 
     /**
