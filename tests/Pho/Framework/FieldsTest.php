@@ -173,4 +173,18 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $ref); // no signal
     }
 
+    public function testEdgeFieldsAutoPilot() {
+        $field_val1 = "A883841";
+        $past_time = 1502224636;
+        $another_actor = new Actor($this->space);
+        $obj = new class($this->actor, $another_actor, null, $field_val1)  extends AbstractEdge {
+            const FIELDS = '{"my_field":{"constraints":{"regex":"^A[0-9]+1$"}},"created_at":{"directives":{"now":true
+}},"with_default":{"directives":{"default":"defne"}}}'; 
+            // '{"my_field":{"constraints":{"regex":"^A[0-9]+1$"}},"created_at":{"directives":{"now":true}}}';
+        };
+        //eval(\Psy\sh());
+        $this->assertGreaterThan($past_time, $obj->getCreatedAt());
+        $this->assertEquals("defne", $obj->getWithDefault());
+    }
+
 }

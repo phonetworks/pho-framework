@@ -253,9 +253,31 @@ abstract class AbstractEdge
             return $this;
         }
         $methods = array_keys($this->fields);
-        foreach($args as $n => $arg) {
+        $args_count = count($args);
+        $fields_count = count($this->fields);
+        $n = 0;
+        while($n<$args_count) {
             $key = sprintf("set%s", $methods[$n]);
-            $this->$key($arg);
+            $this->$key($args[$n++]);
+        }
+        for($n=$args_count; $n<$fields_count; $n++) {
+            $method = $methods[$n];
+            if(
+                isset($this->fields[$method]["directives"]["now"])
+                &&
+                $this->fields[$method]["directives"]["now"]==true
+            ) {
+                    $key = sprintf("set%s", $method);
+                    $this->$key(time());
+            }
+            elseif(
+                isset($this->fields[$method]["directives"]["default"])
+                &&
+                $this->fields[$method]["directives"]["default"]!="|_~_~NO!-!VALUE!-!SET~_~_|" 
+            ) {
+                $key = sprintf("set%s", $method);
+                $this->$key($this->fields[$method]["directives"]["default"]);
+            }
         }
         return $this;
     }
