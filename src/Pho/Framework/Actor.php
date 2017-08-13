@@ -102,7 +102,7 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
     public function where(): ContextInterface
     {
         if(is_null($this->current_context)) {
-            $this->enter($this->context);
+            $this->enter($this->context());
         }
         return $this->current_context;
     }
