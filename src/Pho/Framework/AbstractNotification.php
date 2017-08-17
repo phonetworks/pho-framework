@@ -21,7 +21,7 @@ use Pho\Lib\Graph\HookableInterface;
  * 
  * Notifications are the messages passed between notifiers and objects, or 
  * subscribers and their subscriptions. Notifications constitute a basic component
- * of all social networks.
+ * of all social-enabled apps.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
