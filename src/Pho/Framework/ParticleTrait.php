@@ -301,4 +301,14 @@ trait ParticleTrait
         }
     }
 
+    /**
+     * Returns all incoming edge, outgoing edge and field keywords.
+     *
+     * @return array An array of incoming edge / outgoing edge / field cargo
+     */
+    public function exportCargo(): array
+    {
+        return $this->handler->pack();
+    }
+
 }

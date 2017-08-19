@@ -95,9 +95,9 @@ class Gateway
      * Cargo variables are then transported to relevant static
      * handler class.
      * 
-     * @return array An array of incoming edge / outgoing edge cargo
+     * @return array An array of incoming edge / outgoing edge / field cargo
      */
-    protected function pack(): array
+    public function pack(): array
     {
         return [
             "in"     => $this->cargo_in,
@@ -113,6 +113,8 @@ class Gateway
      * 
      * @param string $name Catch-all method name.
      * @param array $args Catch-all method arguments.
+     * 
+     * @return mixed
      * 
      * @throws \Pho\Framework\Exceptions\InvalidParticleMethodException when the given method does not match with anything.
      * @throws \InvalidArgumentException thrown when there argument does not meet the constraints.
