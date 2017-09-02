@@ -29,5 +29,8 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 * Edges now can also have fields.
 
 ## 8.3 to 8.4
+* exportCargo method added to particles.
+
+## 8.4 to 8.5
 * Switched to pho-lib-graph's new ID
 * node.added signals are now thrown once the particle is fully initialized.
