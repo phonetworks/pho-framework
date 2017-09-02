@@ -182,4 +182,15 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->space->id(), $edge->graph()->id());
     }
 
+    public function testCargoExport() {
+        $actor = new Actor($this->space);
+        $cargo = $actor->exportCargo();
+        $this->assertArrayHasKey("in", $cargo);
+        $this->assertInstanceOf(Cargo\IncomingEdgeCargo::class, $cargo["in"]);
+        $this->assertArrayHasKey("out", $cargo);
+        $this->assertInstanceOf(Cargo\OutgoingEdgeCargo::class, $cargo["out"]);
+        $this->assertArrayHasKey("fields", $cargo);
+        $this->assertInstanceOf(Cargo\FieldsCargo::class, $cargo["fields"]);
+    }
+
 }
