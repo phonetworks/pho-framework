@@ -82,6 +82,7 @@ trait ParticleTrait
         }
         
         $this->initializeHandler();
+        $this->context()->emit("node.added", [$this]);
     }
 
     /**

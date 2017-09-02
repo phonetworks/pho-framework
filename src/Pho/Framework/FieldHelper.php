@@ -12,6 +12,7 @@
 namespace Pho\Framework;
 
 use Webmozart\Assert\Assert;
+use Pho\Lib\Graph as LibGraph;
 
 /**
  * Helps set up fields.
@@ -82,7 +83,20 @@ class FieldHelper
                     Assert::$constraint($this->value, $constraint_val);
                     break;
                 case "uuid":
-                    Assert::$constraint($this->value);
+                /*  $value = implode("-", [
+                        substr($this->value, 0, 8),
+                        substr($this->value, 0, 4),
+                        substr($this->value, 0, 4),
+                        substr($this->value, 0, 4),
+                        substr($this->value, 0, 12)
+                    ]);
+                    Assert::$constraint($value); */
+                    try {
+                        LibGraph\ID::fromString($this->value);
+                    }
+                    catch(LibGraph\Exceptions\MalformedIDException $e) {
+                        throw new \InvalidArgumentException;
+                    }
                     break;
                 case "regex":
                     Assert::$constraint($this->value, "/".addslashes($constraint_val)."/");

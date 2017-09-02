@@ -22,6 +22,19 @@ namespace Pho\Framework;
  */
 class Space extends \Pho\Lib\Graph\Graph implements ContextInterface
 {
+
+    /**
+     * Constructor.
+     * 
+     * Same as \Pho\Lib\Graph\Graph except node addition
+     * is strictly **NOT** emitted.
+     * 
+     */
+    public function __construct()
+    {
+        parent::__construct(false);
+    }
+
     /**
      * {@inheritdoc}
      */

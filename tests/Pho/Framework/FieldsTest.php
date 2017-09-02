@@ -97,7 +97,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
                 ]
             ];
         };
-        $uuid = \Pho\Lib\Graph\ID::generate();
+        $uuid = \Pho\Lib\Graph\ID::generate($obj);
         $obj->setMyField($uuid);
         $this->assertEquals($uuid, $obj->getMyField());
     }
@@ -112,7 +112,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
                 ]
             ];
         };
-        $this->expectException("\InvalidArgumentException");
+        $this->expectException(\InvalidArgumentException::class);
         $obj->setMyField("not_uuid");
     }
 
