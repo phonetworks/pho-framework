@@ -85,8 +85,8 @@ class FieldHelper
                          "url",
                          "creditCard",
                          "alpha",
-                         "alphaNum",
-                         "date"
+                         "alphaNum"
+                         // "date" // there is already the Date field
                     ])) {
                         /*
                         if($constraint_val == "uuid" || $constraint_val == "udid") {
@@ -109,7 +109,7 @@ class FieldHelper
                         throw new \InvalidArgumentException;
                     }
                     break;
-                case "dateFormat":
+                //case "dateFormat":
                 case "dateBefore":
                 case "dateAfter":
                     $v = new Validator(["field"=>$this->value]);
