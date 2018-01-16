@@ -12,6 +12,7 @@
 namespace Pho\Framework;
 
 use Webmozart\Assert\Assert;
+use Valitron\Validator;
 use Pho\Lib\Graph as LibGraph;
 
 /**
@@ -76,6 +77,22 @@ class FieldHelper
             if(is_null($constraint_val))
                 continue;
             switch($constraint) {
+                case "format":
+                    if(!in_array($constraint_val, [
+                         "numeric",
+                         "ip",
+                         "email",
+                         "url",
+                         "creditCard"
+                    ])) {
+                        throw new \InvalidArgumentException;
+                    }
+                    $v = new Validator(["field"=>$this->value]);
+                    $v->rule($constraint_val, "field");
+                    if(!$v->validate()) {
+                        throw new \InvalidArgumentException;
+                    }
+                    break;
                 case "minLength":
                 case "maxLength":
                 case "greaterThan":

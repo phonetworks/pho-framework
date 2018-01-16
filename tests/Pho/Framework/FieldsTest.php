@@ -145,6 +145,35 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         $obj->setMyField("will_not_match_regexp");
     }
 
+    public function testFormatConstraintsNegative() {
+        $obj = new class($this->actor, $this->space) extends Object {
+            const FIELDS = [
+                "MyField" => [
+                    "constraints" => [
+                        "format" => "email"
+                    ]
+                ]
+            ];
+        };
+        $this->expectException("\InvalidArgumentException");
+        $obj->setMyField("not_an_email!");
+    }
+
+    public function testFormatConstraintsPositive() {
+        $obj = new class($this->actor, $this->space) extends Object {
+            const FIELDS = [
+                "MyField" => [
+                    "constraints" => [
+                        "format" => "email"
+                    ]
+                ]
+            ];
+        };
+        $email = "emre@groups-inc.com";
+        $obj->setMyField($email);
+        $this->assertEquals($email, $obj->getMyField());
+    }
+
     public function testJsonFields() {
         $obj = new class($this->actor, $this->space)  extends Object {
             const FIELDS = '{"MyField":{"constraints":{"regex":"^A[0-9]+1$"}}}';
