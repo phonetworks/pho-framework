@@ -107,7 +107,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
             const FIELDS = [
                 "myField" => [
                     "constraints" => [
-                        "uuid" => true
+                        "id" => true
                     ]
                 ]
             ];
@@ -157,6 +157,37 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         };
         $this->expectException("\InvalidArgumentException");
         $obj->setMyField("not_an_email!");
+    }
+
+    public function testDateConstraints() {
+        $obj = new class($this->actor, $this->space) extends Object {
+            const FIELDS = [
+                "MyField" => [
+                    "constraints" => [
+                        "dateBefore" => "01/20/2018",
+                        "dateAfter" => "01/15/2018",
+                    ]
+                ]
+            ];
+        };
+        //eval(\Psy\sh());
+        $this->expectException("\InvalidArgumentException");
+        $obj->setMyField("01/20/2018");
+    }
+
+    public function testDateConstraintsPositive() {
+        $obj = new class($this->actor, $this->space) extends Object {
+            const FIELDS = [
+                "MyField" => [
+                    "constraints" => [
+                        "dateBefore" => "01/20/2018",
+                        "dateAfter" => "01/15/2018",
+                    ]
+                ]
+            ];
+        };
+        $obj->setMyField("01/18/2018");
+        $this->assertEquals("01/18/2018", $obj->getMyField());
     }
 
     public function testFormatConstraintsPositive() {

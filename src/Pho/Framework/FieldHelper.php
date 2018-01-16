@@ -83,12 +83,37 @@ class FieldHelper
                          "ip",
                          "email",
                          "url",
-                         "creditCard"
+                         "creditCard",
+                         "alpha",
+                         "alphaNum",
+                         "date"
                     ])) {
+                        /*
+                        if($constraint_val == "uuid" || $constraint_val == "udid") {
+                            try {
+                                LibGraph\ID::fromString($this->value);
+                            }
+                            catch(LibGraph\Exceptions\MalformedIDException $e) {
+                                throw new \InvalidArgumentException;
+                            }
+                        }
+                        else {
+                            throw new \InvalidArgumentException;
+                        }
+                        */
                         throw new \InvalidArgumentException;
                     }
                     $v = new Validator(["field"=>$this->value]);
                     $v->rule($constraint_val, "field");
+                    if(!$v->validate()) {
+                        throw new \InvalidArgumentException;
+                    }
+                    break;
+                case "dateFormat":
+                case "dateBefore":
+                case "dateAfter":
+                    $v = new Validator(["field"=>$this->value]);
+                    $v->rule($constraint, "field", $constraint_val);
                     if(!$v->validate()) {
                         throw new \InvalidArgumentException;
                     }
@@ -99,15 +124,9 @@ class FieldHelper
                 case "lessThan":
                     Assert::$constraint($this->value, $constraint_val);
                     break;
-                case "uuid":
-                /*  $value = implode("-", [
-                        substr($this->value, 0, 8),
-                        substr($this->value, 0, 4),
-                        substr($this->value, 0, 4),
-                        substr($this->value, 0, 4),
-                        substr($this->value, 0, 12)
-                    ]);
-                    Assert::$constraint($value); */
+                                   
+                //case "uuid":
+                case "id":
                     try {
                         LibGraph\ID::fromString($this->value);
                     }
@@ -115,6 +134,7 @@ class FieldHelper
                         throw new \InvalidArgumentException;
                     }
                     break;
+                
                 case "regex":
                     Assert::$constraint($this->value, "/".addslashes($constraint_val)."/");
                     break;
