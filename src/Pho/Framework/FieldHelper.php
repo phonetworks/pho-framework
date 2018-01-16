@@ -54,7 +54,10 @@ class FieldHelper
         {
             return (isset($directives[$param]) && $directives[$param]);
         };
-        if($isDirectiveEnabled("md5")) {
+        if($isDirectiveEnabled("sha1")) {
+            return sha1($this->value);   
+        }
+        elseif($isDirectiveEnabled("md5")) {
             return md5($this->value);
         }
         return $this->value;
