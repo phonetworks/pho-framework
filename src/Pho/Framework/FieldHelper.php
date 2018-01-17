@@ -29,6 +29,20 @@ class FieldHelper
     protected $settings;
 
     /**
+     * whether the field has index
+     *
+     * @var boolean
+     */
+    protected $with_index = false;
+
+    /**
+     * whether the field is set to be unique
+     *
+     * @var boolean
+     */
+    protected $is_unique = false;
+
+    /**
      * Constructor.
      * 
      * @param mixed $value The value to check.
@@ -38,6 +52,26 @@ class FieldHelper
     {
         $this->value = $value;
         $this->settings = $settings;
+    }
+
+    /**
+     * Whether the field has index on it.
+     *
+     * @return boolean
+     */
+    public function withIndex(): bool
+    {
+        return $this->with_index;
+    }
+
+    /**
+     * Whether the field must be unique
+     *
+     * @return boolean
+     */
+    public function isUnique(): bool
+    {
+        return $this->is_unique;
     }
 
     /**
@@ -54,12 +88,22 @@ class FieldHelper
         {
             return (isset($directives[$param]) && $directives[$param]);
         };
+
+        if($isDirectiveEnabled("index")) {
+            $this->with_index = true;
+        }
+
+        if($isDirectiveEnabled("unique")) {
+            $this->is_unique = true;
+        }
+
         if($isDirectiveEnabled("sha1")) {
             return sha1($this->value);   
         }
         elseif($isDirectiveEnabled("md5")) {
             return md5($this->value);
         }
+
         return $this->value;
     }
 
