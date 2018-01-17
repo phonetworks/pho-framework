@@ -76,10 +76,34 @@ class Set implements HandlerInterface
         $field_helper = new FieldHelper($value, $cargo->fields[$name]);
         $field_helper->probe();
         $value = $field_helper->process(); 
+        static::saveField($particle, $name, $value, $defer_persist, $field_helper);
+    }
+    
+    /**
+     * Helper method to save the field
+     * 
+     * This method exists to help extending the "field" method without overriding it.
+     *
+     * @param ParticleInterface $particle
+     * @param string $field_name Field name
+     * @param mixed $field_value Field value
+     * @param bool $defer_persist Whether to defer persistence
+     * @param FieldHelper $helper an object full of information re: this field.
+     * 
+     * @return void
+     */
+    protected static function saveField(
+        ParticleInterface $particle, 
+        string $field_name, 
+        /*mixed*/ $field_value, 
+        bool $defer_persist, 
+        FieldHelper $helper): void
+    {
+
         if(!$defer_persist) {
-            $particle->attributes()->$name = $value;
+            $particle->attributes()->$field_name = $field_value;
             return;
         }
-        $particle->attributes()->quietSet($name, $value);
+        $particle->attributes()->quietSet($field_name, $field_value);
     }
 }
