@@ -91,6 +91,8 @@ class Set implements HandlerInterface
      * @param FieldHelper $helper an object full of information re: this field.
      * 
      * @return void
+     *
+     * @throws \InvalidArgumentException thrown when there argument does not meet the constraints.
      */
     protected static function saveField(
         ParticleInterface $particle, 
