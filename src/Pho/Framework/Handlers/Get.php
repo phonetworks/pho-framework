@@ -46,7 +46,7 @@ class Get implements HandlerInterface
         array $args // no use -yet-
         ) /*:  array*/
     {
-        $name = substr($name, 3);
+        $name =  \Stringy\StaticStringy::camelize(substr($name, 3));
         if(static::methodExists($pack, $name, Direction::out())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
@@ -95,7 +95,7 @@ class Get implements HandlerInterface
         Direction $direction 
         ): bool
     {
-        return in_array(strtolower($name), $pack[(string) $direction]->labels);
+        return in_array($name, $pack[(string) $direction]->labels);
     }
 
 
