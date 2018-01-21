@@ -34,3 +34,12 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 ## 8.4 to 8.5
 * Switched to pho-lib-graph's new ID
 * node.added signals are now thrown once the particle is fully initialized.
+
+## 8.5 to 8.6
+* Added new format constraints; e.g format="numeric",  "ip", "email", "url", "creditCard"
+
+## 8.6 to 8.7
+* added sha1 directive (for passwords) besides archaic md5
+
+## 8.x to 9.0
+* Standardized getter and setter cargos. Fields are stored upper-camelized while all others are stored camelized.
