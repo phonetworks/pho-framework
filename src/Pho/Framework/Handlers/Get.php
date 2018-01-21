@@ -46,14 +46,14 @@ class Get implements HandlerInterface
         array $args // no use -yet-
         ) /*:  array*/
     {
-        $name =  \Stringy\StaticStringy::camelize(substr($name, 3));
+        $name =  lcfirst(substr($name, 3)); // we don't camelize because we want the method to come in proper format.
         if(static::methodExists($pack, $name, Direction::out())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
         elseif(static::methodExists($pack, $name, Direction::in())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
-        elseif( Utils::fieldExists($pack["fields"], $name) ) {
+        elseif( Utils::fieldExists($pack["fields"], ($name=ucfirst($name))) ) {
             return static::getField($particle, $pack["fields"], $name, $args);
         }
         throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $name);

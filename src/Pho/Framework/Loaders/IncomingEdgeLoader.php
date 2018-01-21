@@ -29,6 +29,11 @@ class IncomingEdgeLoader extends AbstractLoader
      * Given the configurations set in the particle class itself 
      * (e.g. EDGES_IN constant), configures the way the 
      * class will act.
+     * 
+     * Fields are stored in particle camelized; e.g. 
+     * * birthday becomes birthday
+     * * join_time becomes joinTime
+     * * joinTime remains joinTime
      *
      * {@inheritDoc}
      */
@@ -48,11 +53,11 @@ class IncomingEdgeLoader extends AbstractLoader
             }
             if($check) {
                 $method = $class_ref->getConstant("TAIL_LABELS");
-                $obj->cargo->labels[] = $method;
+                $obj->cargo->labels[] = \Stringy\StaticStringy::camelize($method);
                 $obj->cargo->label_class_pairs[$method] = $class;
                 
                 $method = $class_ref->getConstant("TAIL_LABEL");
-                $obj->cargo->singularLabels[] = $method;
+                $obj->cargo->singularLabels[] = \Stringy\StaticStringy::camelize($method);
                 $obj->cargo->singularLabel_class_pairs[$method] = $class;
             }
         }

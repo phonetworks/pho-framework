@@ -37,7 +37,7 @@ namespace Pho\Framework {
         public function testSimpleFormationWithConsumerPost() {
             $actor = new Actor($this->graph);
             $actor->registerOutgoingEdges(\Pho\Framework\ActorOut\ConsumerPost::class);
-            $object = $actor->consumerpost();
+            $object = $actor->consumerPost();
             $this->assertInstanceOf(Object::class, $object);
             $actor_edges = $actor->edges()->out();
             $this->assertTrue($actor_edges->current()->predicate()->formative());

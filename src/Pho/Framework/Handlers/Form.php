@@ -65,6 +65,16 @@ class Form implements HandlerInterface
 
     /**
      * Based on given arguments, helps find the matching class to form.
+     * 
+     * **IMPORTANT NOTE for developers;**
+     * 
+     * We don't touch the $name argument. Because a call like:
+     * ```$user->createGroup()```
+     * means that the formative edge is CreateGroup
+     * and it was already registered in the particle with "camelize"
+     * function. So camelizing calls would allow methods like
+     * ```$user->create_group()``` or ```$user->CreateGroup``` also
+     * take the same effect. This is not the behavior we want.
      *
      * @param string $name
      * @param array $args

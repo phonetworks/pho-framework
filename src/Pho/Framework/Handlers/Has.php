@@ -53,7 +53,7 @@ class Has implements HandlerInterface
         }
         $id = $args[0];
         $original_name = $name;
-        $name = \Stringy\StaticStringy::camelize(substr($name, 3));
+        $name = lcfirst(substr($name, 3)); // we don't camelize, because we want the call to be made in proper format.
 
 
         if(static::methodExists($pack, $name, $id, Direction::out())) {
