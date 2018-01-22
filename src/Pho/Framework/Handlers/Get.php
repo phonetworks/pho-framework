@@ -116,7 +116,7 @@ class Get implements HandlerInterface
         Direction $direction 
         ): array
     {
-        $name = strtolower($name);
+        // $name = strtolower($name); // this is now taken care of beforehand.
         $direction = (string) $direction;
         $node_adj = static::ADJACENCY_EQUIVALENT[$direction];
         $cargo = $pack[$direction];
