@@ -34,6 +34,8 @@ class IncomingEdgeCargo extends AbstractEdgeCargo
      * 
      * A simple array of tail labels of incoming edges in plural.
      * Tail labels in string format.
+     * 
+     * Stored camelized.
      *
      * {@inheritDoc}
      */
@@ -44,7 +46,8 @@ class IncomingEdgeCargo extends AbstractEdgeCargo
      * 
      * An array of tail labels of incoming edges in plural as key
      * and associated class name as value.
-     * Both in string format.
+     * 
+     * Both in string format. Keys are camelized.
      *
      * {@inheritDoc}
      */
@@ -54,7 +57,9 @@ class IncomingEdgeCargo extends AbstractEdgeCargo
      * "Has" Labels of Incoming Edges
      * 
      * A simple array of tail labels of incoming edges in singular.
-     * Tail labels in string format.
+     * Tail labels in string format. 
+     * 
+     * Stored camelized.
      *
      * {@inheritDoc}
      */
@@ -65,7 +70,8 @@ class IncomingEdgeCargo extends AbstractEdgeCargo
      * 
      * An array of tail labels of incoming edges in singular as key
      * and associated class name as value.
-     * Both in string format.
+     * 
+     * Both in string format. Keys are camelized.
      *
      * {@inheritDoc}
      */

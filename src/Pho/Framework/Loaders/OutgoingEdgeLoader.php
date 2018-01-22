@@ -115,6 +115,16 @@ class OutgoingEdgeLoader extends AbstractLoader
                 $_method = \Stringy\StaticStringy::camelize($reflector->getConstant("HEAD_LABEL"));
                 $cargo->singularLabels[] = $_method;
                 $cargo->singularLabel_class_pairs[$_method] = $class;
+
+                if($reflector->hasConstant("TAIL_CALLABLE_LABELS")) {
+                    $callable = $reflector->getConstant("TAIL_CALLABLE_LABELS");
+                    $cargo->callable_edge_labels[] = \Stringy\StaticStringy::camelize($callable);
+                    $cargo->callable_edge_label_class_pairs[$callable] = $class;
+    
+                    $callable = $reflector->getConstant("TAIL_CALLABLE_LABEL");
+                    $cargo->callable_edge_singularLabels[] = \Stringy\StaticStringy::camelize($callable);
+                    $cargo->callable_edge_singularLabel_class_pairs[$callable] = $class;
+                }
         }
         return $obj;
     }

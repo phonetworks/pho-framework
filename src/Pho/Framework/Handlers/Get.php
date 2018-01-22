@@ -47,11 +47,17 @@ class Get implements HandlerInterface
         ) /*:  array*/
     {
         $name =  lcfirst(substr($name, 3)); // we don't camelize because we want the method to come in proper format.
-        if(static::methodExists($pack, $name, Direction::out())) {
+        if(static::edgeMethodExists($pack, $name, Direction::out())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
-        elseif(static::methodExists($pack, $name, Direction::in())) {
+        elseif(static::edgeMethodExists($pack, $name, Direction::in())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::in());
+        }
+        elseif(static::edgeCallableExists($pack, $name, Direction::out())) {
+            return static::getEdgeItself($particle, $pack, $name, Direction::out());
+        }   
+        elseif(static::edgeCallableExists($pack, $name, Direction::in())) {
+            return static::getEdgeItself($particle, $pack, $name, Direction::in());
         }
         elseif( Utils::fieldExists($pack["fields"], ($name=ucfirst($name))) ) {
             return static::getField($particle, $pack["fields"], $name, $args);
@@ -89,13 +95,31 @@ class Get implements HandlerInterface
      * 
      * @return bool
      */
-    protected static function methodExists(
+    protected static function edgeMethodExists(
         array $pack,
         string $name,
         Direction $direction 
         ): bool
     {
         return in_array($name, $pack[(string) $direction]->labels);
+    }
+
+    /**
+     * Whether the given method is available for incoming or outgoing edge callable.
+     *
+     * @param array $pack Holds incoming and outgoing cargos.
+     * @param string $name Method name. Queried among incoming and outgoing labels.
+     * @param Direction $direction Direction in question; in or out.
+     * 
+     * @return bool
+     */
+    protected static function edgeCallableExists(
+        array $pack,
+        string $name,
+        Direction $direction 
+        ): bool
+    {
+        return !is_null($pack[(string) $direction]->callable_edge_labels) && in_array($name, $pack[(string) $direction]->callable_edge_labels);
     }
 
 
@@ -118,7 +142,7 @@ class Get implements HandlerInterface
     {
         // $name = strtolower($name); // this is now taken care of beforehand.
         $direction = (string) $direction;
-        $node_adj = static::ADJACENCY_EQUIVALENT[$direction];
+        $node_adj = static::ADJACENCY_EQUIVALENT[$direction]; // in->tail, out->head
         $cargo = $pack[$direction];
         $edges = $particle->edges()->$direction();
         $return = [];
@@ -130,6 +154,30 @@ class Get implements HandlerInterface
             }
         );
         return $return;
+    }
+
+    /**
+     * Getter Catcher for Edge Callables In and Out
+     *
+     * @param ParticleInterface $particle The particle that this handler is associated with.
+     * @param array  $pack Holds cargo variables extracted by loaders.
+     * @param string $name The edge node label in plural.
+     * @param Direction  $direction The direction of the edge adjacent nodes to look up.
+     * 
+     * @return array The edge nodes.
+     */
+    protected static function getEdgeItself(
+        ParticleInterface $particle, 
+        array $pack,
+        string $name,
+        Direction $direction 
+        ): array
+    {
+        // $name = strtolower($name); // this is now taken care of beforehand.
+        $direction = (string) $direction;
+        $cargo = $pack[$direction];
+        $edges = $particle->edges()->$direction($cargo->callable_edge_label_class_pairs[$name]);
+        return iterator_to_array($edges);
     }
 
 }

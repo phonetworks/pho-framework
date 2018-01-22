@@ -30,7 +30,7 @@ class IncomingEdgeLoader extends AbstractLoader
      * (e.g. EDGES_IN constant), configures the way the 
      * class will act.
      * 
-     * Fields are stored in particle camelized; e.g. 
+     * Incoming edges are stored in particle camelized; e.g. 
      * * birthday becomes birthday
      * * join_time becomes joinTime
      * * joinTime remains joinTime
@@ -43,14 +43,17 @@ class IncomingEdgeLoader extends AbstractLoader
         foreach($obj->cargo->classes as $class) {
             $class_ref = new \ReflectionClass($class);
             $check = false;
+            
             foreach($class_ref->getConstant("SETTABLES") as $head_node_type) {
                 $check |= is_a($particle, $head_node_type);
             }
+            
             if($class_ref->getConstant("SETTABLES_EXTRA")!==false) {
                 foreach($class_ref->getConstant("SETTABLES_EXTRA") as $head_node_type) {
                     $check |= is_a($particle, $head_node_type);
                 }
             }
+            
             if($check) {
                 $method = $class_ref->getConstant("TAIL_LABELS");
                 $obj->cargo->labels[] = \Stringy\StaticStringy::camelize($method);
@@ -60,6 +63,17 @@ class IncomingEdgeLoader extends AbstractLoader
                 $obj->cargo->singularLabels[] = \Stringy\StaticStringy::camelize($method);
                 $obj->cargo->singularLabel_class_pairs[$method] = $class;
             }
+
+            if($class_ref->hasConstant("HEAD_CALLABLE_LABELS")) {
+                $callable = $class_ref->getConstant("HEAD_CALLABLE_LABELS");
+                $obj->cargo->callable_edge_labels[] = \Stringy\StaticStringy::camelize($callable);
+                $obj->cargo->callable_edge_label_class_pairs[$callable] = $class;
+
+                $callable = $class_ref->getConstant("HEAD_CALLABLE_LABEL");
+                $obj->cargo->callable_edge_singularLabels[] = \Stringy\StaticStringy::camelize($callable);
+                $obj->cargo->callable_edge_singularLabel_class_pairs[$callable] = $class;   
+            }
+
         }
         return $obj;
     }

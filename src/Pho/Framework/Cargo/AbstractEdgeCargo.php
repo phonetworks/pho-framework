@@ -50,6 +50,58 @@ abstract class AbstractEdgeCargo implements CargoInterface
     public $singularLabel_class_pairs = [];
 
     /**
+     * Callable edges (in plural format)
+     *
+     * Some edges may be callable directly by the particle.
+     * This is an array of the labels of such edges, in plural
+     * format.
+     * 
+     * Stored camelized.
+     * 
+     * @var array
+     */
+    public $callable_edge_labels;
+
+    /**
+     * Callable edges (in plural) / classes
+     *
+     * Some edges may be callable directly by the particle.
+     * This is an array of the labels of such edges, in plural 
+     * format as key, and the class names as value.
+     * 
+     * Keys are camelized.
+     * 
+     * @var array
+     */
+    public $callable_edge_label_class_pairs;
+
+    /**
+     * Callable edges (in singular format) 
+     *
+     * Some edges may be callable directly by the particle.
+     * This is an array of the labels of such edges, in singular
+     * format.
+     * 
+     * Stored camelized.
+     * 
+     * @var array
+     */
+    public $callable_edge_singularLabels;
+
+    /**
+     * Callable edges (in singular) / classes
+     *
+     * Some edges may be callable directly by the particle.
+     * This is an array of the labels of such edges, in singular 
+     * format as key, and the class names as value.
+     * 
+     * Keys are camelized.
+     * 
+     * @var array
+     */
+    public $callable_edge_singularLabel_class_pairs;
+
+    /**
      * Constructor
      *
      * @param array $edges
