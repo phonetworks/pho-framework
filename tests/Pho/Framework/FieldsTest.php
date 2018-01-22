@@ -53,6 +53,68 @@ class ConstraintedTestObject extends Object
     ];
 }
 
+class ExtraConstraintedTestObject extends Object
+{
+    const FIELDS = [
+        "my_date" => [
+            "constraints" => [
+                "minLength" => null,
+                "maxLength" => null,
+                "uuid" => null,
+                "regex" => null,
+                "greaterThan" => null,
+                "lessThan" => null,
+                "dateAfter" => "1/15/1983",
+                "dateBefore" => "1/15/2017",
+            ],
+            "directives" => [
+                "md5" => false,
+                "now" => false,
+                "default" => "",
+            ]
+        ],
+        "my_int" => [
+            "constraints" => [
+                "minLength" => null,
+                "maxLength" => null,
+                "uuid" => null,
+                "regex" => null,
+                "greaterThan" => null,
+                "lessThan" => null,
+                "lessThan" => 40,
+                "greaterThank" => 10,
+            ],
+            "directives" => [
+                "md5" => false,
+                "now" => false,
+                "default" => "",
+            ]
+        ]
+    ];
+}
+
+class sha1Object extends Object
+{
+    const FIELDS = [
+        "my_field" => [
+            "constraints" => [
+                "minLength" => 6,
+                "maxLength" => null,
+                "uuid" => null,
+                "regex" => null,
+                "greaterThan" => null,
+                "lessThan" => null,
+            ],
+            "directives" => [
+                "sha1" => true,
+                "md5" => false,
+                "now" => false,
+                "default" => "",
+            ]
+        ]
+    ];
+}
+
 class FieldsTest extends \PHPUnit\Framework\TestCase 
 {
     private $space, $actor;
@@ -245,6 +307,46 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         //eval(\Psy\sh());
         $this->assertGreaterThan($past_time, $obj->getCreatedAt());
         $this->assertEquals("defne", $obj->getWithDefault());
+    }
+
+    public function testSha1() {
+        
+        $obj = new sha1Object($this->actor, $this->space);
+        $obj->setMyField("emre12");
+        //$node_expected_to_be_identical = $this->space->get($node->id());
+        $this->assertEquals(sha1("emre12"), $obj->getMyField());
+    }
+
+    /**
+     * May be too similar to:
+     * @see testDateConstraintsPositive
+     */
+    public function testDateConstraintsPositive_withMultipleFields() {
+        $obj = new ExtraConstraintedTestObject($this->actor, $this->space);
+        $obj->setMyDate("10/10/2010");
+        $this->assertTrue(true);
+    }
+
+    /**
+     * May be too similar to:
+     * @see testDateConstraintsNegative
+     */
+    public function testDateConstraintsNegative_withMultipleFields() {
+        $obj = new ExtraConstraintedTestObject($this->actor, $this->space);
+        $this->expectException(\InvalidArgumentException::class);
+        $obj->setMyDate("10/10/1977");
+    }
+
+    public function testIntConstraintsPositive() {
+        $obj = new ExtraConstraintedTestObject($this->actor, $this->space);
+        $obj->setMyInt(20);
+        $this->assertTrue(true);
+    }
+
+    public function testIntConstraintsNegative() {
+        $obj = new ExtraConstraintedTestObject($this->actor, $this->space);
+        $this->expectException(\InvalidArgumentException::class);
+        $obj->setMyInt(1000);
     }
 
 }
