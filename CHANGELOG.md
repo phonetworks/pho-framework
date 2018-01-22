@@ -43,3 +43,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 
 ## 8.x to 9.0
 * Standardized getter and setter cargos. Fields are stored upper-camelized while all others are stored camelized.
+
+## 9.x to 9.1
+* Tail/Head callables introduced. Now you can call directly edges via getters (useful for examples like Message, Comment)
