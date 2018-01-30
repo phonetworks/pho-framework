@@ -284,19 +284,17 @@ abstract class AbstractEdge
 
     public function __call(string $method, array $args)//: mixed
     {
-        $all_fields = $this->fields;
-        $attributes = $this->attributes();
-        $field_setter = function(string $field, array $args) use ($all_fields, $attributes): void
+        $field_setter = function(string $field, array $args): void
         {
             $value = $args[0];
             $is_quiet = (count($args) >= 2 && $args[1] == true);
-            $field_helper = new FieldHelper($value, $all_fields[$field]);
+            $field_helper = new FieldHelper($value, $this->fields[$field]);
             $field_helper->probe(); // make sure this fits.
             if($is_quiet) {
-                $attributes->quietSet($field, $field_helper->process($value));
+                $this->attributes()->quietSet($field, $field_helper->process($value));
                 return;
             }
-            $attributes->$field = $field_helper->process($value);
+            $this->attributes()->$field = $field_helper->process($value);
         };
 
         if(strlen($method)>4) {
