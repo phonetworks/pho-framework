@@ -132,7 +132,7 @@ abstract class AbstractEdge
      * 
      * @return AbstractEdge
      */
-    protected function setup(string $type = "all"): AbstractEdge
+    public function setup(string $type = "all"): AbstractEdge
     {
         $fields = function(): AbstractEdge
         {
