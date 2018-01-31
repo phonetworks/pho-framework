@@ -115,10 +115,11 @@ abstract class AbstractEdge
             $head, 
             $this->resolvePredicate($predicate, Predicate::class)
         );
-        $this
-            ->setup()
-            ->fill(...$args)
-            ->execute();
+        $this->setup();
+        if(count($args)>0) {
+            $this->fill($args);
+        }
+        $this->execute();
     }
 
     /**
