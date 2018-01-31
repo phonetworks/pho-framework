@@ -157,7 +157,8 @@ abstract class AbstractEdge
 
         $all = function() use ($fields, $notification): AbstractEdge
         {
-            $fields();
+            //$fields();
+            $this->fields = Loaders\FieldsLoader::fetchArray($this);
             return $notification();
         };
 

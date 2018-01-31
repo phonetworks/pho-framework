@@ -13,6 +13,7 @@ namespace Pho\Framework\Loaders;
 
 use Pho\Framework\Cargo\IncomingEdgeCargo;
 use Pho\Framework\ParticleInterface;
+use Pho\Lib\Graph\EntityInterface;
 
 /**
  * Helps set up the fields of a particle (aka node)
@@ -55,14 +56,14 @@ class FieldsLoader extends AbstractLoader
      *
      * @return array An array where keys are upper-camelized
      */
-    public static function fetchArray(ParticleInterface $particle): array
+    public static function fetchArray(EntityInterface $entity): array
     {
-        if(!defined(get_class($particle)."::FIELDS"))
+        if(!defined(get_class($entity)."::FIELDS"))
             return [];
-        elseif(is_array($particle::FIELDS))
-            $fields = $particle::FIELDS;
+        elseif(is_array($entity::FIELDS))
+            $fields = $entity::FIELDS;
         else
-            $fields = json_decode($particle::FIELDS, true);
+            $fields = json_decode($entity::FIELDS, true);
 
         $ret = [];
         foreach($fields as $key=>$value) {
