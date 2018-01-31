@@ -55,7 +55,7 @@ class FieldsLoader extends AbstractLoader
      *
      * @return array An array where keys are upper-camelized
      */
-    public static function fetchArray(Particle $particle): array
+    public static function fetchArray(ParticleInterface $particle): array
     {
         if(!defined(get_class($particle)."::FIELDS"))
             return [];
