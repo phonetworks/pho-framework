@@ -117,7 +117,7 @@ abstract class AbstractEdge
         );
         $this
             ->setup()
-            ->fill($args)
+            ->fill(...$args)
             ->execute();
     }
 
@@ -289,10 +289,10 @@ abstract class AbstractEdge
         {
             $value = $args[0];
             $is_quiet = (count($args) >= 2 && $args[1] == true);
-            if(!$this->call_setup) {
+            /*if(!$this->call_setup) {
                 $this->setup("fields");
                 $this->call_setup = true;
-            }
+            }*/
             $field_helper = new FieldHelper($value, $this->fields[$field]);
             $field_helper->probe(); // make sure this fits.
             if($is_quiet) {
