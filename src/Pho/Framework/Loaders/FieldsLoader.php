@@ -43,21 +43,34 @@ class FieldsLoader extends AbstractLoader
         $obj->fields = [];
         $fields = [];
 
+        $obj->cargo->fields = self::fetchArray($particle);
+
+        return $obj;
+    }
+    
+    /**
+     * Helper method for pack()
+     *
+     * @param Particle $particle
+     *
+     * @return array An array where keys are upper-camelized
+     */
+    public static function fetchArray(Particle $particle): array
+    {
         if(!defined(get_class($particle)."::FIELDS"))
-            $fields = [];
+            return [];
         elseif(is_array($particle::FIELDS))
             $fields = $particle::FIELDS;
         else
             $fields = json_decode($particle::FIELDS, true);
 
+        $ret = [];
         foreach($fields as $key=>$value) {
-            $obj->cargo->fields[
+            $ret[
                 \Stringy\StaticStringy::upperCamelize($key)
             ] = $value;
         }
-
         
-
-        return $obj;
+        return $ret;
     }
 }
