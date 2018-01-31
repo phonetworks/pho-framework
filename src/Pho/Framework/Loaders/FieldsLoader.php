@@ -29,6 +29,11 @@ class FieldsLoader extends AbstractLoader
      * Given the configurations set in the particle fields 
      * (e.g. FIELDS constant), configures the way the 
      * class will act.
+     * 
+     * Fields are stored in particle upper camelized; e.g. 
+     * * birthday becomes Birthday
+     * * join_time becomes JoinTime
+     * * joinTime becomes JoinTime
      *
      * {@inheritDoc}
      */

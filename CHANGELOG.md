@@ -20,3 +20,29 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 ## 8.0 to 8.1
 
 * Support for autoRegisterOutgoingEdges back. The directory structure {particle_name}Out/\* would be parsed for outgoing edges.
+
+
+## 8.1 to 8.2 
+* Introduced quietSet to set up node edges at construction without triggering an event each time.
+
+## 8.2 to 8.3
+* Edges now can also have fields.
+
+## 8.3 to 8.4
+* exportCargo method added to particles.
+
+## 8.4 to 8.5
+* Switched to pho-lib-graph's new ID
+* node.added signals are now thrown once the particle is fully initialized.
+
+## 8.5 to 8.6
+* Added new format constraints; e.g format="numeric",  "ip", "email", "url", "creditCard"
+
+## 8.6 to 8.7
+* added sha1 directive (for passwords) besides archaic md5
+
+## 8.x to 9.0
+* Standardized getter and setter cargos. Fields are stored upper-camelized while all others are stored camelized.
+
+## 9.x to 9.1
+* Tail/Head callables introduced. Now you can call directly edges via getters (useful for examples like Message, Comment)

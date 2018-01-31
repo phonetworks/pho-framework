@@ -89,6 +89,7 @@ trait ParticleTrait
         }
         
         $this->initializeHandler();
+        $this->context()->emit("node.added", [$this]);
     }
 
     /**
@@ -267,6 +268,10 @@ trait ParticleTrait
     {
         $array = parent::toArray();
         $array["creator"] = $this->creator_id;
+        $array["registered_edges"] = [
+            "in" => $this->incoming_edges,
+            "out" => $this->outgoing_edges,
+        ];
         if($this instanceof Actor) {
             $array["notifications"] = $this->notifications()->toArray();
         }
@@ -312,6 +317,16 @@ trait ParticleTrait
         foreach ($this->getSubscribers() as $subscriber) {
             $subscriber->notifications()->add($notification);
         }
+    }
+
+    /**
+     * Returns all incoming edge, outgoing edge and field keywords.
+     *
+     * @return array An array of incoming edge / outgoing edge / field cargo
+     */
+    public function exportCargo(): array
+    {
+        return $this->handler->pack();
     }
 
 }

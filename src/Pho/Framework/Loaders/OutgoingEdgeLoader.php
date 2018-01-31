@@ -20,6 +20,11 @@ use Pho\Framework\ParticleInterface;
  * 
  * {@inheritDoc}
  * 
+ * Outgoing edges are stored in particle camelized; e.g. 
+ * * birthday becomes birthday
+ * * join_time becomes joinTime
+ * * joinTime remains joinTime
+ * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 class OutgoingEdgeLoader extends AbstractLoader
@@ -41,7 +46,7 @@ class OutgoingEdgeLoader extends AbstractLoader
                 if(!$reflector->isSubclassOf(Framework\AbstractEdge::class)) { 
                     continue;
                 }
-                $_method = (string) strtolower($reflector->getShortName());
+                $_method = (string) \Stringy\StaticStringy::camelize($reflector->getShortName());
                 $_predicate = $class."Predicate";
                 if($_predicate::T_FORMATIVE) {
                     $cargo->formative_labels[] = $_method;
@@ -104,12 +109,22 @@ class OutgoingEdgeLoader extends AbstractLoader
                         $cargo->setter_label_settable_pairs[$_method] = 
                             $reflector->getConstant("SETTABLES") ;
                 }
-                $_method = $reflector->getConstant("HEAD_LABELS");
+                $_method = \Stringy\StaticStringy::camelize($reflector->getConstant("HEAD_LABELS"));
                 $cargo->labels[] = $_method;
                 $cargo->label_class_pairs[$_method] = $class;
-                $_method = $reflector->getConstant("HEAD_LABEL");
+                $_method = \Stringy\StaticStringy::camelize($reflector->getConstant("HEAD_LABEL"));
                 $cargo->singularLabels[] = $_method;
                 $cargo->singularLabel_class_pairs[$_method] = $class;
+
+                if($reflector->hasConstant("TAIL_CALLABLE_LABELS")) {
+                    $callable = $reflector->getConstant("TAIL_CALLABLE_LABELS");
+                    $cargo->callable_edge_labels[] = \Stringy\StaticStringy::camelize($callable);
+                    $cargo->callable_edge_label_class_pairs[$callable] = $class;
+    
+                    $callable = $reflector->getConstant("TAIL_CALLABLE_LABEL");
+                    $cargo->callable_edge_singularLabels[] = \Stringy\StaticStringy::camelize($callable);
+                    $cargo->callable_edge_singularLabel_class_pairs[$callable] = $class;
+                }
         }
         return $obj;
     }

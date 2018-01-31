@@ -51,7 +51,8 @@ class Utils
      */
     public static function findFieldName(FieldsCargo $cargo, string $name): string
         {
-            if(isset($cargo->fields[$name]))
+            $name = \Stringy\StaticStringy::upperCamelize($name);
+            if(self::fieldExists($cargo, $name))
                 return $name;
             throw new \Exception("Cannot resolve field name.");
         }

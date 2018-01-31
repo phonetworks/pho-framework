@@ -17,4 +17,8 @@ For more infomation on the internals of pho-lib-graph, as well as a simple user 
 ## FAQ
 
 * **Is there a way to save the graph in a file or on disk?** 
-Pho-Framework has no built-in server or mechanism for saving/storing/replacing the graph. It is built purely in memory. But you can use [pho-microkernel](https://github.com/phonetworks/pho-framework) for such persistence.
+Pho-Framework has no built-in server or mechanism for saving/storing/replacing the graph. It is built purely in memory. But you can use [pho-microkernel](https://github.com/phonetworks/pho-framework) for such persistence, and more (access control lists etc.)
+
+## License
+
+MIT, see [LICENSE](https://github.com/phonetworks/pho-framework/blob/master/LICENSE).
