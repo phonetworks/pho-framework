@@ -88,6 +88,15 @@ abstract class AbstractEdge
     protected $fields = [];
 
     /**
+     * Whether the edge was set up at __call time.
+     * 
+     * @todo Must be removed. This exists due to a bug.
+     *
+     * @var boolean
+     */
+    protected $call_setup = false;
+
+    /**
      * Constructor.
      *
      * @param ParticleInterface $tail
@@ -126,16 +135,7 @@ abstract class AbstractEdge
     {
         $fields = function(): AbstractEdge
         {
-            if(!defined("static::FIELDS"))
-                return $this;
-            if(is_array(static::FIELDS))
-                $fields = static::FIELDS;
-            elseif(is_string(static::FIELDS))
-                $fields = json_decode(static::FIELDS, true);
-            foreach($fields as $key=>$val) {
-                $key = (string) \Stringy\StaticStringy::upperCamelize($key);
-                $this->fields[$key] = $val;
-            }
+            $this->fields = Loaders\FieldsLoader::fetchArray($this);
             return $this;
         };
 
@@ -155,10 +155,10 @@ abstract class AbstractEdge
             return $this;
         };
 
+        
         $all = function() use ($fields, $notification): AbstractEdge
         {
-            //$fields();
-            $this->fields = Loaders\FieldsLoader::fetchArray($this);
+            $fields();    
             return $notification();
         };
 
@@ -289,6 +289,10 @@ abstract class AbstractEdge
         {
             $value = $args[0];
             $is_quiet = (count($args) >= 2 && $args[1] == true);
+            if(!$this->call_setup) {
+                $this->setup("fields");
+                $this->call_setup = true;
+            }
             $field_helper = new FieldHelper($value, $this->fields[$field]);
             $field_helper->probe(); // make sure this fits.
             if($is_quiet) {
