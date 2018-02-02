@@ -70,6 +70,15 @@ class CallableTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($obj->hasComment($this->random_id));
     }
 
+    public function testSingularVsArray0() {
+        $obj = new Object($this->actor, $this->space);
+        $comment = new Comment($this->actor, $obj);
+        $this->actor->registerOutgoingEdges(Comment::class);
+        $obj->registerIncomingEdges(Comment::class);
+        $this->assertSame($obj->getComments()[0]->id(), $obj->getComment()->id());
+        $this->assertSame($obj->getComments()[0]->id(), $this->actor->getComment()->id());
+    }
+
     public function testComplicatedCallable() {
         $actor = new Actor($this->space);
         

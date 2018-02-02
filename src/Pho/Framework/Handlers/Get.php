@@ -51,25 +51,25 @@ class Get implements HandlerInterface
             return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
         elseif(static::edgeMethodExistsSingular($pack, $name, Direction::out())) {
-            return Utils::pickSingular(static::getEdgeNodes($particle, $pack, $name, Direction::out()));
+            return Utils::pickSingular(static::getEdgeNodes($particle, $pack, $name, Direction::out(), true));
         }   
         elseif(static::edgeMethodExists($pack, $name, Direction::in())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
         elseif(static::edgeMethodExistsSingular($pack, $name, Direction::in())) {
-            return Utils::pickSingular(static::getEdgeNodes($particle, $pack, $name, Direction::in()));
+            return Utils::pickSingular(static::getEdgeNodes($particle, $pack, $name, Direction::in(), true));
         }
         elseif(static::edgeCallableExists($pack, $name, Direction::out())) {
             return static::getEdgeItself($particle, $pack, $name, Direction::out());
         }  
         elseif(static::edgeCallableExistsSingular($pack, $name, Direction::out())) {
-            return Utils::pickSingular(static::getEdgeItself($particle, $pack, $name, Direction::out()));
+            return Utils::pickSingular(static::getEdgeItself($particle, $pack, $name, Direction::out(), true));
         } 
         elseif(static::edgeCallableExists($pack, $name, Direction::in())) {
             return static::getEdgeItself($particle, $pack, $name, Direction::in());
         }
         elseif(static::edgeCallableExistsSingular($pack, $name, Direction::in())) {
-            return Utils::pickSingular(static::getEdgeItself($particle, $pack, $name, Direction::in()));
+            return Utils::pickSingular(static::getEdgeItself($particle, $pack, $name, Direction::in(), true));
         }
         elseif( Utils::fieldExists($pack["fields"], ($name=ucfirst($name))) ) {
             return static::getField($particle, $pack["fields"], $name, $args);
@@ -197,6 +197,7 @@ class Get implements HandlerInterface
      * @param array  $pack Holds cargo variables extracted by loaders.
      * @param string $name The edge node label in plural.
      * @param Direction  $direction The direction of the edge adjacent nodes to look up.
+     * @param bool  $singular Is this for a singular call
      * 
      * @return array The edge nodes.
      */
@@ -204,7 +205,8 @@ class Get implements HandlerInterface
         ParticleInterface $particle, 
         array $pack,
         string $name,
-        Direction $direction 
+        Direction $direction,
+        bool $singular = false 
         ): array
     {
         // $name = strtolower($name); // this is now taken care of beforehand.
@@ -212,10 +214,11 @@ class Get implements HandlerInterface
         $node_adj = static::ADJACENCY_EQUIVALENT[$direction]; // in->tail, out->head
         $cargo = $pack[$direction];
         $edges = $particle->edges()->$direction();
+        $haystack = $singular ? "singularLabel_class_pairs" : "label_class_pairs";
         $return = [];
         array_walk(
-            $edges, function ($item, $key) use (&$return, $name, $cargo, $node_adj) {
-                if($item instanceof $cargo->label_class_pairs[$name]) {
+            $edges, function ($item, $key) use (&$return, $name, $cargo, $node_adj, $haystack) {
+                if($item instanceof $cargo->$haystack[$name]) {
                     $return[] = $item->$node_adj()->node();
                 }
             }
@@ -230,6 +233,7 @@ class Get implements HandlerInterface
      * @param array  $pack Holds cargo variables extracted by loaders.
      * @param string $name The edge node label in plural.
      * @param Direction  $direction The direction of the edge adjacent nodes to look up.
+     * @param bool $singular Is this for a singular call
      * 
      * @return array The edge nodes.
      */
@@ -237,13 +241,15 @@ class Get implements HandlerInterface
         ParticleInterface $particle, 
         array $pack,
         string $name,
-        Direction $direction 
+        Direction $direction,
+        bool $singular = false
         ): array
     {
         // $name = strtolower($name); // this is now taken care of beforehand.
         $direction = (string) $direction;
         $cargo = $pack[$direction];
-        $edges = $particle->edges()->$direction($cargo->callable_edge_label_class_pairs[$name]);
+        $haystack = $singular ? "callable_edge_singularLabel_class_pairs" : "callable_edge_label_class_pairs";
+        $edges = $particle->edges()->$direction($cargo->$haystack[$name]);
         return array_values(iterator_to_array($edges));
     }
 
