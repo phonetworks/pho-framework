@@ -46,3 +46,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 
 ## 9.x to 9.1
 * Tail/Head callables introduced. Now you can call directly edges via getters (useful for examples like Message, Comment)
+
+## 9.1 to 9.2
+* Singular picking enabled. getComments()[0] = getComment()
