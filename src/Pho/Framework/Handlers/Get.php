@@ -50,20 +50,46 @@ class Get implements HandlerInterface
         if(static::edgeMethodExists($pack, $name, Direction::out())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
+        elseif(static::edgeMethodExistsSingular($pack, $name, Direction::out())) {
+            $return = static::getEdgeNodes($particle, $pack, $name, Direction::out());
+            if(count($return)>=1)
+                return $return[0];
+            return $return;
+        }   
         elseif(static::edgeMethodExists($pack, $name, Direction::in())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
+        elseif(static::edgeMethodExistsSingular($pack, $name, Direction::in())) {
+            $return = static::getEdgeNodes($particle, $pack, $name, Direction::in());
+            if(count($return)>=1)
+                return $return[0];
+            return $return;
+        }
         elseif(static::edgeCallableExists($pack, $name, Direction::out())) {
             return static::getEdgeItself($particle, $pack, $name, Direction::out());
-        }   
+        }  
+        elseif(static::edgeCallableExistsSingular($pack, $name, Direction::out())) {
+            return static::getEdgeItself($particle, $pack, $name, Direction::out());
+            if(count($return)>=1)
+                return $return[0];
+            return $return;
+        } 
         elseif(static::edgeCallableExists($pack, $name, Direction::in())) {
             return static::getEdgeItself($particle, $pack, $name, Direction::in());
+        }
+        elseif(static::edgeCallableExistsSingular($pack, $name, Direction::in())) {
+            return static::getEdgeItself($particle, $pack, $name, Direction::in());
+            if(count($return)>=1)
+                return $return[0];
+            return $return;
         }
         elseif( Utils::fieldExists($pack["fields"], ($name=ucfirst($name))) ) {
             return static::getField($particle, $pack["fields"], $name, $args);
         }
         throw new \Pho\Framework\Exceptions\InvalidParticleMethodException(__CLASS__, $name);
     }
+    
+    
 
     /**
      * Returns the field value
@@ -103,6 +129,31 @@ class Get implements HandlerInterface
     {
         return in_array($name, $pack[(string) $direction]->labels);
     }
+    
+    /**
+     * Whether the given method is available for incoming or outgoing edges.
+     *
+     * Works similarly to ```edgeMethodExists``` with the difference of looking
+     * up singular labels. Example:
+     *
+     * > ```getComment()``` is the same as ```getComments()[0]```
+     *
+     * @see edgeMethodExists
+     *
+     * @param array $pack Holds incoming and outgoing cargos.
+     * @param string $name Method name. Queried among incoming and outgoing labels.
+     * @param Direction $direction Direction in question; in or out.
+     * 
+     * @return bool
+     */
+    protected static function edgeMethodExistsSingular(
+        array $pack,
+        string $name,
+        Direction $direction 
+        ): bool
+    {
+        return in_array($name, $pack[(string) $direction]->singularLabels);
+    }
 
     /**
      * Whether the given method is available for incoming or outgoing edge callable.
@@ -120,6 +171,34 @@ class Get implements HandlerInterface
         ): bool
     {
         return !is_null($pack[(string) $direction]->callable_edge_labels) && in_array($name, $pack[(string) $direction]->callable_edge_labels);
+    }
+    
+    /**
+     * Whether the given method is available for incoming or outgoing edge callable.
+     *
+     * Works similarly to ```edgeCallableExists``` with the difference of looking
+     * up singular labels. Example:
+     *
+     * > ```getComment()``` is the same as ```getComments()[0]```
+     *
+     * @see edgeCallableExists
+     *
+     * @param array $pack Holds incoming and outgoing cargos.
+     * @param string $name Method name. Queried among incoming and outgoing labels.
+     * @param Direction $direction Direction in question; in or out.
+     * 
+     * @return bool
+     */
+    protected static function edgeCallableExistsSingular(
+        array $pack,
+        string $name,
+        Direction $direction 
+        ): bool
+    {
+        return !is_null($pack[(string) $direction]->callable_edge_singularLabels) 
+                && 
+                in_array($name, $pack[(string) $direction]->callable_edge_singularLabels)
+        ;
     }
 
 
