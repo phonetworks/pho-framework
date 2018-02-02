@@ -56,5 +56,21 @@ class Utils
                 return $name;
             throw new \Exception("Cannot resolve field name.");
         }
+    
+    /**
+     * A helper method to pick a single element only.
+     *
+     * Used by Get
+     *
+     * @param ?array $elements
+     *
+     * @return mixed A single element or null
+     */
+    public static function pickSingular(?array $elements) /*:mixed*/
+    {
+        if(!is_null($elements) && is_array($elements) && count($elements) >= 1)
+            return $elements[0];
+        return $elements;
+    }
 
 }
