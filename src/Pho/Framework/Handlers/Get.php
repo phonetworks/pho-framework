@@ -177,7 +177,7 @@ class Get implements HandlerInterface
         $direction = (string) $direction;
         $cargo = $pack[$direction];
         $edges = $particle->edges()->$direction($cargo->callable_edge_label_class_pairs[$name]);
-        return iterator_to_array($edges);
+        return array_values(iterator_to_array($edges));
     }
 
 }
