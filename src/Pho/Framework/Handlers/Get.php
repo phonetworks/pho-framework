@@ -51,37 +51,25 @@ class Get implements HandlerInterface
             return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
         elseif(static::edgeMethodExistsSingular($pack, $name, Direction::out())) {
-            $return = static::getEdgeNodes($particle, $pack, $name, Direction::out());
-            if(count($return)>=1)
-                return $return[0];
-            return $return;
+            return Utils::pickSingular(static::getEdgeNodes($particle, $pack, $name, Direction::out()));
         }   
         elseif(static::edgeMethodExists($pack, $name, Direction::in())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::in());
         }
         elseif(static::edgeMethodExistsSingular($pack, $name, Direction::in())) {
-            $return = static::getEdgeNodes($particle, $pack, $name, Direction::in());
-            if(count($return)>=1)
-                return $return[0];
-            return $return;
+            return Utils::pickSingular(static::getEdgeNodes($particle, $pack, $name, Direction::in()));
         }
         elseif(static::edgeCallableExists($pack, $name, Direction::out())) {
             return static::getEdgeItself($particle, $pack, $name, Direction::out());
         }  
         elseif(static::edgeCallableExistsSingular($pack, $name, Direction::out())) {
-            return static::getEdgeItself($particle, $pack, $name, Direction::out());
-            if(count($return)>=1)
-                return $return[0];
-            return $return;
+            return Utils::pickSingular(static::getEdgeItself($particle, $pack, $name, Direction::out()));
         } 
         elseif(static::edgeCallableExists($pack, $name, Direction::in())) {
             return static::getEdgeItself($particle, $pack, $name, Direction::in());
         }
         elseif(static::edgeCallableExistsSingular($pack, $name, Direction::in())) {
-            return static::getEdgeItself($particle, $pack, $name, Direction::in());
-            if(count($return)>=1)
-                return $return[0];
-            return $return;
+            return Utils::pickSingular(static::getEdgeItself($particle, $pack, $name, Direction::in()));
         }
         elseif( Utils::fieldExists($pack["fields"], ($name=ucfirst($name))) ) {
             return static::getField($particle, $pack["fields"], $name, $args);
