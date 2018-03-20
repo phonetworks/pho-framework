@@ -171,8 +171,7 @@ class FieldHelper
                 case "lessThan":
                     Assert::$constraint($this->value, $constraint_val);
                     break;
-                                   
-                //case "uuid":
+                               
                 case "id":
                     try {
                         LibGraph\ID::fromString($this->value);
@@ -183,7 +182,10 @@ class FieldHelper
                     break;
                 
                 case "regex":
-                    Assert::$constraint($this->value, "/".addslashes($constraint_val)."/");
+                    if($constraint_val[0]!="/")
+                        Assert::$constraint($this->value, "/".addslashes($constraint_val)."/");
+                    else
+                        Assert::$constraint($this->value, $constraint_val);
                     break;
              } 
         }
