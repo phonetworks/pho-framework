@@ -182,9 +182,10 @@ class FieldHelper
                     break;
                 
                 case "regex":
+                    /*
                     if($constraint_val[0]!="/")
                         Assert::$constraint($this->value, "/".addslashes($constraint_val)."/");
-                    else
+                    else*/
                         Assert::$constraint($this->value, $constraint_val);
                     break;
              } 
