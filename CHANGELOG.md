@@ -52,3 +52,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 
 ## 9.2 to 9.3
 * Singular picking enabled. getComments()[0] = getComment()
+
+## 9.3 to 9.4
+* regex delimiters are now a must
