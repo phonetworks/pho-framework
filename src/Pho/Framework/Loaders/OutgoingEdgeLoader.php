@@ -102,10 +102,10 @@ class OutgoingEdgeLoader extends AbstractLoader
                             // instead of string:::string:::(string:::)?
                             // which would be trimmed as string:::string:::(string::
                             // show: string:::string(:::string?)
-                            $pattern = substr($pattern, sprintf(":::(%s)?", $_pattern), sprintf("(:::%s)?", substr($_pattern, 0, -3))); 
+                            $pattern = str_replace(sprintf(":::(%s)?", $_pattern), sprintf("(:::%s)?", substr($_pattern, 0, -3)), $pattern); 
                         }
                         else { // case of (string:::)?
-                            $pattern = substr($pattern, ":::)?", ")?");
+                            $pattern = str_replace(":::)?", ")?", $pattern);
                         }
                         $formation_patterns[$formable] = $pattern;
                     }
