@@ -92,7 +92,22 @@ class OutgoingEdgeLoader extends AbstractLoader
                             else
                                 $pattern .= $_pattern;
                         }
-                        $formation_patterns[$formable] = substr(str_replace("\\", ":", $pattern),0 ,-3);
+                        $pattern = str_replace("\\", ":", $pattern);
+                        if($pattern[strlen($pattern)-1]!="?") {
+                            $pattern = substr($pattern, 0 ,-3);
+                        }
+                        elseif($pattern[0]!="(") { 
+                            // if the last char is optional
+                            // like: string:::string:::string?
+                            // instead of string:::string:::(string:::)?
+                            // which would be trimmed as string:::string:::(string::
+                            // show: string:::string(:::string?)
+                            $pattern = substr($pattern, sprintf(":::(%s)?", $_pattern), sprintf("(:::%s)?", substr($_pattern, 0, -3))); 
+                        }
+                        else { // case of (string:::)?
+                            $pattern = substr($pattern, ":::)?", ")?");
+                        }
+                        $formation_patterns[$formable] = $pattern;
                     }
                     $cargo->formative_patterns[$_method] = $formation_patterns;
                 }
