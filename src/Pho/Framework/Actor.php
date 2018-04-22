@@ -144,7 +144,9 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface, \SplObserv
      */
     public function notifications(): NotificationList
     {
-        return $this->notifications;
+        if(isset($this->notifications))
+            return $this->notifications;
+        return new NotificationList($this);
     }
 
     /**
