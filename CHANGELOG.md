@@ -55,3 +55,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 
 ## 9.3 to 9.4
 * regex delimiters are now a must
+
+## 9.4 to 10.0
+* removed sabre-event dependency
+* no more observer pattern which was complicating.
