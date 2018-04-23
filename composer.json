@@ -19,9 +19,8 @@
     "require": {
         "php":">=5.3.0",
         "zendframework/zend-file": "*",
-        "phonetworks/pho-lib-graph": "^6.2",
+        "phonetworks/pho-lib-graph": "^7.1",
         "psr/log": "^1.0",
-        "sabre/event": "^5.0",
         "webmozart/assert": "^1.2",
         "danielstjules/stringy": "^3.0",
         "vlucas/valitron": "^1.4"
