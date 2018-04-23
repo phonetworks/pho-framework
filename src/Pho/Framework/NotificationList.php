@@ -1,17 +1,15 @@
 <?php
 namespace Pho\Framework;
 
-class NotificationList implements \SplSubject
+class NotificationList 
 {
 
     protected $owner;
     protected $list = [];
-    protected $observers = [];
 
     public function __construct(Actor $owner, array $data = [])
     {
         $this->owner = $owner;
-        $this->attach($owner);
         $this->import($data);
     }
 
@@ -48,50 +46,5 @@ class NotificationList implements \SplSubject
             $read[] = array_pop($this->list);
         }
         return $read;
-    }
-
-
-
-    /**********************************************
-     * The rest are \SplSubject functions.
-     *********************************************/
-
-    /**
-     * Adds a new observer to the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function attach(\SplObserver $observer): void 
-    {
-        $this->observers[] = $observer;
-    }
-    
-    /**
-     * Removes an observer from the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function detach(\SplObserver $observer): void 
-    {
-        $key = array_search($observer, $this->observers, true);
-        if($key) {
-            unset($this->observers[$key]);
-        }
-    }
-
-    /**
-     * Notifies observers about deletion
-     * 
-     * @return void
-     */
-    public function notify(): void
-    {
-        foreach ($this->observers as $value) {
-            $value->update($this);
-        }
     }
 }
