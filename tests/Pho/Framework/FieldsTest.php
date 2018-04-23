@@ -183,7 +183,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
-                        "regex" => "^A[0-9]+1\$"
+                        "regex" => "/^A[0-9]+1\$/"
                     ]
                 ]
             ];
@@ -198,7 +198,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
-                        "regex" => "^A[0-9]+1\$"
+                        "regex" => "/^A[0-9]+1\$/"
                     ]
                 ]
             ];
@@ -269,7 +269,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
 
     public function testJsonFields() {
         $obj = new class($this->actor, $this->space)  extends Object {
-            const FIELDS = '{"MyField":{"constraints":{"regex":"^A[0-9]+1$"}}}';
+            const FIELDS = '{"MyField":{"constraints":{"regex":"/^A[0-9]+1$/"}}}';
         };
         $field_val = "A883841";
         $obj->setMyField($field_val);
@@ -280,7 +280,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         $ref = 0;
         $another_actor = new Actor($this->space);
         $obj = new class($this->actor, $another_actor)  extends AbstractEdge {
-            const FIELDS = '{"my_field":{"constraints":{"regex":"^A[0-9]+1$"}}}';
+            const FIELDS = '{"my_field":{"constraints":{"regex":"/^A[0-9]+1$/"}}}';
         };
         $obj->on("modified", function() use(&$ref) {
             $ref++;
@@ -300,7 +300,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
         $past_time = 1502224636;
         $another_actor = new Actor($this->space);
         $obj = new class($this->actor, $another_actor, null, $field_val1)  extends AbstractEdge {
-            const FIELDS = '{"my_field":{"constraints":{"regex":"^A[0-9]+1$"}},"created_at":{"directives":{"now":true
+            const FIELDS = '{"my_field":{"constraints":{"regex":"/^A[0-9]+1$/"}},"created_at":{"directives":{"now":true
 }},"with_default":{"directives":{"default":"defne"}}}'; 
             // '{"my_field":{"constraints":{"regex":"^A[0-9]+1$"}},"created_at":{"directives":{"now":true}}}';
         };
