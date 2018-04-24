@@ -74,7 +74,7 @@ trait ParticleTrait
      * 
      * @return void
      */
-    public function initializeParticle(): void
+    protected function initializeParticle(): void
     {
         $this->addEdges("incoming",
             ActorOut\Read::class, 

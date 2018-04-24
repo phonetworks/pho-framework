@@ -44,4 +44,13 @@ class SignalsTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($ref1);
     }
 
+    public function testNodeAdded() {
+        $ref = 0;
+        $this->graph->on("node.added", function($node) use(&$ref) {
+            $ref++;
+        });
+        $actor = new Actor($this->graph);
+        $this->assertEquals(1, $ref);
+    }
+
 }
