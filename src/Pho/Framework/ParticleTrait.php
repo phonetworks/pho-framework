@@ -83,10 +83,6 @@ trait ParticleTrait
         );
 
         $this->autoRegisterOutgoingEdges();
-
-        if(method_exists($this, "onIncomingEdgeRegistration")) {
-            $this->onIncomingEdgeRegistration();
-        }
         
         $this->initializeHandler();
         $this->context()->emit("node.added", [$this]);
