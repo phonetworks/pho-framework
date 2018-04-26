@@ -47,7 +47,10 @@ class Get implements HandlerInterface
         ) /*:  array*/
     {
         $name =  lcfirst(substr($name, 3)); // we don't camelize because we want the method to come in proper format.
-        if(static::edgeMethodExists($pack, $name, Direction::out())) {
+        if($name==='id') {
+            return $particle->id();
+        }
+        elseif(static::edgeMethodExists($pack, $name, Direction::out())) {
             return static::getEdgeNodes($particle, $pack, $name, Direction::out());
         }   
         elseif(static::edgeMethodExistsSingular($pack, $name, Direction::out())) {
