@@ -29,7 +29,7 @@ namespace Pho\Framework {
             $actor = new Actor($this->graph);
             $actor->registerOutgoingEdges(\Pho\Framework\ActorOut\Post::class);
             $edge = $actor->post();
-            $this->assertInstanceOf(Object::class, $edge->head()->node());
+            $this->assertInstanceOf(Obj::class, $edge->head()->node());
             $this->assertTrue($edge->predicate()->formative());
             $this->assertFalse($edge->predicate()->consumer());
         }
@@ -38,7 +38,7 @@ namespace Pho\Framework {
             $actor = new Actor($this->graph);
             $actor->registerOutgoingEdges(\Pho\Framework\ActorOut\ConsumerPost::class);
             $object = $actor->consumerPost();
-            $this->assertInstanceOf(Object::class, $object);
+            $this->assertInstanceOf(Obj::class, $object);
             $actor_edges = $actor->edges()->out();
             $this->assertTrue($actor_edges->current()->predicate()->formative());
             $this->assertTrue($actor_edges->current()->predicate()->consumer());
@@ -55,7 +55,7 @@ namespace Pho\Framework {
 
     }
 
-    class MockFable extends Object {
+    class MockFable extends Obj {
         private $x;
         public function __construct(Actor $creator, ContextInterface $context, string $x) {
             parent::__construct($creator, $context);
@@ -74,7 +74,7 @@ namespace Pho\Framework\ActorOut {
         const HEAD_LABELS = "posts";
         const TAIL_LABEL = "poster";
         const TAIL_LABELS = "posters";
-        const FORMABLES = [\Pho\Framework\Object::class, \Pho\Framework\MockFable::class]; 
+        const FORMABLES = [\Pho\Framework\Obj::class, \Pho\Framework\MockFable::class]; 
     }
     class PostPredicate extends WritePredicate {
         const T_FORMATIVE = true;
@@ -84,7 +84,7 @@ namespace Pho\Framework\ActorOut {
         const HEAD_LABELS = "posts";
         const TAIL_LABEL = "poster";
         const TAIL_LABELS = "posters";
-        const FORMABLES = [\Pho\Framework\Object::class, \Pho\Framework\MockFable::class]; 
+        const FORMABLES = [\Pho\Framework\Obj::class, \Pho\Framework\MockFable::class]; 
     }
     class ConsumerPostPredicate extends WritePredicate {
         const T_FORMATIVE = true;

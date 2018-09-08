@@ -20,7 +20,7 @@ use Pho\Framework;
  * {@link Pho\Framework\Actor} particle. 
  * 
  * The "writes" name comes from the UNIX world. It represents 
- * creation or editing of new {@link Pho\Framework\Object}s.
+ * creation or editing of new {@link Pho\Framework\Obj}s.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
@@ -31,7 +31,7 @@ class Write extends Subscribe
     const HEAD_LABELS = "writes";
     const TAIL_LABEL = "writer";
     const TAIL_LABELS = "writers";
-    const SETTABLES = [Framework\Graph::class, Framework\Object::class]; /* inherits the values in Edits */
+    const SETTABLES = [Framework\Graph::class, Framework\Obj::class]; /* inherits the values in Edits */
 
 
     protected function execute(): void

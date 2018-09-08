@@ -27,7 +27,7 @@ class EdgeRolesTest extends \PHPUnit\Framework\TestCase
 
     public function testDefaultEdgeRole() {
         $node1 = new Actor($this->graph);
-        $node2 = new Object($node1, $this->graph);
+        $node2 = new Obj($node1, $this->graph);
         $edge = new class($node1, $node2) extends AbstractEdge {};
         $this->assertFalse($edge->predicate()->consumer());
         $this->assertFalse($edge->predicate()->notifier());
@@ -48,7 +48,7 @@ class EdgeRolesTest extends \PHPUnit\Framework\TestCase
 
     public function testWriteEdge() {
         $actor = new Actor($this->graph);
-        $object = new Object($actor, $this->graph);
+        $object = new Obj($actor, $this->graph);
         $edge = $actor->write($object);
         $this->assertFalse($edge->predicate()->consumer());
         $this->assertFalse($edge->predicate()->notifier());
@@ -58,7 +58,7 @@ class EdgeRolesTest extends \PHPUnit\Framework\TestCase
 
     public function testReadEdge() {
         $actor = new Actor($this->graph);
-        $object = new Object($actor, $this->graph);
+        $object = new Obj($actor, $this->graph);
         $object_dup = $actor->read($object);
         $this->assertEquals($object->id(), $object_dup->id());
         $this->assertTrue($object_dup->edges()->in()->current()->predicate()->consumer());
@@ -69,7 +69,7 @@ class EdgeRolesTest extends \PHPUnit\Framework\TestCase
 
     public function testSubscribeEdge() {
         $actor = new Actor($this->graph);
-        $object = new Object($actor, $this->graph);
+        $object = new Obj($actor, $this->graph);
         $edge = $actor->subscribe($object);
         $this->assertFalse($edge->predicate()->consumer());
         $this->assertFalse($edge->predicate()->notifier());
@@ -79,7 +79,7 @@ class EdgeRolesTest extends \PHPUnit\Framework\TestCase
     
     public function testMentionEdge() {
         $actor = new Actor($this->graph);
-        $object = new Object($actor, $this->graph);
+        $object = new Obj($actor, $this->graph);
         $actor2 = new Actor($this->graph);
         $edge = $object->mention($actor2);
         $this->assertFalse($edge->predicate()->consumer());

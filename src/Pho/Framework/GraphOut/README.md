@@ -1,6 +1,6 @@
 ## Important Note
 
-In contrast to Actor and Object, Graph has no regular edges built-in.
+In contrast to Actor and Obj, Graph has no regular edges built-in.
 
 Graph extends Pho\Lib\SubGraph, hence comes with the **"contains"** 
 method which is a quasi-edge, but not quite.

@@ -138,7 +138,7 @@ class FieldHelper
                         /*
                         if($constraint_val == "uuid" || $constraint_val == "udid") {
                             try {
-                                LibGraph\ID::fromString($this->value);
+                                ID::fromString($this->value);
                             }
                             catch(LibGraph\Exceptions\MalformedIDException $e) {
                                 throw new \InvalidArgumentException;
@@ -174,7 +174,7 @@ class FieldHelper
                                
                 case "id":
                     try {
-                        LibGraph\ID::fromString($this->value);
+                        ID::fromString($this->value);
                     }
                     catch(LibGraph\Exceptions\MalformedIDException $e) {
                         throw new \InvalidArgumentException;

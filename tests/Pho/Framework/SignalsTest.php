@@ -38,7 +38,7 @@ class SignalsTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($ref1);
         $this->assertFalse($ref2);
         $friend->subscribe($actor);
-        $actor->write(new Object($actor, $this->graph));
+        $actor->write(new Obj($actor, $this->graph));
         $this->assertTrue($ref2);
         $this->assertEquals(1, $friend->notifications()->count());
         $this->assertTrue($ref1);

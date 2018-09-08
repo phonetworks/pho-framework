@@ -11,7 +11,7 @@
 
 namespace Pho\Framework;
 
-class DirectedTestObject extends Object
+class DirectedTestObject extends Obj
 {
     const FIELDS = [
         "my_field" => [
@@ -32,7 +32,7 @@ class DirectedTestObject extends Object
     ];
 }
 
-class ConstraintedTestObject extends Object
+class ConstraintedTestObject extends Obj
 {
     const FIELDS = [
         "my_field" => [
@@ -53,7 +53,7 @@ class ConstraintedTestObject extends Object
     ];
 }
 
-class ExtraConstraintedTestObject extends Object
+class ExtraConstraintedTestObject extends Obj
 {
     const FIELDS = [
         "my_date" => [
@@ -93,7 +93,7 @@ class ExtraConstraintedTestObject extends Object
     ];
 }
 
-class sha1Object extends Object
+class sha1Object extends Obj
 {
     const FIELDS = [
         "my_field" => [
@@ -150,7 +150,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testCamelCaseVariableWithUuidConstraint() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "myField" => [
                     "constraints" => [
@@ -159,13 +159,13 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
                 ]
             ];
         };
-        $uuid = \Pho\Lib\Graph\ID::generate($obj);
+        $uuid = ID::generate($obj);
         $obj->setMyField($uuid);
         $this->assertEquals($uuid, $obj->getMyField());
     }
 
     public function testUuidConstraintWithNegative() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "myField" => [
                     "constraints" => [
@@ -179,7 +179,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testRegexConstraintWithPositive() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
@@ -194,7 +194,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testRegexConstraintWithNegative() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
@@ -208,7 +208,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testFormatConstraintsNegative() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
@@ -222,7 +222,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testDateConstraints() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
@@ -238,7 +238,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testDateConstraintsPositive() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
@@ -253,7 +253,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testFormatConstraintsPositive() {
-        $obj = new class($this->actor, $this->space) extends Object {
+        $obj = new class($this->actor, $this->space) extends Obj {
             const FIELDS = [
                 "MyField" => [
                     "constraints" => [
@@ -268,7 +268,7 @@ class FieldsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testJsonFields() {
-        $obj = new class($this->actor, $this->space)  extends Object {
+        $obj = new class($this->actor, $this->space)  extends Obj {
             const FIELDS = '{"MyField":{"constraints":{"regex":"/^A[0-9]+1$/"}}}';
         };
         $field_val = "A883841";

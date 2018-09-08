@@ -42,6 +42,13 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface
      */
     protected $notifications;
 
+    /**
+     * ID generator is now Framework's own ID class
+     *
+     * @var string
+     */
+    protected $id_generator = ID::class;
+
     public function __construct(ContextInterface $context) 
     {
         parent::__construct($context);

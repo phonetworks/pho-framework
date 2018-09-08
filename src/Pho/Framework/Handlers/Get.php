@@ -12,7 +12,6 @@
 namespace Pho\Framework\Handlers;
 
 use Pho\Framework\ParticleInterface;
-use Pho\Lib\Graph\ID;
 use Pho\Lib\Graph\Direction;
 use Pho\Framework\Cargo\FieldsCargo;
 

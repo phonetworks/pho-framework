@@ -27,7 +27,7 @@ $actor = new Framework\Actor($graph);
 printf("Actor created with id: %s", $actor->id());
 
 function createObject($actor, $graph) {
-  $object = new Framework\Object($actor, $graph);
+  $object = new Framework\Obj($actor, $graph);
   printf("Object created with id: %s", $object->id());
   return $actor->writes($object);
 }

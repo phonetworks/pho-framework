@@ -12,6 +12,9 @@
 namespace Pho\Framework;
 
 //use Pho\Lib\Graph\Predicate;
+use Pho\Lib\Graph\SubGraph;
+use Pho\Lib\Graph\Node;
+use Pho\Lib\Graph\Edge;
 
 class IDTest extends \PHPUnit\Framework\TestCase 
 {
@@ -26,9 +29,11 @@ class IDTest extends \PHPUnit\Framework\TestCase
     }
 
 
+
+
     public function testActorEdge() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = $actor->write($object);
         $subscription = $actor->subscribe($object);
         $this->assertEquals(4, (int) $actor->id()->toString()[0]);

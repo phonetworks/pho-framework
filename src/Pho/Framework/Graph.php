@@ -32,6 +32,13 @@ class Graph extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
 
     use ParticleTrait;
 
+    /**
+     * ID generator is now Framework's own ID class
+     *
+     * @var string
+     */
+    protected $id_generator = ID::class;
+
     public function __construct(Actor $creator, ContextInterface $context) 
     {
         parent::__construct($context);

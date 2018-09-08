@@ -11,13 +11,12 @@
 
 namespace Pho\Framework;
 
-use Pho\Lib\Graph\ID;
 use Pho\Lib\Graph\Node;
 
 /**
  * An edge example, with simple callable names.
  */
-class Comment extends AbstractEdge // Actor -> Object (Comment)
+class Comment extends AbstractEdge // Actor -> Obj (Comment)
 {
     const TAIL_CALLABLE_LABEL = "comment";
     const TAIL_CALLABLE_LABELS = "comments";
@@ -58,7 +57,7 @@ class CallableTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testSimpleCallable() {
-        $obj = new Object($this->actor, $this->space);
+        $obj = new Obj($this->actor, $this->space);
         $comment = new Comment($this->actor, $obj);
         $this->actor->registerOutgoingEdges(Comment::class);
         $obj->registerIncomingEdges(Comment::class);
@@ -71,7 +70,7 @@ class CallableTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testSingularVsArray0() {
-        $obj = new Object($this->actor, $this->space);
+        $obj = new Obj($this->actor, $this->space);
         $comment = new Comment($this->actor, $obj);
         $this->actor->registerOutgoingEdges(Comment::class);
         $obj->registerIncomingEdges(Comment::class);

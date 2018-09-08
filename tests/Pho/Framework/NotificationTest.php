@@ -29,7 +29,7 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
         $actor = new Actor($this->graph);
         $friend = new Actor($this->graph);
         $friend->subscribe($actor);
-        $obj = new Object($actor, $this->graph);
+        $obj = new Obj($actor, $this->graph);
         $edge = $actor->write($obj);
         $this->assertEquals(0, $actor->notifications()->count());
         $this->assertEquals(1, $friend->notifications()->count());
@@ -41,7 +41,7 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
     public function testMentionNotifications() {
         $actor = new Actor($this->graph);
         $friend = new Actor($this->graph);
-        $obj = new Object($actor, $this->graph);
+        $obj = new Obj($actor, $this->graph);
         $edge = $obj->mention($friend);
         $this->assertEquals(0, $actor->notifications()->count());
         $this->assertEquals(1, $friend->notifications()->count());
@@ -56,7 +56,7 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
         $friend2 = new Actor($this->graph);
         $friend1->subscribe($actor);
         $friend2->subscribe($actor);
-        $obj = new Object($actor, $this->graph);
+        $obj = new Obj($actor, $this->graph);
         $edge = $actor->write($obj);
         $this->assertEquals(0, $actor->notifications()->count());
         $this->assertEquals(1, $friend1->notifications()->count());
@@ -69,7 +69,7 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
         $actor = new Actor($this->graph);
         $friend1 = new Actor($this->graph);
         $friend2 = new Actor($this->graph);
-        $obj = new Object($actor, $this->graph);
+        $obj = new Obj($actor, $this->graph);
         $edge1 = $obj->mention($friend1);
         $edge2 = $obj->mention($friend2);
         $this->assertEquals(0, $actor->notifications()->count());
@@ -81,7 +81,7 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
 
     public function testSerialization() {
         $actor = new Actor($this->graph);
-        $obj = new Object($actor, $this->graph);
+        $obj = new Obj($actor, $this->graph);
         $edge = $obj->mention($actor);
         $this->assertEquals(1,  $actor->notifications()->count());
         $this->assertArrayHasKey("notifications",  $actor->toArray());

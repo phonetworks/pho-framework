@@ -97,6 +97,13 @@ abstract class AbstractEdge
     protected $call_setup = false;
 
     /**
+     * ID generator is now Framework's own ID class
+     *
+     * @var string
+     */
+    protected $id_generator = ID::class;
+
+    /**
      * Constructor.
      *
      * @param ParticleInterface $tail
@@ -216,7 +223,7 @@ abstract class AbstractEdge
     public function unserialize(/* mixed */ $data): void
     {
         $data = unserialize($data);
-        $this->id = Graph\ID::fromString($data["id"]);
+        $this->id = ID::fromString($data["id"]);
         $this->tail_id = $data["tail"];
         $this->head_id = $data["head"];
         if (class_exists($data["predicate"])) {

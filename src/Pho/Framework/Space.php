@@ -22,6 +22,12 @@ namespace Pho\Framework;
  */
 class Space extends \Pho\Lib\Graph\Graph implements ContextInterface
 {
+    /**
+     * ID generator is now Framework's own ID class
+     *
+     * @var string
+     */
+    protected $id_generator = ID::class;
 
     /**
      * Constructor.

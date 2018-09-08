@@ -18,7 +18,7 @@ use Pho\Framework\Loaders;
  * The Particle Trait
  * 
  * This constitutes the basis of all particle classes that are part of the
- * Pho Framework; namely {@link Actor},  {@link Frame} and {@link Object}.
+ * Pho Framework; namely {@link Actor},  {@link Frame} and {@link Obj}.
  * 
  * Pho Framework particles extend Pho\Lib\Graph\Node
  * 
@@ -79,7 +79,7 @@ trait ParticleTrait
         $this->addEdges("incoming",
             ActorOut\Read::class, 
             ActorOut\Subscribe::class, 
-            ObjectOut\Mention::class
+            ObjOut\Mention::class
         );
 
         $this->autoRegisterOutgoingEdges();
@@ -160,7 +160,7 @@ trait ParticleTrait
      * The default ones for all nodes are:
      * * ActorOut\Read::class
      * * ActorOut\Subscribe::class
-     * * ObjectOut\Publish::class
+     * * ObjOut\Publish::class
      * 
      * @param ...$classes 
      * 

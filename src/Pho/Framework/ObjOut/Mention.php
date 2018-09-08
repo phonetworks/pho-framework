@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pho\Framework\ObjectOut;
+namespace Pho\Framework\ObjOut;
 
 use Pho\Framework;
 
@@ -17,8 +17,8 @@ use Pho\Framework;
  * Transmits Edge
  * 
  * **"Transmits"** is the only outgoing edge of the 
- * {@link Pho\Framework\Object} particle. It links the
- * Object with other nodes, allowing message passing.
+ * {@link Pho\Framework\Obj} particle. It links the
+ * Obj with other nodes, allowing message passing.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */

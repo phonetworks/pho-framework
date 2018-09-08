@@ -19,7 +19,7 @@ namespace Pho\Framework;
  * 
  * This interface does not hold a method. The classes that implement 
  * this do it, in order to define that they are Pho Framework particles.
- * Otherwise, In Pho Framework, both {@link Actor} and {@link Object} extend 
+ * Otherwise, In Pho Framework, both {@link Actor} and {@link Obj} extend 
  * Pho\Lib\Graph\Node but {@link Frame} doesn't, it extends 
  * Pho\Lib\Graph\SubGraph which is also a subclass of Pho\Lib\Graph\Node
  * but with additional graph-like traits. Therefore this interface provides 

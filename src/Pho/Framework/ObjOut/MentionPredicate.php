@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pho\Framework\ObjectOut;
+namespace Pho\Framework\ObjOut;
 
 
 /**

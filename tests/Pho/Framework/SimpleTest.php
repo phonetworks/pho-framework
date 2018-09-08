@@ -33,7 +33,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     public function testActorEdge() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = $actor->write($object);
         $this->assertInstanceOf(ActorOut\Write::class, $edge);
         $this->assertInstanceOf(Predicate::class, $edge->predicate());
@@ -41,27 +41,27 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     public function testActorPredicate() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = $actor->subscribe($object);
         $this->assertInstanceOf(ActorOut\SubscribePredicate::class, $edge->predicate());
     }
 
     public function testObjectGetter() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = $actor->write($object);
         $this->assertInstanceOf(ActorOut\Write::class, $object->edges()->in()->current());
         $this->assertInstanceOf(Actor::class, $object->getWriters()[0]);
         $this->assertCount(1, $object->getWriters());
         $this->assertCount(1, $actor->getWrites());
         $this->assertInstanceOf(ActorOut\Write::class, $actor->edges()->out()->current());
-        $this->assertInstanceOf(Object::class, $actor->getWrites()[0]);
+        $this->assertInstanceOf(Obj::class, $actor->getWrites()[0]);
     }
 
 
     public function testObjectHaser() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $GLOBALS["dur"] = true;
         $edge = $actor->write($object);
         $this->assertTrue($object->hasWriter($actor->id()));
@@ -72,7 +72,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
      public function testFiltering() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = $actor->write($object);
         $edge = $actor->read($object);
         $this->assertCount(1, $actor->getWrites());
@@ -83,7 +83,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
      */
     public function testEdgeInheritance() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = $actor->write($object);
         $this->assertCount(1, $actor->getSubscriptions());
         $this->assertCount(0, $actor->getReads());
@@ -100,9 +100,9 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     public function testEdgeInvoke() {
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = $actor->write($object);
-        $this->assertInstanceOf(Object::class, $edge());
+        $this->assertInstanceOf(Obj::class, $edge());
         $this->assertEquals($object->id(), $edge()->id());
     }
 
@@ -157,7 +157,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $mock_kernel = \Mockery::mock('StdClass');
         $mock_kernel->shouldReceive('graph')->andReturn($this->space);
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = new class($actor, $object) extends ActorOut\Write {
             public function graph() {
                 return $this->injection("kernel")->graph();
@@ -172,7 +172,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $mock_kernel = \Mockery::mock('StdClass');
         $mock_kernel->shouldReceive('graph')->andReturn($this->space);
         $actor = new Actor($this->space);
-        $object = new Object($actor, $this->space);
+        $object = new Obj($actor, $this->space);
         $edge = new class($actor, $object) extends ActorOut\Write {
             public function graph() {
                 return $this->injection("kernel")->graph();
