@@ -59,3 +59,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 ## 9.4 to 10.0
 * removed sabre-event dependency
 * no more observer pattern which was complicating.
+
+## 10.0 to 11.0
+* Object to Obj
+* moved ID headers off of pho-lib-graph towars this framework
