@@ -41,6 +41,7 @@ class IncomingEdgeLoader extends AbstractLoader
     {
         $obj = new IncomingEdgeLoader($particle->getRegisteredIncomingEdges());
         foreach($obj->cargo->classes as $class) {
+            $class = str_replace("ObjectOut", "ObjOut", $class); // for backwards-compatibility.
             $class_ref = new \ReflectionClass($class);
             $check = false;
             
