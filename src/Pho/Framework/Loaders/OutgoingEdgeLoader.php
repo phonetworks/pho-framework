@@ -41,6 +41,7 @@ class OutgoingEdgeLoader extends AbstractLoader
     {
         $obj = new OutgoingEdgeLoader($particle->getRegisteredOutgoingEdges());
         foreach ($obj->cargo->classes as $class) {
+            $class = str_replace("ObjectOut", "ObjOut", $class); // for backwards-compatibility.
             $cargo = &$obj->cargo;
             $reflector = new \ReflectionClass($class);
                 if(!$reflector->isSubclassOf(Framework\AbstractEdge::class)) { 
