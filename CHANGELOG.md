@@ -63,3 +63,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 ## 10.0 to 11.0
 * Object to Obj
 * moved ID headers off of pho-lib-graph towars this framework
+
+## 11.0 to 11.1
+* added long form formative edges. E.g $node->post also $node->postBlog
