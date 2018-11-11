@@ -54,6 +54,10 @@ class OutgoingEdgeLoader extends AbstractLoader
                     $cargo->formative_label_class_pairs[$_method] = $class;
                     $formation_patterns = [];
                     foreach($reflector->getConstant("FORMABLES") as $formable) {
+                        $formable_reflection = new \ReflectionClass($formable);
+                        $__method = $_method . \Stringy\StaticStringy::upperCamelize($formable_reflection->getShortName());
+                        $cargo->formative_labels[] = $__method;
+                        $cargo->formative_label_class_pairs[$__method] = $class;
                         $pattern = "";
                         // @todo 
                         // we should do this with recursive
@@ -109,6 +113,7 @@ class OutgoingEdgeLoader extends AbstractLoader
                             $pattern = str_replace(":::)?", ")?", $pattern);
                         }
                         $formation_patterns[$formable] = $pattern;
+                        $cargo->formative_patterns[$__method] = [$formable=>$pattern];
                     }
                     $cargo->formative_patterns[$_method] = $formation_patterns;
                 }

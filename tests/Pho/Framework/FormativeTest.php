@@ -44,6 +44,17 @@ namespace Pho\Framework {
             $this->assertTrue($actor_edges->current()->predicate()->consumer());
         }        
 
+        
+        /*
+        // this wouldn't work because Obj::class is abstract
+        public function testSimpleFormationWithConsumerPostLongForm() {
+            $actor = new Actor($this->graph);
+            $actor->registerOutgoingEdges(\Pho\Framework\ActorOut\ConsumerPost::class);
+            $object = $actor->consumerPostObj();
+            $this->assertInstanceOf(Obj::class, $object);
+        } 
+        */
+
         public function testFormationWithArgument() {
             $actor = new Actor($this->graph);
             $actor->registerOutgoingEdges(\Pho\Framework\ActorOut\Post::class);
@@ -51,6 +62,18 @@ namespace Pho\Framework {
             $edge = $actor->post($text);
             $this->assertInstanceOf(MockFable::class, $edge->head()->node());
             $this->assertEquals($text, $edge->head()->sayWhat());
+        }
+
+        public function testFormationWithArgumentLongForm() {
+            $actor = new Actor($this->graph);
+            $actor->registerOutgoingEdges(\Pho\Framework\ActorOut\Post::class);
+            $actor->registerOutgoingEdges(\Pho\Framework\ActorOut\ConsumerPost::class);
+            $text = "this is a good night story.";
+            $edge = $actor->postMockFable($text);
+            $this->assertInstanceOf(MockFable::class, $edge->head()->node());
+            $this->assertEquals($text, $edge->head()->sayWhat());
+            $edge2 = $actor->consumerPostMockFable($text); 
+            $this->assertInstanceOf(MockFable::class, $edge2); // because consumerPost is consumer
         }
 
     }
