@@ -150,6 +150,6 @@ class Gateway
                 }
             }
         }
-        throw new InvalidParticleMethodException(get_class($this->particle), $name);
+        throw new InvalidParticleMethodException(get_class($this->particle), $name, (string) $this->particle->id());
     }
 }
