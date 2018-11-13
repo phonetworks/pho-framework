@@ -31,13 +31,15 @@ class InvalidParticleMethodException extends \Exception
      *
      * @param string $class_name Class name of the particle
      * @param string $method     Invalid method
+     * @param string $id         ID of the particle
      */
-    public function __construct(string $class_name, string $method)
+    public function __construct(string $class_name, string $method, string $id = "unknown")
     {
         parent::__construct();
         $this->message = sprintf(
-            "The particle %s was called with the invalid method: %s",
+            "The particle %s with ID %s was called with the invalid method: %s",
             $class_name,
+            $id,
             $method
         );
     }
