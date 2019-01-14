@@ -42,6 +42,7 @@ class NotificationList
     public function read(int $limit = 5): array
     {
         $read = [];
+        $limit = ( $this->count() < $limit ) ? $this->count() : $limit;
         for($i=0;$i<$limit;$i++) {
             $read[] = array_pop($this->list);
         }
