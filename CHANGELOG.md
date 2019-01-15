@@ -69,3 +69,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 
 ## 11.1 to 11.2
 * added long form formative edges. E.g $node->post also $node->postBlog
+
+## 11.2 to 11.3
+* added SubscribeNotification
