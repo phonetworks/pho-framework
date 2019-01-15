@@ -1,0 +1,30 @@
+<?php
+
+/*
+ * This file is part of the Pho package.
+ *
+ * (c) Emre Sokullu <emre@phonetworks.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Pho\Framework\ActorOut;
+
+/**
+ * The Subscribe notification.
+ * 
+ * @author Emre Sokullu <emre@phonetworks.org>
+ */
+class SubscribeNotification extends \Pho\Framework\AbstractNotification
+{
+    const MSG = "%s has subscribed to you.";
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString(): string
+    {
+        return sprintf(self::MSG, (string) $this->edge()->tail()->id());
+    }
+}
