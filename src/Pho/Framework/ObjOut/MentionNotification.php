@@ -17,13 +17,13 @@ namespace Pho\Framework\ObjOut;
  */
 class MentionNotification extends \Pho\Framework\AbstractNotification
 {
-    const MSG = "%s has mentioned you in";
+    const MSG = "%s has mentioned you";
 
     /**
      * {@inheritdoc}
      */
     public function __toString(): string
     {
-        return sprintf(self::MSG, (string) $this()->tail()->creator()->id());
+        return sprintf(self::MSG, (string) $this->edge()->tail()->creator()->id());
     }
 }

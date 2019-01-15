@@ -304,14 +304,18 @@ trait ParticleTrait
      *************************************************/
 
     /**
-     * Notifies observers about deletion
+     * Sends notification to subscriber particles
+     * 
+     * @todo maybe this should go to Actor class. Not for particles.
      * 
      * @return void
      */
     public function notifySubscribers(AbstractNotification $notification): void
     {
         foreach ($this->getSubscribers() as $subscriber) {
-            $subscriber->notifications()->add($notification);
+            if($subscriber instanceof Actor)
+                $subscriber->notify($notification);
+            // else: log // would be an awful bug, since Actors can subscribe only.
         }
     }
 

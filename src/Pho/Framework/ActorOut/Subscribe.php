@@ -12,6 +12,7 @@
 namespace Pho\Framework\ActorOut;
 
 use Pho\Framework;
+use Pho\Framework\Actor;
 
 /**
  * Subscribe Edge
@@ -35,6 +36,11 @@ class Subscribe extends Framework\AbstractEdge
 
     protected function execute(): void
     {
-        
+        if(
+            isset($this->notification) &&
+            !$this->orphan() &&
+            $this->head()->node() instanceof Actor
+        )
+            $this->head()->node()->notify($this->notification);
     }
 }

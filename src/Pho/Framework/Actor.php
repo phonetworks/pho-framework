@@ -141,6 +141,17 @@ class Actor extends \Pho\Lib\Graph\Node implements ParticleInterface
     }
 
     /**
+     * Notifies the Actor about a Notification
+     *
+     * @param AbstractNotification $notification
+     * @return void
+     */
+    public function notify(AbstractNotification $notification): void
+    {
+        $this->notifications()->add($notification);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function changeContext(\Pho\Lib\Graph\GraphInterface $context): void

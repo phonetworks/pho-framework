@@ -40,9 +40,13 @@ class Mention extends Framework\AbstractEdge
         if(!$notification instanceof Framework\Notification) {
             throw new Framework\Exceptions\NotificationNotFoundException(get_class($this));
         }*/
-        if(isset($this->notification))
-            if( $this->head()->node() instanceof Framework\Actor )
-                $this->head()->node()->notifications()->add($this->notification);
+        if(
+            isset($this->notification) &&
+            !$this->orphan() &&
+            $this->head()->node() instanceof Framework\Actor 
+        )
+                $this->head()->node()->notify($this->notification);
+                
     }
 
 }

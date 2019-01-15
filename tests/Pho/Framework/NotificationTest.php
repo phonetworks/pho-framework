@@ -31,7 +31,8 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
         $friend->subscribe($actor);
         $obj = new Obj($actor, $this->graph);
         $edge = $actor->write($obj);
-        $this->assertEquals(0, $actor->notifications()->count());
+        //eval(\Psy\sh());
+        $this->assertEquals(1, $actor->notifications()->count());
         $this->assertEquals(1, $friend->notifications()->count());
         $this->assertCount(1, $friend->notifications()->toArray());
         $this->assertEquals($edge->id()->toString(), $friend->notifications()->toArray()[0]["edge"]);
@@ -58,7 +59,7 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
         $friend2->subscribe($actor);
         $obj = new Obj($actor, $this->graph);
         $edge = $actor->write($obj);
-        $this->assertEquals(0, $actor->notifications()->count());
+        $this->assertEquals(2, $actor->notifications()->count());
         $this->assertEquals(1, $friend1->notifications()->count());
         $this->assertEquals(1, $friend2->notifications()->count());
         $this->assertEquals($edge->id()->toString(), $friend1->notifications()->toArray()[0]["edge"]);

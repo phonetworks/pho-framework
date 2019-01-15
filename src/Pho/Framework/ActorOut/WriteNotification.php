@@ -25,6 +25,6 @@ class WriteNotification extends \Pho\Framework\AbstractNotification
      */
     public function __toString(): string
     {
-        return sprintf(self::MSG, (string) $this()->tail()->id());
+        return sprintf(self::MSG, (string) $this->edge()->tail()->id());
     }
 }
