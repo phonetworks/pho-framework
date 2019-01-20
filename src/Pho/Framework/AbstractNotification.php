@@ -47,7 +47,7 @@ abstract class AbstractNotification implements \Serializable, HookableInterface
      *
      * Kept in records for hydration/dehydration.
      * 
-     * @var [type]
+     * @var string
      */
     protected $edge_id;
 
@@ -59,7 +59,7 @@ abstract class AbstractNotification implements \Serializable, HookableInterface
     public function __construct(EdgeInterface $edge)
     {
         $this->edge = $edge;
-        $this->edge_id = $edge->id();
+        $this->edge_id = (string) $edge->id();
     }
 
     /**
