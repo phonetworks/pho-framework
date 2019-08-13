@@ -72,3 +72,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 
 ## 11.2 to 11.3
 * added SubscribeNotification
+
+## 11.3 to 11.4
+* added notifications.read signal
