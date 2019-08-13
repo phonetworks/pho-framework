@@ -26,7 +26,7 @@ class SignalsTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testNotificationSignal() {
-        $ref1 = $ref2 = false;
+        $ref1 = $ref2 = $ref3 = false;
         $actor = new Actor($this->graph);
         $friend = new Actor($this->graph);
         $friend->on("notification.received", function(AbstractNotification $notification) use (&$ref1) {
@@ -35,6 +35,9 @@ class SignalsTest extends \PHPUnit\Framework\TestCase
         $actor->on("edge.created", function() use (&$ref2) {
             $ref2 = true;
         });
+        $friend->on("notifications.read", function(int $count) use (&$ref3) {
+            $ref3 = true;
+        });
         $this->assertFalse($ref1);
         $this->assertFalse($ref2);
         $friend->subscribe($actor);
@@ -42,6 +45,10 @@ class SignalsTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($ref2);
         $this->assertEquals(1, $friend->notifications()->count());
         $this->assertTrue($ref1);
+        $this->assertFalse($ref3);
+        $notifications =  $friend->notifications()->read();
+        $this->assertInternalType('array', $notifications);
+        $this->assertTrue($ref3);
     }
 
     public function testNodeAdded() {

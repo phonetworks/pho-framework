@@ -46,6 +46,9 @@ class NotificationList
         for($i=0;$i<$limit;$i++) {
             $read[] = array_pop($this->list);
         }
+        if(count($read)>0) {
+            $this->owner->emit("notifications.read", [count($read)]);
+        }
         return $read;
     }
 }
