@@ -14,6 +14,8 @@ The recommended way to install pho-framework is through composer.
 
 ```composer require phonetworks/pho-framework```
 
+Please note, pho-framework works with PHP 7.2+
+
 ## Documentation
 
 For more infomation on the internals of pho-lib-graph, as well as a simple user guide, please refer to the [docs/](https://github.com/phonetworks/pho-framework/tree/master/docs) folder. You may also generate the APIs using phpdoc as described in [CONTRIBUTING.md](https://github.com/phonetworks/pho-framework/blob/master/CONTRIBUTING.md)
