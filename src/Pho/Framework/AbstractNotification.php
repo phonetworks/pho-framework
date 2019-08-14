@@ -83,7 +83,7 @@ abstract class AbstractNotification implements \Serializable, HookableInterface
     {
         if(isset($this->edge)) 
             return $this->edge;
-        $this->hookable();
+        return $this->hookable();
     }
 
     /**
