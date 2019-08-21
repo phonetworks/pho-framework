@@ -91,6 +91,7 @@ class Form implements HandlerInterface
         $argline = "";
         if(count($args)>0) {
             foreach($args as $arg) {
+                $_type = ((gettype($arg) == "boolean") ? "bool" : gettype($arg));
                 $argline .= sprintf(
                     "%s:::", 
                     str_replace("\\", ":", gettype($arg))
