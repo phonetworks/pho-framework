@@ -92,9 +92,11 @@ class OutgoingEdgeLoader extends AbstractLoader
                                 $_pattern .= $param->getType();
                             $_pattern .= ":::";
                             if($param->isOptional()) {
-                                if(substr($pattern, -3)==":::")
+                                if(strlen($pattern)>3&&substr($pattern, -3)==":::") // if it's the first optional param, and not the first param
                                     $pattern = substr($pattern, 0, -3) .sprintf("(:::%s)?", $_pattern);
-                                else
+                                elseif(strlen($pattern)>5&&substr($pattern, -5)==":::)?") // if it comes after an optional param
+                                    $pattern = substr($pattern, 0, -5) .sprintf(")?(:::%s)?", $_pattern);
+                                else // if it's the first argument
                                     $pattern .= sprintf("(%s)?", $_pattern);
                             }
                             else
