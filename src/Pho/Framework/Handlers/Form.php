@@ -94,7 +94,7 @@ class Form implements HandlerInterface
                 $_type = ((gettype($arg) == "boolean") ? "bool" : gettype($arg));
                 $argline .= sprintf(
                     "%s:::", 
-                    str_replace("\\", ":", gettype($arg))
+                    str_replace("\\", ":", $_type)
                 );
             }
             $argline = substr($argline, 0, -3);
