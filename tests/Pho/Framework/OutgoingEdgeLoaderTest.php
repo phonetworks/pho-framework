@@ -66,7 +66,7 @@ namespace Pho\Framework {
     }
 
 
-    class FieldsTest extends \PHPUnit\Framework\TestCase 
+    class OutgoingEdgeLoaderTest extends \PHPUnit\Framework\TestCase 
     {
         private $space, $actor;
 
