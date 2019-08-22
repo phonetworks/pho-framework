@@ -90,33 +90,18 @@ class OutgoingEdgeLoader extends AbstractLoader
                                 $_pattern .= ".+?";
                             else
                                 $_pattern .= $param->getType();
-                            $_pattern .= ":::";
                             if($param->isOptional()) {
-                                if(strlen($pattern)>3&&substr($pattern, -3)==":::") // if it's the first optional param, and not the first param
-                                    $pattern = substr($pattern, 0, -3) .sprintf("(:::%s)?", $_pattern);
-                                elseif(strlen($pattern)>5&&substr($pattern, -5)==":::)?") // if it comes after an optional param
-                                    $pattern = substr($pattern, 0, -5) .sprintf(")?(:::%s)?", $_pattern);
-                                else // if it's the first argument
-                                    $pattern .= sprintf("(%s)?", $_pattern);
+                                $_pattern .= "?";
                             }
-                            else
-                                $pattern .= $_pattern;
+                            $_pattern .= ":::";
+                            $pattern .= $_pattern;
                         }
                         $pattern = str_replace("\\", ":", $pattern);
-                        if($pattern[strlen($pattern)-1]!="?") {
-                            $pattern = substr($pattern, 0 ,-3);
-                        }
-                        elseif($pattern[0]!="(") { 
-                            // if the last char is optional
-                            // like: string:::string:::string?
-                            // instead of string:::string:::(string:::)?
-                            // which would be trimmed as string:::string:::(string::
-                            // show: string:::string(:::string?)
-                            $pattern = str_replace(sprintf(":::(%s)?", $_pattern), sprintf("(:::%s)?", substr($_pattern, 0, -3)), $pattern); 
-                        }
-                        else { // case of (string:::)?
-                            $pattern = str_replace(":::)?", ")?", $pattern);
-                        }
+                        if(substr($pattern, -3)==":::")
+                            $pattern = substr($pattern, 0, -3);
+                        $pattern = \preg_replace("/^([^?:]+)\?(.?$)/", "(\\1)?\\2", $pattern);
+                        $pattern = \preg_replace("/(:::[^?:]+)\?/", "(\\1)?", $pattern);
+                    
                         $formation_patterns[$formable] = $pattern;
                         $cargo->formative_patterns[$__method] = [$formable=>$pattern];
                     }
