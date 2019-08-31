@@ -9,6 +9,8 @@
     ],
   "homepage": "https://phonetworks.org",
   "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "authors": [
         {
             "name": "Emre Sokullu",
@@ -19,7 +21,7 @@
     "require": {
         "php":">=7.2.0",
         "zendframework/zend-file": "*",
-        "phonetworks/pho-lib-graph": "^8.1",
+        "phonetworks/pho-lib-graph": "^9.0",
         "psr/log": "^1.0",
         "webmozart/assert": "^1.2",
         "danielstjules/stringy": "^3.0",
