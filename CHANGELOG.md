@@ -78,3 +78,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-f
 
 ## 11.4 to 11.5
 * pho-lib-graph 9.0 update to DHT support
+
+## 11.5 to 11.6
+* important bugfix so subgraph actors won't get deleted.

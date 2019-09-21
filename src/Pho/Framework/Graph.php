@@ -39,6 +39,14 @@ class Graph extends \Pho\Lib\Graph\SubGraph implements ParticleInterface, Contex
      */
     protected $id_generator = ID::class;
 
+    /**
+     * Don't delete actors when the subgraph is deleted
+     * Always!
+     *
+     * @var boolean
+     */
+    protected $no_member_deletion = true; // always
+
     public function __construct(Actor $creator, ContextInterface $context) 
     {
         parent::__construct($context);
